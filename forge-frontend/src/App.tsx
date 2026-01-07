@@ -1,3 +1,4 @@
+import { Box, Flex, Heading, Text } from '@chakra-ui/react'
 import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
@@ -27,13 +28,15 @@ export default function App() {
   ]
 
   return (
-    <div style={{ padding: 16, maxWidth: 980, margin: '0 auto' }}>
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
-        <h1 style={{ margin: 0 }}>Forge</h1>
-        <span style={{ opacity: 0.7 }}>Calendar</span>
-      </div>
+    <Box p={4} maxW="980px" mx="auto">
+      <Flex align="baseline" gap={3}>
+        <Heading as="h1" size="xl" m={0}>
+          Forge
+        </Heading>
+        <Text opacity={0.7}>Calendar</Text>
+      </Flex>
 
-      <div style={{ marginTop: 12 }}>
+      <Box mt={3}>
         <FullCalendar
           plugins={[timeGridPlugin, interactionPlugin]}
           initialView="timeGridDay"
@@ -72,8 +75,8 @@ export default function App() {
             })
           }}
         />
-      </div>
-    </div>
+      </Box>
+    </Box>
   )
 }
 
