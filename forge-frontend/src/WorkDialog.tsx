@@ -17,7 +17,7 @@ export function WorkDialog({ goal }: { goal: Goal }) {
   const [selected, setSelected] = useState<string>(defaultVal)
 
   return (
-    <Dialog.Root>
+    <Dialog.Root size="lg">
       <Dialog.Trigger asChild>
         <Button size="sm" colorScheme="blue">
           Work!
@@ -46,6 +46,7 @@ export function WorkDialog({ goal }: { goal: Goal }) {
                       onValueChange={(v: any) =>
                         setSelected(String((v && (v as any).value) ?? v))
                       }
+                      variant="solid"
                     >
                       <RadioCard.Label>Select deliverable</RadioCard.Label>
                       <HStack align="stretch">
@@ -82,7 +83,7 @@ export function WorkDialog({ goal }: { goal: Goal }) {
               <Dialog.ActionTrigger asChild>
                 <Button variant="ghost">Cancel</Button>
               </Dialog.ActionTrigger>
-              <Dialog.CloseTrigger asChild>
+              <Dialog.ActionTrigger asChild>
                 <Button
                   onClick={() => {
                     // eslint-disable-next-line no-console
@@ -96,7 +97,8 @@ export function WorkDialog({ goal }: { goal: Goal }) {
                 >
                   Start
                 </Button>
-              </Dialog.CloseTrigger>
+              </Dialog.ActionTrigger>
+              <Dialog.CloseTrigger asChild></Dialog.CloseTrigger>
             </Dialog.Footer>
 
             <Dialog.CloseTrigger asChild>
