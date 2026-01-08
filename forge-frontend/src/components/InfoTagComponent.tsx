@@ -15,7 +15,7 @@ export function InfoTagComponent({ tag }: { tag: InfoTag }) {
       </Box>
       {/* Close button prints to console for now */}
       <CloseButton
-        size="sm"
+        size="2xs"
         aria-label={`Remove ${tag.title}`}
         onClick={() => {
           // keep simple: print the tag title to the console
