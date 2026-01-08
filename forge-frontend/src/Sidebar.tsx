@@ -11,6 +11,7 @@ import {
   Portal,
 } from '@chakra-ui/react'
 import { InfoTagComponent } from './states/InfoTag'
+import WorkDialog from './WorkDialog'
 import type { Goal } from './states/goals'
 import { useState, useRef } from 'react'
 
@@ -144,17 +145,7 @@ function GoalComponent({
         </Box>
       )}
       <Box mt={3}>
-        <Button
-          size="sm"
-          colorScheme="blue"
-          onClick={() => {
-            // Placeholder action for "Work!" — connect to a timer or planner later
-            // eslint-disable-next-line no-console
-            console.log('Work!', goal.title)
-          }}
-        >
-          Work!
-        </Button>
+        <WorkDialog goal={goal} />
       </Box>
     </Box>
   )
