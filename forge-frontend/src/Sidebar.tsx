@@ -68,6 +68,9 @@ export default function Sidebar({ goals, onAddGoal }: Props) {
       borderBottomColor="gray.200"
       p={4}
       flexShrink={0}
+      height="100%"
+      minHeight={0}
+      overflowY="auto"
     >
       <VStack align="stretch" gap={3}>
         <Heading as="h2" size="md">

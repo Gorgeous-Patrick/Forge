@@ -44,8 +44,8 @@ type CalendarEvent = {
 
 function CalendarView({ events }: { events: CalendarEvent[] }) {
   return (
-    <Box flex={1} p={4}>
-      <Box mt={3}>
+    <Box flex={1} p={4} height="100%" minHeight={0} overflowY="auto">
+      <Box mt={3} minHeight={0}>
         <FullCalendar
           plugins={[timeGridPlugin, interactionPlugin]}
           initialView="timeGridDay"
@@ -116,7 +116,7 @@ export default function App() {
         direction={{ base: 'column', md: 'row' }}
         mx="auto"
         gap={0}
-        minH="calc(100vh - 73px)"
+        height="calc(100vh - 73px)"
       >
         <Sidebar
           goals={goals}
