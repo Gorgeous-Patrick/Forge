@@ -1,5 +1,3 @@
-import { Badge } from '@chakra-ui/react'
-
 export type InfoTag = {
   title: string
   info: string
@@ -35,6 +33,4 @@ export const sampleInfoTags: InfoTag[] = [
   },
 ]
 
-export function InfoTagComponent({ tag }: { tag: InfoTag }) {
-  return <Badge>{tag.title}</Badge>
-}
+// InfoTagComponent moved to `src/components/InfoTagComponent.tsx`
