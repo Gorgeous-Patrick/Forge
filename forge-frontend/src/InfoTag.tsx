@@ -35,6 +35,6 @@ export const sampleInfoTags: InfoTag[] = [
   },
 ]
 
-export function InfoTagComponent({ title, info }: InfoTag) {
-  return <Badge>{title}</Badge>
+export function InfoTagComponent({ tag }: { tag: InfoTag }) {
+  return <Badge>{tag.title}</Badge>
 }

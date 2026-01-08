@@ -10,6 +10,7 @@ import {
   Dialog,
   Portal,
 } from '@chakra-ui/react'
+import { InfoTagComponent } from './InfoTag'
 import type { Goal } from './goals'
 import { useState, useRef } from 'react'
 
@@ -118,6 +119,7 @@ export default function Sidebar({ goals, onAddGoal, onRemoveGoal }: Props) {
       description: description || '',
       dueDate: dueDate ? dueDate.toISOString() : null,
       deliverables: [],
+      infoTags: [],
     }
     if (onAddGoal) onAddGoal(goal)
     resetForm()
@@ -177,6 +179,15 @@ export default function Sidebar({ goals, onAddGoal, onRemoveGoal }: Props) {
               <Text mt={2} fontSize="sm" color="gray.600">
                 {g.description}
               </Text>
+              {g.infoTags && g.infoTags.length > 0 && (
+                <Box mt={2} display="flex" gap={2} flexWrap="wrap">
+                  {g.infoTags.map((t, idx) => (
+                    <Box key={`${g.title}-info-${idx}`}>
+                      <InfoTagComponent tag={t} />
+                    </Box>
+                  ))}
+                </Box>
+              )}
             </Box>
           ))
         )}
