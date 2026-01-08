@@ -58,7 +58,7 @@ function DeleteGoalDialog({
               <Dialog.ActionTrigger asChild>
                 <Button variant="ghost">Cancel</Button>
               </Dialog.ActionTrigger>
-              <Dialog.CloseTrigger asChild>
+              <Dialog.ActionTrigger asChild>
                 <Button
                   colorScheme="red"
                   onClick={() => {
@@ -67,6 +67,9 @@ function DeleteGoalDialog({
                 >
                   Delete
                 </Button>
+              </Dialog.ActionTrigger>
+              <Dialog.CloseTrigger asChild>
+                <CloseButton size="sm" />
               </Dialog.CloseTrigger>
             </Dialog.Footer>
 
