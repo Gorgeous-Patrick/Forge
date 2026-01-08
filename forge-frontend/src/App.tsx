@@ -121,6 +121,9 @@ export default function App() {
         <Sidebar
           goals={goals}
           onAddGoal={g => setGoals(prev => [g, ...prev])}
+          onRemoveGoal={i =>
+            setGoals(prev => prev.filter((_, idx) => idx !== i))
+          }
         />
         <CalendarView events={events} />
       </Flex>

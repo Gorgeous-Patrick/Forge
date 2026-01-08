@@ -14,6 +14,7 @@ import { useState, useRef } from 'react'
 type Props = {
   goals: Goal[]
   onAddGoal?: (g: Goal) => void
+  onRemoveGoal?: (index: number) => void
 }
 
 function formatDue(d: string | null) {
@@ -32,12 +33,13 @@ function formatDue(d: string | null) {
   }
 }
 
-export default function Sidebar({ goals, onAddGoal }: Props) {
+export default function Sidebar({ goals, onAddGoal, onRemoveGoal }: Props) {
   const { open, onOpen, onClose } = useDisclosure()
   const initialRef = useRef<HTMLInputElement | null>(null)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [dueInput, setDueInput] = useState('') // datetime-local value
+  const [confirmIndex, setConfirmIndex] = useState<number | null>(null)
 
   function resetForm() {
     setTitle('')
@@ -81,7 +83,25 @@ export default function Sidebar({ goals, onAddGoal }: Props) {
           <Text color="gray.600">No goals yet</Text>
         ) : (
           goals.map((g, i) => (
-            <Box key={`${g.title}-${i}`} p={3} bg="gray.50" borderRadius="md">
+            <Box
+              key={`${g.title}-${i}`}
+              p={3}
+              bg="gray.50"
+              borderRadius="md"
+              position="relative"
+            >
+              <Button
+                size="sm"
+                variant="ghost"
+                position="absolute"
+                top={2}
+                right={2}
+                onClick={() => setConfirmIndex(i)}
+                aria-label={`Remove ${g.title}`}
+              >
+                ✕
+              </Button>
+
               <Text fontWeight="semibold">{g.title}</Text>
 
               {g.dueDate ? (
@@ -174,6 +194,57 @@ export default function Sidebar({ goals, onAddGoal }: Props) {
                 </Button>
                 <Button onClick={handleSubmit} variant="ghost">
                   Create
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+        )}
+
+        {/* Confirm delete overlay */}
+        {confirmIndex !== null && (
+          <Box
+            position="fixed"
+            top={0}
+            left={0}
+            right={0}
+            bottom={0}
+            bg="rgba(0,0,0,0.4)"
+            zIndex={10000}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            onClick={() => setConfirmIndex(null)}
+          >
+            <Box
+              bg="white"
+              borderRadius="md"
+              width={{ base: '90%', md: '380px' }}
+              p={4}
+              onClick={e => e.stopPropagation()}
+            >
+              <Text mb={3} fontWeight="semibold">
+                Delete goal?
+              </Text>
+              <Text mb={4} color="gray.600">
+                Are you sure you want to delete "{goals[confirmIndex].title}"?
+                This action cannot be undone.
+              </Text>
+              <Box textAlign="right">
+                <Button
+                  mr={3}
+                  variant="ghost"
+                  onClick={() => setConfirmIndex(null)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  colorScheme="red"
+                  onClick={() => {
+                    if (onRemoveGoal) onRemoveGoal(confirmIndex)
+                    setConfirmIndex(null)
+                  }}
+                >
+                  Delete
                 </Button>
               </Box>
             </Box>
