@@ -3,6 +3,7 @@ import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import Sidebar from './Sidebar'
+import SettingsDialog from './SettingsDialog'
 import { sampleGoals, type Goal } from './states/goals'
 import { useState } from 'react'
 import { events, type CalendarEvent } from './states/events'
@@ -22,6 +23,9 @@ function Header() {
           Forge
         </Heading>
         <Text opacity={0.7}>Calendar</Text>
+        <Box ml="auto">
+          <SettingsDialog />
+        </Box>
       </Flex>
     </Box>
   )
