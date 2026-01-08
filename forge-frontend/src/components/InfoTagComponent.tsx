@@ -4,11 +4,24 @@ import type { InfoTag } from '../states/InfoTag'
 export function InfoTagComponent({
   tag,
   onRemove = null,
+  onClick = null,
 }: {
   tag: InfoTag
-  // onRemove may be null or a function that takes no args and returns nothing
+  // onRemove/onClick may be null or a function that takes no args and returns nothing
   onRemove?: (() => void) | null
+  onClick?: (() => void) | null
 }) {
+  const badgeOnClick = onClick
+    ? () => {
+        try {
+          onClick()
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.error('Error in InfoTag onClick:', e)
+        }
+      }
+    : undefined
+
   return (
     <Badge
       display="inline-flex"
@@ -16,6 +29,8 @@ export function InfoTagComponent({
       px={2}
       py={1}
       borderRadius="md"
+      cursor={onClick ? 'pointer' : undefined}
+      onClick={badgeOnClick}
     >
       <Box as="span" mr={2} fontSize="sm">
         {tag.title}
@@ -26,13 +41,14 @@ export function InfoTagComponent({
         <CloseButton
           size="2xs"
           aria-label={`Remove ${tag.title}`}
-          onClick={() => {
+          onClick={e => {
+            // prevent the badge's onClick from firing when the close button is clicked
+            e.stopPropagation()
             try {
               onRemove()
-            } catch (e) {
-              // swallow errors so UI doesn't break
+            } catch (err) {
               // eslint-disable-next-line no-console
-              console.error('Error in InfoTag onRemove:', e)
+              console.error('Error in InfoTag onRemove:', err)
             }
           }}
         />
