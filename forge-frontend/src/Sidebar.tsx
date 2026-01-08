@@ -100,6 +100,48 @@ function formatDue(d: string | null) {
   }
 }
 
+const GoalComponent = (g: Goal, i: number, onRemoveGoal?: () => void) => (
+  <Box
+    key={`${g.title}-${i}`}
+    p={3}
+    bg="gray.50"
+    borderRadius="md"
+    position="relative"
+  >
+    <DeleteGoalDialog
+      goalTitle={g.title}
+      onDelete={() => {
+        if (onRemoveGoal) onRemoveGoal()
+      }}
+    />
+
+    <Text fontWeight="semibold">{g.title}</Text>
+
+    {g.dueDate ? (
+      <Text fontSize="sm" color="gray.500">
+        {formatDue(g.dueDate)}
+      </Text>
+    ) : (
+      <Text fontSize="sm" color="gray.500">
+        No due date
+      </Text>
+    )}
+
+    <Text mt={2} fontSize="sm" color="gray.600">
+      {g.description}
+    </Text>
+    {g.infoTags && g.infoTags.length > 0 && (
+      <Box mt={2} display="flex" gap={2} flexWrap="wrap">
+        {g.infoTags.map((t, idx) => (
+          <Box key={`${g.title}-info-${idx}`}>
+            <InfoTagComponent tag={t} />
+          </Box>
+        ))}
+      </Box>
+    )}
+  </Box>
+)
+
 export default function Sidebar({ goals, onAddGoal, onRemoveGoal }: Props) {
   const initialRef = useRef<HTMLInputElement | null>(null)
   const [title, setTitle] = useState('')
@@ -149,47 +191,11 @@ export default function Sidebar({ goals, onAddGoal, onRemoveGoal }: Props) {
         {goals.length === 0 ? (
           <Text color="gray.600">No goals yet</Text>
         ) : (
-          goals.map((g, i) => (
-            <Box
-              key={`${g.title}-${i}`}
-              p={3}
-              bg="gray.50"
-              borderRadius="md"
-              position="relative"
-            >
-              <DeleteGoalDialog
-                goalTitle={g.title}
-                onDelete={() => {
-                  if (onRemoveGoal) onRemoveGoal(i)
-                }}
-              />
-
-              <Text fontWeight="semibold">{g.title}</Text>
-
-              {g.dueDate ? (
-                <Text fontSize="sm" color="gray.500">
-                  {formatDue(g.dueDate)}
-                </Text>
-              ) : (
-                <Text fontSize="sm" color="gray.500">
-                  No due date
-                </Text>
-              )}
-
-              <Text mt={2} fontSize="sm" color="gray.600">
-                {g.description}
-              </Text>
-              {g.infoTags && g.infoTags.length > 0 && (
-                <Box mt={2} display="flex" gap={2} flexWrap="wrap">
-                  {g.infoTags.map((t, idx) => (
-                    <Box key={`${g.title}-info-${idx}`}>
-                      <InfoTagComponent tag={t} />
-                    </Box>
-                  ))}
-                </Box>
-              )}
-            </Box>
-          ))
+          goals.map((g, i) =>
+            GoalComponent(g, i, () => {
+              if (onRemoveGoal) onRemoveGoal(i)
+            })
+          )
         )}
 
         {/* Bottom add button using Chakra Dialog */}
