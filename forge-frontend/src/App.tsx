@@ -3,7 +3,7 @@ import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import Sidebar from './Sidebar'
-import { sampleGoals, type Goal } from './goals'
+import { sampleGoals, type Goal } from './states/goals'
 import { useState } from 'react'
 
 function todayAt(hour: number, minute: number) {
