@@ -19,6 +19,67 @@ type Props = {
   onRemoveGoal?: (index: number) => void
 }
 
+function DeleteGoalDialog({
+  goalTitle,
+  onDelete,
+}: {
+  goalTitle: string
+  onDelete: () => void
+}) {
+  return (
+    <Dialog.Root>
+      <Dialog.Trigger asChild>
+        <Button
+          size="sm"
+          variant="ghost"
+          position="absolute"
+          top={2}
+          right={2}
+          aria-label={`Remove ${goalTitle}`}
+        >
+          ✕
+        </Button>
+      </Dialog.Trigger>
+
+      <Portal>
+        <Dialog.Backdrop />
+        <Dialog.Positioner>
+          <Dialog.Content>
+            <Dialog.Header>
+              <Dialog.Title>Delete goal?</Dialog.Title>
+            </Dialog.Header>
+            <Dialog.Body>
+              <Text color="gray.600">
+                Are you sure you want to delete "{goalTitle}"? This action
+                cannot be undone.
+              </Text>
+            </Dialog.Body>
+            <Dialog.Footer>
+              <Dialog.ActionTrigger asChild>
+                <Button variant="ghost">Cancel</Button>
+              </Dialog.ActionTrigger>
+              <Dialog.CloseTrigger asChild>
+                <Button
+                  colorScheme="red"
+                  onClick={() => {
+                    onDelete()
+                  }}
+                >
+                  Delete
+                </Button>
+              </Dialog.CloseTrigger>
+            </Dialog.Footer>
+
+            <Dialog.CloseTrigger asChild>
+              <CloseButton size="sm" />
+            </Dialog.CloseTrigger>
+          </Dialog.Content>
+        </Dialog.Positioner>
+      </Portal>
+    </Dialog.Root>
+  )
+}
+
 function formatDue(d: string | null) {
   if (!d) return null
   const dt = new Date(d)
@@ -91,56 +152,12 @@ export default function Sidebar({ goals, onAddGoal, onRemoveGoal }: Props) {
               borderRadius="md"
               position="relative"
             >
-              <Dialog.Root>
-                <Dialog.Trigger asChild>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    position="absolute"
-                    top={2}
-                    right={2}
-                    aria-label={`Remove ${g.title}`}
-                  >
-                    ✕
-                  </Button>
-                </Dialog.Trigger>
-
-                <Portal>
-                  <Dialog.Backdrop />
-                  <Dialog.Positioner>
-                    <Dialog.Content>
-                      <Dialog.Header>
-                        <Dialog.Title>Delete goal?</Dialog.Title>
-                      </Dialog.Header>
-                      <Dialog.Body>
-                        <Text color="gray.600">
-                          Are you sure you want to delete "{g.title}"? This
-                          action cannot be undone.
-                        </Text>
-                      </Dialog.Body>
-                      <Dialog.Footer>
-                        <Dialog.ActionTrigger asChild>
-                          <Button variant="ghost">Cancel</Button>
-                        </Dialog.ActionTrigger>
-                        <Dialog.CloseTrigger asChild>
-                          <Button
-                            colorScheme="red"
-                            onClick={() => {
-                              if (onRemoveGoal) onRemoveGoal(i)
-                            }}
-                          >
-                            Delete
-                          </Button>
-                        </Dialog.CloseTrigger>
-                      </Dialog.Footer>
-
-                      <Dialog.CloseTrigger asChild>
-                        <CloseButton size="sm" />
-                      </Dialog.CloseTrigger>
-                    </Dialog.Content>
-                  </Dialog.Positioner>
-                </Portal>
-              </Dialog.Root>
+              <DeleteGoalDialog
+                goalTitle={g.title}
+                onDelete={() => {
+                  if (onRemoveGoal) onRemoveGoal(i)
+                }}
+              />
 
               <Text fontWeight="semibold">{g.title}</Text>
 
