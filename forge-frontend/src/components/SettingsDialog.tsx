@@ -1,10 +1,68 @@
-import { Box, Button, Dialog, Portal, Heading, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Dialog,
+  Portal,
+  Heading,
+  Text,
+  CloseButton,
+} from '@chakra-ui/react'
 import SettingsButton from './SettingsButton'
 import { useState } from 'react'
 import { sampleInfoTags } from '../states/InfoTag'
 import { InfoTagComponent } from './InfoTagComponent'
 
+function TagDialog({
+  tag,
+  onClose,
+}: {
+  tag: typeof sampleInfoTags[number] | null
+  onClose: () => void
+}) {
+  if (!tag) return null
+  console.log('Rendering TagDialog for tag:', tag)
+
+  return (
+    <Dialog.Root
+      open={!!tag}
+      onOpenChange={isOpen => {
+        if (!isOpen) onClose()
+      }}
+      size="full"
+    >
+      <Portal>
+        <Dialog.Backdrop />
+        <Dialog.Positioner>
+          <Dialog.Content>
+            <Dialog.Header>
+              <Dialog.Title>{tag.title}</Dialog.Title>
+            </Dialog.Header>
+
+            <Dialog.Body>
+              <Box>
+                <Box as="p" color="gray.700">
+                  {tag.info}
+                </Box>
+              </Box>
+            </Dialog.Body>
+
+            <Dialog.Footer>
+              <Dialog.CloseTrigger asChild>
+                <CloseButton aria-label="Close tag dialog" onClick={onClose} />
+              </Dialog.CloseTrigger>
+            </Dialog.Footer>
+          </Dialog.Content>
+        </Dialog.Positioner>
+      </Portal>
+    </Dialog.Root>
+  )
+}
+
 function InfoTagSettingsPane() {
+  const [selectedTag, setSelectedTag] = useState<
+    typeof sampleInfoTags[number] | null
+  >(null)
+
   return (
     <Box>
       <Text fontWeight="semibold">Info Tags</Text>
@@ -15,10 +73,13 @@ function InfoTagSettingsPane() {
       <Box mt={4} display="flex" gap={2} flexWrap="wrap">
         {sampleInfoTags.map(tag => (
           <Box key={tag.title}>
-            <InfoTagComponent tag={tag} />
+            <InfoTagComponent tag={tag} onClick={() => setSelectedTag(tag)} />
           </Box>
         ))}
       </Box>
+
+      {/* Parent-controlled dialog rendered here */}
+      <TagDialog tag={selectedTag} onClose={() => setSelectedTag(null)} />
     </Box>
   )
 }
