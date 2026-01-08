@@ -8,7 +8,7 @@ import {
   HStack,
   RadioCard,
 } from '@chakra-ui/react'
-import type { Goal } from './states/goals'
+import type { Goal } from '../states/goals'
 import { useState } from 'react'
 
 export function WorkDialog({ goal }: { goal: Goal }) {

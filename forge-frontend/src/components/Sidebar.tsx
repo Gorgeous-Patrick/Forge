@@ -10,9 +10,9 @@ import {
   Dialog,
   Portal,
 } from '@chakra-ui/react'
-import { InfoTagComponent } from './components/InfoTagComponent'
+import { InfoTagComponent } from './InfoTagComponent'
 import WorkDialog from './WorkDialog'
-import type { Goal } from './states/goals'
+import type { Goal } from '../states/goals'
 import { useState, useRef } from 'react'
 
 type Props = {
