@@ -1,6 +1,8 @@
 import { Box, Button, Dialog, Portal, Heading, Text } from '@chakra-ui/react'
 import SettingsButton from './SettingsButton'
 import { useState } from 'react'
+import { sampleInfoTags } from '../states/InfoTag'
+import { InfoTagComponent } from './InfoTagComponent'
 
 function InfoTagSettingsPane() {
   return (
@@ -9,6 +11,14 @@ function InfoTagSettingsPane() {
       <Text color="gray.600" mt={2}>
         Manage and customize your information tags.
       </Text>
+
+      <Box mt={4} display="flex" gap={2} flexWrap="wrap">
+        {sampleInfoTags.map(tag => (
+          <Box key={tag.title}>
+            <InfoTagComponent tag={tag} />
+          </Box>
+        ))}
+      </Box>
     </Box>
   )
 }
