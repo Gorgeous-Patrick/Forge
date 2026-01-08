@@ -1,7 +1,14 @@
 import { Badge, CloseButton, Box } from '@chakra-ui/react'
 import type { InfoTag } from '../states/InfoTag'
 
-export function InfoTagComponent({ tag }: { tag: InfoTag }) {
+export function InfoTagComponent({
+  tag,
+  onRemove = null,
+}: {
+  tag: InfoTag
+  // onRemove may be null or a function that takes no args and returns nothing
+  onRemove?: (() => void) | null
+}) {
   return (
     <Badge
       display="inline-flex"
@@ -13,15 +20,23 @@ export function InfoTagComponent({ tag }: { tag: InfoTag }) {
       <Box as="span" mr={2} fontSize="sm">
         {tag.title}
       </Box>
-      {/* Close button prints to console for now */}
-      <CloseButton
-        size="2xs"
-        aria-label={`Remove ${tag.title}`}
-        onClick={() => {
-          // keep simple: print the tag title to the console
-          console.log('InfoTag clicked:', tag.title)
-        }}
-      />
+
+      {/* Render close button only when onRemove is provided */}
+      {onRemove ? (
+        <CloseButton
+          size="2xs"
+          aria-label={`Remove ${tag.title}`}
+          onClick={() => {
+            try {
+              onRemove()
+            } catch (e) {
+              // swallow errors so UI doesn't break
+              // eslint-disable-next-line no-console
+              console.error('Error in InfoTag onRemove:', e)
+            }
+          }}
+        />
+      ) : null}
     </Badge>
   )
 }
