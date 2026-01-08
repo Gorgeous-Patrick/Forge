@@ -1,6 +1,7 @@
 export type Deliverable = {
   title: string
   completed: boolean
+  minutesEstimate?: number
 }
 
 export type Goal = {
@@ -19,9 +20,21 @@ export const sampleGoals: Goal[] = [
       'Finalize and install the repository pre-commit hooks; run autoupdate and fix any reported issues.',
     dueDate: '2026-01-15T17:00:00',
     deliverables: [
-      { title: 'Add .pre-commit-config.yaml', completed: true },
-      { title: 'Run pre-commit install', completed: false },
-      { title: 'Run pre-commit autoupdate', completed: false },
+      {
+        title: 'Add .pre-commit-config.yaml',
+        completed: true,
+        minutesEstimate: 30,
+      },
+      {
+        title: 'Run pre-commit install',
+        completed: false,
+        minutesEstimate: 15,
+      },
+      {
+        title: 'Run pre-commit autoupdate',
+        completed: false,
+        minutesEstimate: 20,
+      },
     ],
   },
   {
@@ -30,8 +43,16 @@ export const sampleGoals: Goal[] = [
       'Adjust responsive styles and finalize the main landing section in the React app.',
     dueDate: null,
     deliverables: [
-      { title: 'Fix mobile header spacing', completed: true },
-      { title: 'Adjust hero section spacing', completed: false },
+      {
+        title: 'Fix mobile header spacing',
+        completed: true,
+        minutesEstimate: 10,
+      },
+      {
+        title: 'Adjust hero section spacing',
+        completed: false,
+        minutesEstimate: 25,
+      },
     ],
   },
   {
@@ -40,8 +61,8 @@ export const sampleGoals: Goal[] = [
       'Write unit tests covering login/logout and token refresh logic.',
     dueDate: '2026-02-01T09:30:00',
     deliverables: [
-      { title: 'Test login flow', completed: false },
-      { title: 'Test token refresh', completed: false },
+      { title: 'Test login flow', completed: false, minutesEstimate: 40 },
+      { title: 'Test token refresh', completed: false, minutesEstimate: 35 },
     ],
   },
 ]
