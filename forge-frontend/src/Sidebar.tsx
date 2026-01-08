@@ -236,9 +236,9 @@ export default function Sidebar({ goals, onAddGoal, onRemoveGoal }: Props) {
                     <Dialog.ActionTrigger asChild>
                       <Button variant="ghost">Cancel</Button>
                     </Dialog.ActionTrigger>
-                    <Dialog.CloseTrigger asChild>
+                    <Dialog.ActionTrigger asChild>
                       <Button onClick={handleSubmit}>Create</Button>
-                    </Dialog.CloseTrigger>
+                    </Dialog.ActionTrigger>
                   </Dialog.Footer>
 
                   <Dialog.CloseTrigger asChild>
