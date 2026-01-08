@@ -9,7 +9,16 @@ function formatDue(d: string | null) {
   if (!d) return null
   const dt = new Date(d)
   if (Number.isNaN(dt.getTime())) return null
-  return dt.toLocaleDateString()
+  // Show both date and time (e.g. "Jan 15, 2026, 5:00 PM")
+  try {
+    return dt.toLocaleString(undefined, {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+    })
+  } catch (e) {
+    // Fallback for environments that don't support dateStyle/timeStyle
+    return dt.toLocaleString()
+  }
 }
 
 export default function Sidebar({ goals }: Props) {
