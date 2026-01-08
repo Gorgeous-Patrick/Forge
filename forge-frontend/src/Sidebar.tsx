@@ -180,7 +180,7 @@ export default function Sidebar({ goals, onAddGoal, onRemoveGoal }: Props) {
   return (
     <Box
       as="aside"
-      w={{ base: '100%', md: '30%' }}
+      w={{ base: '100%', md: '350px', lg: '600px' }}
       bg="white"
       borderRightWidth={{ base: 0, md: '1px' }}
       borderBottomWidth={{ base: '1px', md: 0 }}
