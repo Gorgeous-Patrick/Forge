@@ -12,6 +12,14 @@ export default function SettingsDialog() {
         </Text>
       </Box>
     ),
+    InformationTags: (
+      <Box>
+        <Text fontWeight="semibold">Info Tags</Text>
+        <Text color="gray.600" mt={2}>
+          Manage and customize your information tags.
+        </Text>
+      </Box>
+    ),
     Appearance: (
       <Box>
         <Text fontWeight="semibold">Appearance</Text>
