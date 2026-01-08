@@ -2,6 +2,17 @@ import { Box, Button, Dialog, Portal, Heading, Text } from '@chakra-ui/react'
 import SettingsButton from './SettingsButton'
 import { useState } from 'react'
 
+function InfoTagSettingsPane() {
+  return (
+    <Box>
+      <Text fontWeight="semibold">Info Tags</Text>
+      <Text color="gray.600" mt={2}>
+        Manage and customize your information tags.
+      </Text>
+    </Box>
+  )
+}
+
 export default function SettingsDialog() {
   const panes = {
     General: (
@@ -12,14 +23,7 @@ export default function SettingsDialog() {
         </Text>
       </Box>
     ),
-    InformationTags: (
-      <Box>
-        <Text fontWeight="semibold">Info Tags</Text>
-        <Text color="gray.600" mt={2}>
-          Manage and customize your information tags.
-        </Text>
-      </Box>
-    ),
+    InformationTags: <InfoTagSettingsPane />,
     Appearance: (
       <Box>
         <Text fontWeight="semibold">Appearance</Text>
