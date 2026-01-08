@@ -1,8 +1,19 @@
-import { Box, VStack, Text, Heading, Button } from '@chakra-ui/react'
+import {
+  Box,
+  VStack,
+  Text,
+  Heading,
+  Button,
+  useDisclosure,
+  Input,
+  Textarea,
+} from '@chakra-ui/react'
 import type { Goal } from './goals'
+import { useState, useRef } from 'react'
 
 type Props = {
   goals: Goal[]
+  onAddGoal?: (g: Goal) => void
 }
 
 function formatDue(d: string | null) {
@@ -21,7 +32,31 @@ function formatDue(d: string | null) {
   }
 }
 
-export default function Sidebar({ goals }: Props) {
+export default function Sidebar({ goals, onAddGoal }: Props) {
+  const { open, onOpen, onClose } = useDisclosure()
+  const initialRef = useRef<HTMLInputElement | null>(null)
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
+  const [dueInput, setDueInput] = useState('') // datetime-local value
+
+  function resetForm() {
+    setTitle('')
+    setDescription('')
+    setDueInput('')
+  }
+
+  function handleSubmit() {
+    const dueDate = dueInput ? new Date(dueInput) : null
+    const goal: Goal = {
+      title: title || 'Untitled Goal',
+      description: description || '',
+      dueDate: dueDate ? dueDate.toISOString() : null,
+    }
+    if (onAddGoal) onAddGoal(goal)
+    resetForm()
+    onClose()
+  }
+
   return (
     <Box
       as="aside"
@@ -65,18 +100,82 @@ export default function Sidebar({ goals }: Props) {
 
         {/* Bottom add button */}
         <Box pt={2}>
-          <Button
-            width="100%"
-            bg="transparent"
-            color="gray.800"
-            borderWidth="1px"
-            borderColor="gray.200"
-            _hover={{ bg: 'gray.50' }}
-            onClick={() => console.log('Add goal clicked')}
-          >
+          <Button width="100%" onClick={onOpen}>
             + Add Goal
           </Button>
         </Box>
+
+        {/* Inline overlay modal (fallback to ensure it opens) */}
+        {open && (
+          <Box
+            position="fixed"
+            top={0}
+            left={0}
+            right={0}
+            bottom={0}
+            bg="rgba(0,0,0,0.4)"
+            zIndex={9999}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            onClick={onClose}
+          >
+            <Box
+              bg="white"
+              borderRadius="md"
+              width={{ base: '90%', md: '480px' }}
+              p={4}
+              onClick={e => e.stopPropagation()}
+            >
+              <Heading size="md" mb={3}>
+                Create Goal
+              </Heading>
+
+              <Box>
+                <Text fontSize="sm" mb={1}>
+                  Title
+                </Text>
+                <Input
+                  ref={initialRef}
+                  placeholder="Goal title"
+                  value={title}
+                  onChange={e => setTitle(e.target.value)}
+                />
+              </Box>
+
+              <Box mt={4}>
+                <Text fontSize="sm" mb={1}>
+                  Description
+                </Text>
+                <Textarea
+                  placeholder="Short description"
+                  value={description}
+                  onChange={e => setDescription(e.target.value)}
+                />
+              </Box>
+
+              <Box mt={4}>
+                <Text fontSize="sm" mb={1}>
+                  Due date & time
+                </Text>
+                <Input
+                  type="datetime-local"
+                  value={dueInput}
+                  onChange={e => setDueInput(e.target.value)}
+                />
+              </Box>
+
+              <Box mt={4} textAlign="right">
+                <Button mr={3} onClick={onClose} variant="ghost">
+                  Cancel
+                </Button>
+                <Button onClick={handleSubmit} variant="ghost">
+                  Create
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+        )}
       </VStack>
     </Box>
   )

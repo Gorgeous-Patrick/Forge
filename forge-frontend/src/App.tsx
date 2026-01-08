@@ -3,7 +3,8 @@ import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import Sidebar from './Sidebar'
-import { sampleGoals } from './goals'
+import { sampleGoals, type Goal } from './goals'
+import { useState } from 'react'
 
 function todayAt(hour: number, minute: number) {
   const d = new Date()
@@ -89,6 +90,8 @@ function CalendarView({ events }: { events: CalendarEvent[] }) {
 }
 
 export default function App() {
+  const [goals, setGoals] = useState<Goal[]>(sampleGoals)
+
   const events: CalendarEvent[] = [
     {
       id: 'task-1',
@@ -115,7 +118,10 @@ export default function App() {
         gap={0}
         minH="calc(100vh - 73px)"
       >
-        <Sidebar goals={sampleGoals} />
+        <Sidebar
+          goals={goals}
+          onAddGoal={g => setGoals(prev => [g, ...prev])}
+        />
         <CalendarView events={events} />
       </Flex>
     </Box>
