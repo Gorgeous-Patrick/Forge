@@ -1,4 +1,4 @@
-import { Box, VStack, Text, Heading } from '@chakra-ui/react'
+import { Box, VStack, Text, Heading, Button } from '@chakra-ui/react'
 import type { Goal } from './goals'
 
 type Props = {
@@ -62,6 +62,21 @@ export default function Sidebar({ goals }: Props) {
             </Box>
           ))
         )}
+
+        {/* Bottom add button */}
+        <Box pt={2}>
+          <Button
+            width="100%"
+            bg="transparent"
+            color="gray.800"
+            borderWidth="1px"
+            borderColor="gray.200"
+            _hover={{ bg: 'gray.50' }}
+            onClick={() => console.log('Add goal clicked')}
+          >
+            + Add Goal
+          </Button>
+        </Box>
       </VStack>
     </Box>
   )
