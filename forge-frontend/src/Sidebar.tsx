@@ -4,9 +4,11 @@ import {
   Text,
   Heading,
   Button,
-  useDisclosure,
   Input,
   Textarea,
+  CloseButton,
+  Dialog,
+  Portal,
 } from '@chakra-ui/react'
 import type { Goal } from './goals'
 import { useState, useRef } from 'react'
@@ -34,12 +36,10 @@ function formatDue(d: string | null) {
 }
 
 export default function Sidebar({ goals, onAddGoal, onRemoveGoal }: Props) {
-  const { open, onOpen, onClose } = useDisclosure()
   const initialRef = useRef<HTMLInputElement | null>(null)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [dueInput, setDueInput] = useState('') // datetime-local value
-  const [confirmIndex, setConfirmIndex] = useState<number | null>(null)
 
   function resetForm() {
     setTitle('')
@@ -57,7 +57,7 @@ export default function Sidebar({ goals, onAddGoal, onRemoveGoal }: Props) {
     }
     if (onAddGoal) onAddGoal(goal)
     resetForm()
-    onClose()
+    // Dialog.CloseTrigger will close the dialog when used as child
   }
 
   return (
@@ -91,17 +91,56 @@ export default function Sidebar({ goals, onAddGoal, onRemoveGoal }: Props) {
               borderRadius="md"
               position="relative"
             >
-              <Button
-                size="sm"
-                variant="ghost"
-                position="absolute"
-                top={2}
-                right={2}
-                onClick={() => setConfirmIndex(i)}
-                aria-label={`Remove ${g.title}`}
-              >
-                ✕
-              </Button>
+              <Dialog.Root>
+                <Dialog.Trigger asChild>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    position="absolute"
+                    top={2}
+                    right={2}
+                    aria-label={`Remove ${g.title}`}
+                  >
+                    ✕
+                  </Button>
+                </Dialog.Trigger>
+
+                <Portal>
+                  <Dialog.Backdrop />
+                  <Dialog.Positioner>
+                    <Dialog.Content>
+                      <Dialog.Header>
+                        <Dialog.Title>Delete goal?</Dialog.Title>
+                      </Dialog.Header>
+                      <Dialog.Body>
+                        <Text color="gray.600">
+                          Are you sure you want to delete "{g.title}"? This
+                          action cannot be undone.
+                        </Text>
+                      </Dialog.Body>
+                      <Dialog.Footer>
+                        <Dialog.ActionTrigger asChild>
+                          <Button variant="ghost">Cancel</Button>
+                        </Dialog.ActionTrigger>
+                        <Dialog.CloseTrigger asChild>
+                          <Button
+                            colorScheme="red"
+                            onClick={() => {
+                              if (onRemoveGoal) onRemoveGoal(i)
+                            }}
+                          >
+                            Delete
+                          </Button>
+                        </Dialog.CloseTrigger>
+                      </Dialog.Footer>
+
+                      <Dialog.CloseTrigger asChild>
+                        <CloseButton size="sm" />
+                      </Dialog.CloseTrigger>
+                    </Dialog.Content>
+                  </Dialog.Positioner>
+                </Portal>
+              </Dialog.Root>
 
               <Text fontWeight="semibold">{g.title}</Text>
 
@@ -122,135 +161,74 @@ export default function Sidebar({ goals, onAddGoal, onRemoveGoal }: Props) {
           ))
         )}
 
-        {/* Bottom add button */}
+        {/* Bottom add button using Chakra Dialog */}
         <Box pt={2}>
-          <Button width="100%" onClick={onOpen}>
-            + Add Goal
-          </Button>
+          <Dialog.Root>
+            <Dialog.Trigger asChild>
+              <Button width="100%">+ Add Goal</Button>
+            </Dialog.Trigger>
+
+            <Portal>
+              <Dialog.Backdrop />
+              <Dialog.Positioner>
+                <Dialog.Content>
+                  <Dialog.Header>
+                    <Dialog.Title>Create Goal</Dialog.Title>
+                  </Dialog.Header>
+
+                  <Dialog.Body>
+                    <Box>
+                      <Text fontSize="sm" mb={1}>
+                        Title
+                      </Text>
+                      <Input
+                        ref={initialRef}
+                        placeholder="Goal title"
+                        value={title}
+                        onChange={e => setTitle(e.target.value)}
+                      />
+                    </Box>
+
+                    <Box mt={4}>
+                      <Text fontSize="sm" mb={1}>
+                        Description
+                      </Text>
+                      <Textarea
+                        placeholder="Short description"
+                        value={description}
+                        onChange={e => setDescription(e.target.value)}
+                      />
+                    </Box>
+
+                    <Box mt={4}>
+                      <Text fontSize="sm" mb={1}>
+                        Due date & time
+                      </Text>
+                      <Input
+                        type="datetime-local"
+                        value={dueInput}
+                        onChange={e => setDueInput(e.target.value)}
+                      />
+                    </Box>
+                  </Dialog.Body>
+
+                  <Dialog.Footer>
+                    <Dialog.ActionTrigger asChild>
+                      <Button variant="ghost">Cancel</Button>
+                    </Dialog.ActionTrigger>
+                    <Dialog.CloseTrigger asChild>
+                      <Button onClick={handleSubmit}>Create</Button>
+                    </Dialog.CloseTrigger>
+                  </Dialog.Footer>
+
+                  <Dialog.CloseTrigger asChild>
+                    <CloseButton size="sm" />
+                  </Dialog.CloseTrigger>
+                </Dialog.Content>
+              </Dialog.Positioner>
+            </Portal>
+          </Dialog.Root>
         </Box>
-
-        {/* Inline overlay modal (fallback to ensure it opens) */}
-        {open && (
-          <Box
-            position="fixed"
-            top={0}
-            left={0}
-            right={0}
-            bottom={0}
-            bg="rgba(0,0,0,0.4)"
-            zIndex={9999}
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            onClick={onClose}
-          >
-            <Box
-              bg="white"
-              borderRadius="md"
-              width={{ base: '90%', md: '480px' }}
-              p={4}
-              onClick={e => e.stopPropagation()}
-            >
-              <Heading size="md" mb={3}>
-                Create Goal
-              </Heading>
-
-              <Box>
-                <Text fontSize="sm" mb={1}>
-                  Title
-                </Text>
-                <Input
-                  ref={initialRef}
-                  placeholder="Goal title"
-                  value={title}
-                  onChange={e => setTitle(e.target.value)}
-                />
-              </Box>
-
-              <Box mt={4}>
-                <Text fontSize="sm" mb={1}>
-                  Description
-                </Text>
-                <Textarea
-                  placeholder="Short description"
-                  value={description}
-                  onChange={e => setDescription(e.target.value)}
-                />
-              </Box>
-
-              <Box mt={4}>
-                <Text fontSize="sm" mb={1}>
-                  Due date & time
-                </Text>
-                <Input
-                  type="datetime-local"
-                  value={dueInput}
-                  onChange={e => setDueInput(e.target.value)}
-                />
-              </Box>
-
-              <Box mt={4} textAlign="right">
-                <Button mr={3} onClick={onClose} variant="ghost">
-                  Cancel
-                </Button>
-                <Button onClick={handleSubmit} variant="ghost">
-                  Create
-                </Button>
-              </Box>
-            </Box>
-          </Box>
-        )}
-
-        {/* Confirm delete overlay */}
-        {confirmIndex !== null && (
-          <Box
-            position="fixed"
-            top={0}
-            left={0}
-            right={0}
-            bottom={0}
-            bg="rgba(0,0,0,0.4)"
-            zIndex={10000}
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            onClick={() => setConfirmIndex(null)}
-          >
-            <Box
-              bg="white"
-              borderRadius="md"
-              width={{ base: '90%', md: '380px' }}
-              p={4}
-              onClick={e => e.stopPropagation()}
-            >
-              <Text mb={3} fontWeight="semibold">
-                Delete goal?
-              </Text>
-              <Text mb={4} color="gray.600">
-                Are you sure you want to delete "{goals[confirmIndex].title}"?
-                This action cannot be undone.
-              </Text>
-              <Box textAlign="right">
-                <Button
-                  mr={3}
-                  variant="ghost"
-                  onClick={() => setConfirmIndex(null)}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  colorScheme="red"
-                  onClick={() => {
-                    if (onRemoveGoal) onRemoveGoal(confirmIndex)
-                    setConfirmIndex(null)
-                  }}
-                >
-                  Delete
-                </Button>
-              </Box>
-            </Box>
-          </Box>
-        )}
       </VStack>
     </Box>
   )
