@@ -1,7 +1,9 @@
-import { Box, Flex, Heading, Text, VStack } from '@chakra-ui/react'
+import { Box, Flex, Heading, Text } from '@chakra-ui/react'
 import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import Sidebar from './Sidebar'
+import { sampleGoals } from './goals'
 
 function todayAt(hour: number, minute: number) {
   const d = new Date()
@@ -29,28 +31,7 @@ function Header() {
   )
 }
 
-function Sidebar() {
-  return (
-    <Box
-      as="aside"
-      w={{ base: '100%', md: '250px' }}
-      bg="white"
-      borderRightWidth={{ base: 0, md: '1px' }}
-      borderBottomWidth={{ base: '1px', md: 0 }}
-      borderRightColor="gray.200"
-      borderBottomColor="gray.200"
-      p={4}
-      flexShrink={0}
-    >
-      <VStack align="stretch" gap={3}>
-        <Text fontWeight="bold" fontSize="lg">
-          Goals
-        </Text>
-        {/* <Text>Sidebar content goes here</Text> */}
-      </VStack>
-    </Box>
-  )
-}
+// Sidebar moved to its own component in `src/Sidebar.tsx` and receives goals via props.
 
 type CalendarEvent = {
   id: string
@@ -134,7 +115,7 @@ export default function App() {
         gap={0}
         minH="calc(100vh - 73px)"
       >
-        <Sidebar />
+        <Sidebar goals={sampleGoals} />
         <CalendarView events={events} />
       </Flex>
     </Box>
