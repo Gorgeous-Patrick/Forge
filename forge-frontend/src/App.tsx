@@ -83,18 +83,18 @@ function CalendarView({ events }: { events: CalendarEvent[] }) {
           eventStartEditable={true}
           eventDurationEditable={true}
           events={events}
-          eventClick={(info) => {
+          eventClick={info => {
             const kind = info.event.extendedProps?.kind ?? 'task'
             alert(`[${kind}] ${info.event.title}`)
           }}
-          eventDrop={(info) => {
+          eventDrop={info => {
             console.log('eventDrop:', {
               id: info.event.id,
               start: info.event.start,
               end: info.event.end,
             })
           }}
-          eventResize={(info) => {
+          eventResize={info => {
             console.log('eventResize:', {
               id: info.event.id,
               start: info.event.start,
@@ -141,4 +141,3 @@ export default function App() {
     </Box>
   )
 }
-
