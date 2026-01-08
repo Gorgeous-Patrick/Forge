@@ -143,6 +143,19 @@ function GoalComponent({
           ))}
         </Box>
       )}
+      <Box mt={3}>
+        <Button
+          size="sm"
+          colorScheme="blue"
+          onClick={() => {
+            // Placeholder action for "Work!" — connect to a timer or planner later
+            // eslint-disable-next-line no-console
+            console.log('Work!', goal.title)
+          }}
+        >
+          Work!
+        </Button>
+      </Box>
     </Box>
   )
 }
