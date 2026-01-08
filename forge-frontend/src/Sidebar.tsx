@@ -1,4 +1,4 @@
-import { Box, VStack, Text, Heading, HStack, Badge } from '@chakra-ui/react'
+import { Box, VStack, Text, Heading } from '@chakra-ui/react'
 import type { Goal } from './goals'
 
 type Props = {
@@ -35,23 +35,21 @@ export default function Sidebar({ goals }: Props) {
         ) : (
           goals.map((g, i) => (
             <Box key={`${g.title}-${i}`} p={3} bg="gray.50" borderRadius="md">
-              <HStack align="start" justify="space-between">
-                <Box>
-                  <Text fontWeight="semibold">{g.title}</Text>
-                  <Text fontSize="sm" color="gray.600">
-                    {g.description}
-                  </Text>
-                </Box>
-                <Box textAlign="right">
-                  {g.dueDate ? (
-                    <Badge colorScheme="purple">{formatDue(g.dueDate)}</Badge>
-                  ) : (
-                    <Text fontSize="xs" color="gray.500">
-                      No due date
-                    </Text>
-                  )}
-                </Box>
-              </HStack>
+              <Text fontWeight="semibold">{g.title}</Text>
+
+              {g.dueDate ? (
+                <Text fontSize="sm" color="gray.500">
+                  {formatDue(g.dueDate)}
+                </Text>
+              ) : (
+                <Text fontSize="sm" color="gray.500">
+                  No due date
+                </Text>
+              )}
+
+              <Text mt={2} fontSize="sm" color="gray.600">
+                {g.description}
+              </Text>
             </Box>
           ))
         )}
