@@ -19,7 +19,7 @@ function Header() {
       px={4}
       py={3}
     >
-      <Flex align="baseline" gap={3} maxW="980px" mx="auto">
+      <Flex align="baseline" gap={3}>
         <Heading as="h1" size="xl" m={0}>
           Forge
         </Heading>
@@ -130,7 +130,6 @@ export default function App() {
 
       <Flex
         direction={{ base: 'column', md: 'row' }}
-        maxW="980px"
         mx="auto"
         gap={0}
         minH="calc(100vh - 73px)"
