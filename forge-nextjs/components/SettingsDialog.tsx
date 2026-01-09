@@ -6,28 +6,28 @@ import {
   Heading,
   Text,
   CloseButton,
-} from '@chakra-ui/react'
-import SettingsButton from './SettingsButton'
-import { useState } from 'react'
-import { sampleInfoTags } from '../states/InfoTag'
-import { InfoTagComponent } from './InfoTagComponent'
-import { ChatboxComponent } from '@/components/Chatbox'
+} from "@chakra-ui/react";
+import SettingsButton from "./SettingsButton";
+import { useState } from "react";
+import { sampleInfoTags } from "../states/InfoTag";
+import { InfoTagComponent } from "./InfoTagComponent";
+import { ChatboxComponent } from "@/components/Chatbox";
 
 function TagDialog({
   tag,
   onClose,
 }: {
-  tag: typeof sampleInfoTags[number] | null
-  onClose: () => void
+  tag: typeof sampleInfoTags[number] | null;
+  onClose: () => void;
 }) {
-  if (!tag) return null
-  console.log('Rendering TagDialog for tag:', tag)
+  if (!tag) return null;
+  console.log("Rendering TagDialog for tag:", tag);
 
   return (
     <Dialog.Root
       open={!!tag}
-      onOpenChange={isOpen => {
-        if (!isOpen) onClose()
+      onOpenChange={(isOpen) => {
+        if (!isOpen) onClose();
       }}
       size="full"
     >
@@ -57,13 +57,13 @@ function TagDialog({
         </Dialog.Positioner>
       </Portal>
     </Dialog.Root>
-  )
+  );
 }
 
 function InfoTagSettingsPane() {
   const [selectedTag, setSelectedTag] = useState<
     typeof sampleInfoTags[number] | null
-  >(null)
+  >(null);
 
   return (
     <Box>
@@ -73,7 +73,7 @@ function InfoTagSettingsPane() {
       </Text>
 
       <Box mt={4} display="flex" gap={2} flexWrap="wrap">
-        {sampleInfoTags.map(tag => (
+        {sampleInfoTags.map((tag) => (
           <Box key={tag.title}>
             <InfoTagComponent tag={tag} onClick={() => setSelectedTag(tag)} />
           </Box>
@@ -83,7 +83,7 @@ function InfoTagSettingsPane() {
       {/* Parent-controlled dialog rendered here */}
       <TagDialog tag={selectedTag} onClose={() => setSelectedTag(null)} />
     </Box>
-  )
+  );
 }
 
 export default function SettingsDialog() {
@@ -121,10 +121,10 @@ export default function SettingsDialog() {
         </Text>
       </Box>
     ),
-  }
+  };
 
-  const [selected, setSelected] = useState('General' as keyof typeof panes)
-  const menuItems = Object.keys(panes) as Array<keyof typeof panes>
+  const [selected, setSelected] = useState("General" as keyof typeof panes);
+  const menuItems = Object.keys(panes) as Array<keyof typeof panes>;
 
   return (
     <Dialog.Root size="lg">
@@ -137,9 +137,7 @@ export default function SettingsDialog() {
         <Dialog.Positioner>
           <Dialog.Content maxW="720px">
             <Dialog.Header>
-              <Dialog.Title>
-                  Settings
-              </Dialog.Title>
+              <Dialog.Title>Settings</Dialog.Title>
             </Dialog.Header>
 
             <Dialog.Body>
@@ -147,14 +145,14 @@ export default function SettingsDialog() {
               <Box display="flex" gap={6} p={3} minWidth="600px">
                 <Box width="200px" flexShrink={0}>
                   <Box as="nav">
-                    {menuItems.map(item => (
+                    {menuItems.map((item) => (
                       <Button
                         key={item}
                         variant="ghost"
                         justifyContent="flex-start"
                         width="100%"
                         mb={1}
-                        bg={item === selected ? 'gray.100' : 'transparent'}
+                        bg={item === selected ? "gray.100" : "transparent"}
                         onClick={() => setSelected(item)}
                       >
                         {item}
@@ -178,11 +176,11 @@ export default function SettingsDialog() {
 
             <Dialog.CloseTrigger asChild>
               {/* close icon already inside content via CloseTrigger if desired */}
-              <Button aria-hidden style={{ display: 'none' }} />
+              <Button aria-hidden style={{ display: "none" }} />
             </Dialog.CloseTrigger>
           </Dialog.Content>
         </Dialog.Positioner>
       </Portal>
     </Dialog.Root>
-  )
+  );
 }

@@ -7,14 +7,14 @@ import {
   Portal,
   HStack,
   RadioCard,
-} from '@chakra-ui/react'
-import type { Goal } from '../states/goals'
-import { useState } from 'react'
+} from "@chakra-ui/react";
+import type { Goal } from "../states/goals";
+import { useState } from "react";
 
 export function WorkDialog({ goal }: { goal: Goal }) {
   const defaultVal =
-    goal.deliverables && goal.deliverables.length > 0 ? '0' : ''
-  const [selected, setSelected] = useState<string>(defaultVal)
+    goal.deliverables && goal.deliverables.length > 0 ? "0" : "";
+  const [selected, setSelected] = useState<string>(defaultVal);
 
   return (
     <Dialog.Root size="lg">
@@ -88,11 +88,11 @@ export function WorkDialog({ goal }: { goal: Goal }) {
                   onClick={() => {
                     // eslint-disable-next-line no-console
                     console.log(
-                      'Start work on',
+                      "Start work on",
                       goal.title,
-                      'deliverable',
+                      "deliverable",
                       selected
-                    )
+                    );
                   }}
                 >
                   Start
@@ -108,7 +108,7 @@ export function WorkDialog({ goal }: { goal: Goal }) {
         </Dialog.Positioner>
       </Portal>
     </Dialog.Root>
-  )
+  );
 }
 
-export default WorkDialog
+export default WorkDialog;

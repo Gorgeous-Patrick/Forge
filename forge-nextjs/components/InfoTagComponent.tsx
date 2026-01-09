@@ -1,26 +1,26 @@
-import { Badge, CloseButton, Box } from '@chakra-ui/react'
-import type { InfoTag } from '../states/InfoTag'
+import { Badge, CloseButton, Box } from "@chakra-ui/react";
+import type { InfoTag } from "../states/InfoTag";
 
 export function InfoTagComponent({
   tag,
   onRemove = null,
   onClick = null,
 }: {
-  tag: InfoTag
+  tag: InfoTag;
   // onRemove/onClick may be null or a function that takes no args and returns nothing
-  onRemove?: (() => void) | null
-  onClick?: (() => void) | null
+  onRemove?: (() => void) | null;
+  onClick?: (() => void) | null;
 }) {
   const badgeOnClick = onClick
     ? () => {
         try {
-          onClick()
+          onClick();
         } catch (e) {
           // eslint-disable-next-line no-console
-          console.error('Error in InfoTag onClick:', e)
+          console.error("Error in InfoTag onClick:", e);
         }
       }
-    : undefined
+    : undefined;
 
   return (
     <Badge
@@ -29,7 +29,7 @@ export function InfoTagComponent({
       px={2}
       py={1}
       borderRadius="md"
-      cursor={onClick ? 'pointer' : undefined}
+      cursor={onClick ? "pointer" : undefined}
       onClick={badgeOnClick}
     >
       <Box as="span" mr={2} fontSize="sm">
@@ -41,18 +41,18 @@ export function InfoTagComponent({
         <CloseButton
           size="2xs"
           aria-label={`Remove ${tag.title}`}
-          onClick={e => {
+          onClick={(e) => {
             // prevent the badge's onClick from firing when the close button is clicked
-            e.stopPropagation()
+            e.stopPropagation();
             try {
-              onRemove()
+              onRemove();
             } catch (err) {
               // eslint-disable-next-line no-console
-              console.error('Error in InfoTag onRemove:', err)
+              console.error("Error in InfoTag onRemove:", err);
             }
           }}
         />
       ) : null}
     </Badge>
-  )
+  );
 }

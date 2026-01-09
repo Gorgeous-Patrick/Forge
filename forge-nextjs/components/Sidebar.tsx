@@ -9,24 +9,24 @@ import {
   CloseButton,
   Dialog,
   Portal,
-} from '@chakra-ui/react'
-import { InfoTagComponent } from './InfoTagComponent'
-import WorkDialog from './WorkDialog'
-import type { Goal } from '../states/goals'
-import { useState, useRef } from 'react'
+} from "@chakra-ui/react";
+import { InfoTagComponent } from "./InfoTagComponent";
+import WorkDialog from "./WorkDialog";
+import type { Goal } from "../states/goals";
+import { useState, useRef } from "react";
 
 type Props = {
-  goals: Goal[]
-  onAddGoal?: (g: Goal) => void
-  onRemoveGoal?: (index: number) => void
-}
+  goals: Goal[];
+  onAddGoal?: (g: Goal) => void;
+  onRemoveGoal?: (index: number) => void;
+};
 
 function DeleteGoalDialog({
   goalTitle,
   onDelete,
 }: {
-  goalTitle: string
-  onDelete: () => void
+  goalTitle: string;
+  onDelete: () => void;
 }) {
   return (
     <Dialog.Root>
@@ -64,7 +64,7 @@ function DeleteGoalDialog({
                 <Button
                   colorScheme="red"
                   onClick={() => {
-                    onDelete()
+                    onDelete();
                   }}
                 >
                   Delete
@@ -82,22 +82,22 @@ function DeleteGoalDialog({
         </Dialog.Positioner>
       </Portal>
     </Dialog.Root>
-  )
+  );
 }
 
 function formatDue(d: string | null) {
-  if (!d) return null
-  const dt = new Date(d)
-  if (Number.isNaN(dt.getTime())) return null
+  if (!d) return null;
+  const dt = new Date(d);
+  if (Number.isNaN(dt.getTime())) return null;
   // Show both date and time (e.g. "Jan 15, 2026, 5:00 PM")
   try {
     return dt.toLocaleString(undefined, {
-      dateStyle: 'medium',
-      timeStyle: 'short',
-    })
+      dateStyle: "medium",
+      timeStyle: "short",
+    });
   } catch (e) {
     // Fallback for environments that don't support dateStyle/timeStyle
-    return dt.toLocaleString()
+    return dt.toLocaleString();
   }
 }
 
@@ -106,16 +106,16 @@ function GoalComponent({
   index,
   onRemove,
 }: {
-  goal: Goal
-  index: number
-  onRemove?: () => void
+  goal: Goal;
+  index: number;
+  onRemove?: () => void;
 }) {
   return (
     <Box p={3} bg="gray.50" borderRadius="md" position="relative">
       <DeleteGoalDialog
         goalTitle={goal.title}
         onDelete={() => {
-          if (onRemove) onRemove()
+          if (onRemove) onRemove();
         }}
       />
 
@@ -148,42 +148,42 @@ function GoalComponent({
         <WorkDialog goal={goal} />
       </Box>
     </Box>
-  )
+  );
 }
 
 export default function Sidebar({ goals, onAddGoal, onRemoveGoal }: Props) {
-  const initialRef = useRef<HTMLInputElement | null>(null)
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [dueInput, setDueInput] = useState('') // datetime-local value
+  const initialRef = useRef<HTMLInputElement | null>(null);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [dueInput, setDueInput] = useState(""); // datetime-local value
 
   function resetForm() {
-    setTitle('')
-    setDescription('')
-    setDueInput('')
+    setTitle("");
+    setDescription("");
+    setDueInput("");
   }
 
   function handleSubmit() {
-    const dueDate = dueInput ? new Date(dueInput) : null
+    const dueDate = dueInput ? new Date(dueInput) : null;
     const goal: Goal = {
-      title: title || 'Untitled Goal',
-      description: description || '',
+      title: title || "Untitled Goal",
+      description: description || "",
       dueDate: dueDate ? dueDate.toISOString() : null,
       deliverables: [],
       infoTags: [],
-    }
-    if (onAddGoal) onAddGoal(goal)
-    resetForm()
+    };
+    if (onAddGoal) onAddGoal(goal);
+    resetForm();
     // Dialog.CloseTrigger will close the dialog when used as child
   }
 
   return (
     <Box
       as="aside"
-      w={{ base: '100%', md: '350px', lg: '600px' }}
+      w={{ base: "100%", md: "350px", lg: "600px" }}
       bg="white"
-      borderRightWidth={{ base: 0, md: '1px' }}
-      borderBottomWidth={{ base: '1px', md: 0 }}
+      borderRightWidth={{ base: 0, md: "1px" }}
+      borderBottomWidth={{ base: "1px", md: 0 }}
       borderRightColor="gray.200"
       borderBottomColor="gray.200"
       p={4}
@@ -206,7 +206,7 @@ export default function Sidebar({ goals, onAddGoal, onRemoveGoal }: Props) {
               goal={g}
               index={i}
               onRemove={() => {
-                if (onRemoveGoal) onRemoveGoal(i)
+                if (onRemoveGoal) onRemoveGoal(i);
               }}
             />
           ))
@@ -236,7 +236,7 @@ export default function Sidebar({ goals, onAddGoal, onRemoveGoal }: Props) {
                         ref={initialRef}
                         placeholder="Goal title"
                         value={title}
-                        onChange={e => setTitle(e.target.value)}
+                        onChange={(e) => setTitle(e.target.value)}
                       />
                     </Box>
 
@@ -247,7 +247,7 @@ export default function Sidebar({ goals, onAddGoal, onRemoveGoal }: Props) {
                       <Textarea
                         placeholder="Short description"
                         value={description}
-                        onChange={e => setDescription(e.target.value)}
+                        onChange={(e) => setDescription(e.target.value)}
                       />
                     </Box>
 
@@ -258,7 +258,7 @@ export default function Sidebar({ goals, onAddGoal, onRemoveGoal }: Props) {
                       <Input
                         type="datetime-local"
                         value={dueInput}
-                        onChange={e => setDueInput(e.target.value)}
+                        onChange={(e) => setDueInput(e.target.value)}
                       />
                     </Box>
                   </Dialog.Body>
@@ -282,5 +282,5 @@ export default function Sidebar({ goals, onAddGoal, onRemoveGoal }: Props) {
         </Box>
       </VStack>
     </Box>
-  )
+  );
 }

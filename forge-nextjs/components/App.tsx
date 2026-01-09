@@ -1,15 +1,18 @@
-"use client"
-import { Box, Flex, Heading, Text } from '@chakra-ui/react'
-import FullCalendar from '@fullcalendar/react'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin from '@fullcalendar/interaction'
-import Sidebar from '@/components/Sidebar'
-import SettingsDialog from '@/components/SettingsDialog'
-import { sampleGoals, type Goal } from '@/states/goals'
-import { useState } from 'react'
-import { events, type CalendarEvent } from '@/states/events'
-import { AssistantRuntimeProvider } from '@assistant-ui/react'
-import { useChatRuntime, AssistantChatTransport } from "@assistant-ui/react-ai-sdk";
+"use client";
+import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import FullCalendar from "@fullcalendar/react";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import Sidebar from "@/components/Sidebar";
+import SettingsDialog from "@/components/SettingsDialog";
+import { sampleGoals, type Goal } from "@/states/goals";
+import { useState } from "react";
+import { events, type CalendarEvent } from "@/states/events";
+import { AssistantRuntimeProvider } from "@assistant-ui/react";
+import {
+  useChatRuntime,
+  AssistantChatTransport,
+} from "@assistant-ui/react-ai-sdk";
 
 function Header() {
   return (
@@ -31,7 +34,7 @@ function Header() {
         </Box>
       </Flex>
     </Box>
-  )
+  );
 }
 
 // Sidebar moved to its own component in `src/Sidebar.tsx` and receives goals via props.
@@ -44,9 +47,9 @@ function CalendarView({ events }: { events: CalendarEvent[] }) {
           plugins={[timeGridPlugin, interactionPlugin]}
           initialView="timeGridDay"
           headerToolbar={{
-            left: 'prev,next today',
-            center: 'title',
-            right: '',
+            left: "prev,next today",
+            center: "title",
+            right: "",
           }}
           nowIndicator={true}
           height="auto"
@@ -59,32 +62,32 @@ function CalendarView({ events }: { events: CalendarEvent[] }) {
           eventStartEditable={true}
           eventDurationEditable={true}
           events={events}
-          eventClick={info => {
-            const kind = info.event.extendedProps?.kind ?? 'task'
-            alert(`[${kind}] ${info.event.title}`)
+          eventClick={(info) => {
+            const kind = info.event.extendedProps?.kind ?? "task";
+            alert(`[${kind}] ${info.event.title}`);
           }}
-          eventDrop={info => {
-            console.log('eventDrop:', {
+          eventDrop={(info) => {
+            console.log("eventDrop:", {
               id: info.event.id,
               start: info.event.start,
               end: info.event.end,
-            })
+            });
           }}
-          eventResize={info => {
-            console.log('eventResize:', {
+          eventResize={(info) => {
+            console.log("eventResize:", {
               id: info.event.id,
               start: info.event.start,
               end: info.event.end,
-            })
+            });
           }}
         />
       </Box>
     </Box>
-  )
+  );
 }
 
 export default function App() {
-  const [goals, setGoals] = useState<Goal[]>(sampleGoals)
+  const [goals, setGoals] = useState<Goal[]>(sampleGoals);
   const runtime = useChatRuntime({
     transport: new AssistantChatTransport({
       api: "/api/chat",
@@ -93,25 +96,25 @@ export default function App() {
 
   return (
     <AssistantRuntimeProvider runtime={runtime}>
-    <Box minH="100vh" bg="gray.50">
-      <Header />
+      <Box minH="100vh" bg="gray.50">
+        <Header />
 
-      <Flex
-        direction={{ base: 'column', md: 'row' }}
-        mx="auto"
-        gap={0}
-        height="calc(100vh - 73px)"
-      >
-        <Sidebar
-          goals={goals}
-          onAddGoal={g => setGoals(prev => [g, ...prev])}
-          onRemoveGoal={i =>
-            setGoals(prev => prev.filter((_, idx) => idx !== i))
-          }
-        />
-        <CalendarView events={events} />
-      </Flex>
-    </Box>
+        <Flex
+          direction={{ base: "column", md: "row" }}
+          mx="auto"
+          gap={0}
+          height="calc(100vh - 73px)"
+        >
+          <Sidebar
+            goals={goals}
+            onAddGoal={(g) => setGoals((prev) => [g, ...prev])}
+            onRemoveGoal={(i) =>
+              setGoals((prev) => prev.filter((_, idx) => idx !== i))
+            }
+          />
+          <CalendarView events={events} />
+        </Flex>
+      </Box>
     </AssistantRuntimeProvider>
-  )
+  );
 }

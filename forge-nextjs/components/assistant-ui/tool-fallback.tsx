@@ -30,7 +30,7 @@ export const ToolFallback: ToolCallMessagePartComponent = ({
     <div
       className={cn(
         "aui-tool-fallback-root mb-4 flex w-full flex-col gap-3 rounded-lg border py-3",
-        isCancelled && "border-muted-foreground/30 bg-muted/30",
+        isCancelled && "border-muted-foreground/30 bg-muted/30"
       )}
     >
       <div className="aui-tool-fallback-header flex items-center gap-2 px-4">
@@ -42,7 +42,7 @@ export const ToolFallback: ToolCallMessagePartComponent = ({
         <p
           className={cn(
             "aui-tool-fallback-title grow",
-            isCancelled && "text-muted-foreground line-through",
+            isCancelled && "text-muted-foreground line-through"
           )}
         >
           {isCancelled ? "Cancelled tool: " : "Used tool: "}
@@ -67,7 +67,7 @@ export const ToolFallback: ToolCallMessagePartComponent = ({
           <div
             className={cn(
               "aui-tool-fallback-args-root px-4",
-              isCancelled && "opacity-60",
+              isCancelled && "opacity-60"
             )}
           >
             <pre className="aui-tool-fallback-args-value whitespace-pre-wrap">
