@@ -131,7 +131,7 @@ export default function SettingsDialog() {
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
-          <Dialog.Content maxW="720px">
+          <Dialog.Content maxW="960px">
             <Dialog.Header>
               <Dialog.Title>Settings</Dialog.Title>
             </Dialog.Header>
