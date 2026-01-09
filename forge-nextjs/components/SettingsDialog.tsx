@@ -138,9 +138,7 @@ export default function SettingsDialog() {
           <Dialog.Content maxW="720px">
             <Dialog.Header>
               <Dialog.Title>
-                <Heading as="h3" size="md">
                   Settings
-                </Heading>
               </Dialog.Title>
             </Dialog.Header>
 

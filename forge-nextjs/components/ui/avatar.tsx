@@ -1,34 +1,53 @@
-import {
-  Avatar as ChakraAvatar,
-  AvatarGroup as ChakraAvatarGroup,
-} from "@chakra-ui/react"
+"use client"
+
 import * as React from "react"
+import * as AvatarPrimitive from "@radix-ui/react-avatar"
 
-type ImageProps = React.ImgHTMLAttributes<HTMLImageElement>
+import { cn } from "@/lib/utils"
 
-export interface AvatarProps extends ChakraAvatar.RootProps {
-  name?: string
-  src?: string
-  srcSet?: string
-  loading?: ImageProps["loading"]
-  icon?: React.ReactElement
-  fallback?: React.ReactNode
+function Avatar({
+  className,
+  ...props
+}: React.ComponentProps<typeof AvatarPrimitive.Root>) {
+  return (
+    <AvatarPrimitive.Root
+      data-slot="avatar"
+      className={cn(
+        "relative flex size-8 shrink-0 overflow-hidden rounded-full",
+        className
+      )}
+      {...props}
+    />
+  )
 }
 
-export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
-  function Avatar(props, ref) {
-    const { name, src, srcSet, loading, icon, fallback, children, ...rest } =
-      props
-    return (
-      <ChakraAvatar.Root ref={ref} {...rest}>
-        <ChakraAvatar.Fallback name={name}>
-          {icon || fallback}
-        </ChakraAvatar.Fallback>
-        <ChakraAvatar.Image src={src} srcSet={srcSet} loading={loading} />
-        {children}
-      </ChakraAvatar.Root>
-    )
-  },
-)
+function AvatarImage({
+  className,
+  ...props
+}: React.ComponentProps<typeof AvatarPrimitive.Image>) {
+  return (
+    <AvatarPrimitive.Image
+      data-slot="avatar-image"
+      className={cn("aspect-square size-full", className)}
+      {...props}
+    />
+  )
+}
 
-export const AvatarGroup = ChakraAvatarGroup
+function AvatarFallback({
+  className,
+  ...props
+}: React.ComponentProps<typeof AvatarPrimitive.Fallback>) {
+  return (
+    <AvatarPrimitive.Fallback
+      data-slot="avatar-fallback"
+      className={cn(
+        "bg-muted flex size-full items-center justify-center rounded-full",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+export { Avatar, AvatarImage, AvatarFallback }
