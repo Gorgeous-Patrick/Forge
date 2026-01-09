@@ -1,75 +1,9 @@
-import {
-  Box,
-  Button,
-  Dialog,
-  Portal,
-  Heading,
-  Text,
-  CloseButton,
-} from "@chakra-ui/react";
+import { Box, Button, Dialog, Portal, Heading, Text } from "@chakra-ui/react";
 import SettingsButton from "./SettingsButton";
 import { useState } from "react";
 import { sampleInfoTags } from "../states/InfoTag";
 import { InfoTagComponent } from "./InfoTagComponent";
 import { ChatboxComponent } from "@/components/Chatbox";
-
-function TagDialog({
-  tag,
-  onClose,
-}: {
-  tag: typeof sampleInfoTags[number] | null;
-  onClose: () => void;
-}) {
-  if (!tag) return null;
-  console.log("Rendering TagDialog for tag:", tag);
-
-  return (
-    <Dialog.Root
-      open={!!tag}
-      onOpenChange={(isOpen) => {
-        if (!isOpen) onClose();
-      }}
-      size="full"
-    >
-      <Portal>
-        <Dialog.Backdrop />
-        <Dialog.Positioner>
-          <Dialog.Content
-            maxW="100vw"
-            height="100vh"
-            display="flex"
-            flexDirection="column"
-          >
-            <Dialog.Header>
-              <Dialog.Title>{tag.title}</Dialog.Title>
-            </Dialog.Header>
-
-            <Dialog.Body
-              display="flex"
-              flexDirection="column"
-              flex={1}
-              minH={0}
-              gap={4}
-            >
-              <Box as="p" color="gray.700" flexShrink={0}>
-                {tag.info}
-              </Box>
-              <Box flex={1} minH={0} overflow="hidden">
-                <ChatboxComponent name={tag.title} />
-              </Box>
-            </Dialog.Body>
-
-            <Dialog.Footer>
-              <Dialog.CloseTrigger asChild>
-                <CloseButton aria-label="Close tag dialog" onClick={onClose} />
-              </Dialog.CloseTrigger>
-            </Dialog.Footer>
-          </Dialog.Content>
-        </Dialog.Positioner>
-      </Portal>
-    </Dialog.Root>
-  );
-}
 
 function InfoTagSettingsPane() {
   const [selectedTag, setSelectedTag] = useState<
@@ -83,16 +17,67 @@ function InfoTagSettingsPane() {
         Manage and customize your information tags.
       </Text>
 
-      <Box mt={4} display="flex" gap={2} flexWrap="wrap">
-        {sampleInfoTags.map((tag) => (
-          <Box key={tag.title}>
-            <InfoTagComponent tag={tag} onClick={() => setSelectedTag(tag)} />
+      <Box
+        mt={6}
+        display="flex"
+        flexDirection={{ base: "column", md: "row" }}
+        gap={6}
+      >
+        <Box flex={1}>
+          <Text fontWeight="medium" mb={3}>
+            Available Tags
+          </Text>
+          <Box display="flex" gap={2} flexWrap="wrap">
+            {sampleInfoTags.map((tag) => (
+              <Box key={tag.title}>
+                <InfoTagComponent
+                  tag={tag}
+                  onClick={() => setSelectedTag(tag)}
+                />
+              </Box>
+            ))}
           </Box>
-        ))}
-      </Box>
+        </Box>
 
-      {/* Parent-controlled dialog rendered here */}
-      <TagDialog tag={selectedTag} onClose={() => setSelectedTag(null)} />
+        <Box flex={1} minH="420px">
+          <Box
+            borderWidth="1px"
+            borderColor="gray.200"
+            borderRadius="lg"
+            bg="white"
+            p={4}
+            height="100%"
+            display="flex"
+            flexDirection="column"
+            minH="420px"
+          >
+            {selectedTag ? (
+              <>
+                <Heading as="h3" size="md">
+                  {selectedTag.title}
+                </Heading>
+                <Text color="gray.600" mt={2}>
+                  {selectedTag.info}
+                </Text>
+                <Box mt={4} flex={1} minH="0">
+                  <ChatboxComponent name={selectedTag.title} />
+                </Box>
+              </>
+            ) : (
+              <Box
+                flex={1}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Text color="gray.500">
+                  Select a tag to view details and chat.
+                </Text>
+              </Box>
+            )}
+          </Box>
+        </Box>
+      </Box>
     </Box>
   );
 }
