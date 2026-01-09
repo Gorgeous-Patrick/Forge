@@ -55,7 +55,7 @@ function TagDialog({
                 {tag.info}
               </Box>
               <Box flex={1} minH={0} overflow="hidden">
-                <ChatboxComponent />
+                <ChatboxComponent name={tag.title} />
               </Box>
             </Dialog.Body>
 
