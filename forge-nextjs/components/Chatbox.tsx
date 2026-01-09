@@ -28,14 +28,14 @@ export function ChatboxComponent({
   systemPrompt,
   summaryPrompt = SUMMARY_PROMPT,
 }: ChatboxProps) {
-  const transport = useMemo(
-    () =>
-      new AssistantChatTransport({
-        api: "/api/chat",
-        requestMetadata: { summaryPrompt },
-      }),
-    [name, systemPrompt, summaryPrompt]
-  );
+  const transport = useMemo(() => {
+    const params = new URLSearchParams();
+    if (summaryPrompt) params.set("summaryPrompt", summaryPrompt);
+
+    return new AssistantChatTransport({
+      api: params.size ? `/api/chat?${params.toString()}` : "/api/chat",
+    });
+  }, [name, systemPrompt, summaryPrompt]);
   const runtime = useChatRuntime({ transport });
   const providerKey = `${name}-${systemPrompt ?? "default"}`;
 
