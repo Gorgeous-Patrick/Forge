@@ -5,9 +5,10 @@ export const maxDuration = 30;
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
+  const modelMessages = await convertToModelMessages(messages);
   const result = streamText({
     model: openai("gpt-4o-mini"),
-    messages: convertToModelMessages(messages),
+    messages: modelMessages,
   });
   return result.toUIMessageStreamResponse();
 }
