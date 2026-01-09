@@ -34,9 +34,9 @@ import type { FC } from "react";
 export const Thread: FC = () => {
   return (
     <ThreadPrimitive.Root
-      className="aui-root aui-thread-root @container flex h-full flex-col bg-background"
+      className="aui-root aui-thread-root @container flex h-full w-full flex-col bg-background"
       style={{
-        ["--thread-max-width" as string]: "44rem",
+        ["--thread-max-width" as string]: "100%",
       }}
     >
       <ThreadPrimitive.Viewport
@@ -54,12 +54,13 @@ export const Thread: FC = () => {
             AssistantMessage,
           }}
         />
-
-        <ThreadPrimitive.ViewportFooter className="aui-thread-viewport-footer sticky bottom-0 mx-auto mt-auto flex w-full max-w-(--thread-max-width) flex-col gap-4 overflow-visible rounded-t-3xl bg-background pb-4 md:pb-6">
+      </ThreadPrimitive.Viewport>
+      <ThreadPrimitive.ViewportFooter className="aui-thread-viewport-footer relative border-t border-border bg-background px-4 pb-4 pt-4 md:pb-6">
+        <div className="mx-auto flex w-full max-w-(--thread-max-width) flex-col gap-4">
           <ThreadScrollToBottom />
           <Composer />
-        </ThreadPrimitive.ViewportFooter>
-      </ThreadPrimitive.Viewport>
+        </div>
+      </ThreadPrimitive.ViewportFooter>
     </ThreadPrimitive.Root>
   );
 };

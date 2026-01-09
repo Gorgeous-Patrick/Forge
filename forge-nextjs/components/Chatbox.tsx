@@ -1,6 +1,9 @@
-import { AssistantIf } from "@assistant-ui/react";
 import { Thread } from "./assistant-ui/thread";
 
 export function ChatboxComponent() {
-  return <Thread />;
+  return (
+    <div className="flex h-full w-full min-h-[60vh]">
+      <Thread />
+    </div>
+  );
 }

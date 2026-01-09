@@ -34,16 +34,27 @@ function TagDialog({
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
-          <Dialog.Content>
+          <Dialog.Content
+            maxW="100vw"
+            height="100vh"
+            display="flex"
+            flexDirection="column"
+          >
             <Dialog.Header>
               <Dialog.Title>{tag.title}</Dialog.Title>
             </Dialog.Header>
 
-            <Dialog.Body>
-              <Box>
-                <Box as="p" color="gray.700">
-                  {tag.info}
-                </Box>
+            <Dialog.Body
+              display="flex"
+              flexDirection="column"
+              flex={1}
+              minH={0}
+              gap={4}
+            >
+              <Box as="p" color="gray.700" flexShrink={0}>
+                {tag.info}
+              </Box>
+              <Box flex={1} minH={0} overflow="hidden">
                 <ChatboxComponent />
               </Box>
             </Dialog.Body>
