@@ -7,7 +7,8 @@ import {
   AssistantChatTransport,
   useChatRuntime,
 } from "@assistant-ui/react-ai-sdk";
-import { Thread, SUMMARY_PROMPT } from "./assistant-ui/thread";
+import { Thread } from "./assistant-ui/thread";
+import { DEFAULT_SUMMARY_PROMPT } from "./assistant-ui/prompts";
 import type { FC } from "react";
 
 type ChatboxProps = {
@@ -26,7 +27,7 @@ const SystemPromptRegistrar: FC<{ prompt?: string }> = ({ prompt }) => {
 export function ChatboxComponent({
   name,
   systemPrompt,
-  summaryPrompt = SUMMARY_PROMPT,
+  summaryPrompt = DEFAULT_SUMMARY_PROMPT,
 }: ChatboxProps) {
   const transport = useMemo(() => {
     const params = new URLSearchParams();

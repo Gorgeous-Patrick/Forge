@@ -34,6 +34,7 @@ import {
 } from "lucide-react";
 import type { FC } from "react";
 import { useCallback } from "react";
+import { DEFAULT_SUMMARY_PROMPT } from "./prompts";
 
 export const Thread: FC = () => {
   return (
@@ -158,9 +159,6 @@ const ComposerAction: FC = () => {
   );
 };
 
-export const SUMMARY_PROMPT =
-  "Please summarize everything we've discussed into one concise paragraph describing me.";
-
 const SummarizeButton: FC = () => {
   const api = useAssistantApi();
   const isRunning = useAssistantState((state) => state.thread.isRunning);
@@ -172,7 +170,7 @@ const SummarizeButton: FC = () => {
     const composerApi = threadApi.composer;
     const previousText = composerApi.getState().text;
 
-    composerApi.setText(SUMMARY_PROMPT);
+    composerApi.setText(DEFAULT_SUMMARY_PROMPT);
     composerApi.send();
 
     if (previousText) {
