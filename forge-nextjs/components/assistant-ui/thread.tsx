@@ -25,6 +25,7 @@ import {
   ChevronRightIcon,
   CopyIcon,
   DownloadIcon,
+  FileTextIcon,
   PencilIcon,
   RefreshCwIcon,
   SquareIcon,
@@ -119,6 +120,8 @@ const ComposerAction: FC = () => {
     <div className="aui-composer-action-wrapper relative mx-2 mb-2 flex items-center justify-between">
       <ComposerAddAttachment />
 
+      <SummarizeButton />
+
       <AssistantIf condition={({ thread }) => !thread.isRunning}>
         <ComposerPrimitive.Send asChild>
           <TooltipIconButton
@@ -149,6 +152,25 @@ const ComposerAction: FC = () => {
         </ComposerPrimitive.Cancel>
       </AssistantIf>
     </div>
+  );
+};
+
+const SummarizeButton: FC = () => {
+  return (
+    <TooltipIconButton
+      tooltip="Summarize"
+      variant="outline"
+      size="icon"
+      className="aui-composer-summarize size-8 rounded-full"
+      type="button"
+      aria-label="Summarize chat"
+      onClick={() => {
+        // TODO: wire up with summarization flow
+        alert("Summarize action not implemented yet");
+      }}
+    >
+      <FileTextIcon className="size-4" />
+    </TooltipIconButton>
   );
 };
 
