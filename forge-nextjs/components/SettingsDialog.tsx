@@ -66,6 +66,11 @@ function InfoTagSettingsPane() {
                       "Hello GPT, you are now chatting about " +
                       selectedTag.title
                     }
+                    summaryPrompt={
+                      "Please summarize the key points about " +
+                      selectedTag.title +
+                      " from our conversation."
+                    }
                   />
                 </Box>
               </>

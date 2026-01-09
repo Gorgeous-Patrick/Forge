@@ -9,6 +9,7 @@ import {
 } from "@assistant-ui/react-ai-sdk";
 import { Thread } from "./assistant-ui/thread";
 import { DEFAULT_SUMMARY_PROMPT } from "./assistant-ui/prompts";
+import { SummaryPromptContext } from "./assistant-ui/summary-context";
 import type { FC } from "react";
 
 type ChatboxProps = {
@@ -47,7 +48,9 @@ export function ChatboxComponent({
     >
       <AssistantRuntimeProvider key={providerKey} runtime={runtime}>
         <SystemPromptRegistrar prompt={systemPrompt} />
-        <Thread />
+        <SummaryPromptContext.Provider value={summaryPrompt}>
+          <Thread />
+        </SummaryPromptContext.Provider>
       </AssistantRuntimeProvider>
     </div>
   );
