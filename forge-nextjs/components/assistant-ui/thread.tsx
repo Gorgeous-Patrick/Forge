@@ -16,6 +16,8 @@ import {
   ErrorPrimitive,
   MessagePrimitive,
   ThreadPrimitive,
+  useAssistantApi,
+  useAssistantState,
 } from "@assistant-ui/react";
 import {
   ArrowDownIcon,
@@ -31,6 +33,7 @@ import {
   SquareIcon,
 } from "lucide-react";
 import type { FC } from "react";
+import { useCallback } from "react";
 
 export const Thread: FC = () => {
   return (
@@ -155,7 +158,28 @@ const ComposerAction: FC = () => {
   );
 };
 
+export const SUMMARY_PROMPT =
+  "Please summarize everything we've discussed into one concise paragraph describing me.";
+
 const SummarizeButton: FC = () => {
+  const api = useAssistantApi();
+  const isRunning = useAssistantState((state) => state.thread.isRunning);
+
+  const handleSummarize = useCallback(() => {
+    if (isRunning) return;
+
+    const threadApi = api.thread();
+    const composerApi = threadApi.composer;
+    const previousText = composerApi.getState().text;
+
+    composerApi.setText(SUMMARY_PROMPT);
+    composerApi.send();
+
+    if (previousText) {
+      setTimeout(() => composerApi.setText(previousText), 0);
+    }
+  }, [api, isRunning]);
+
   return (
     <TooltipIconButton
       tooltip="Summarize"
@@ -164,10 +188,8 @@ const SummarizeButton: FC = () => {
       className="aui-composer-summarize size-8 rounded-full"
       type="button"
       aria-label="Summarize chat"
-      onClick={() => {
-        // TODO: wire up with summarization flow
-        alert("Summarize action not implemented yet");
-      }}
+      disabled={isRunning}
+      onClick={handleSummarize}
     >
       <FileTextIcon className="size-4" />
     </TooltipIconButton>

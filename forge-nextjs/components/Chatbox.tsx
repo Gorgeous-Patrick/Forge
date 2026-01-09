@@ -7,12 +7,13 @@ import {
   AssistantChatTransport,
   useChatRuntime,
 } from "@assistant-ui/react-ai-sdk";
-import { Thread } from "./assistant-ui/thread";
+import { Thread, SUMMARY_PROMPT } from "./assistant-ui/thread";
 import type { FC } from "react";
 
 type ChatboxProps = {
   name: string;
   systemPrompt?: string;
+  summaryPrompt?: string;
 };
 
 const SystemPromptRegistrar: FC<{ prompt?: string }> = ({ prompt }) => {
@@ -22,10 +23,18 @@ const SystemPromptRegistrar: FC<{ prompt?: string }> = ({ prompt }) => {
   return null;
 };
 
-export function ChatboxComponent({ name, systemPrompt }: ChatboxProps) {
+export function ChatboxComponent({
+  name,
+  systemPrompt,
+  summaryPrompt = SUMMARY_PROMPT,
+}: ChatboxProps) {
   const transport = useMemo(
-    () => new AssistantChatTransport({ api: "/api/chat" }),
-    [name, systemPrompt]
+    () =>
+      new AssistantChatTransport({
+        api: "/api/chat",
+        requestMetadata: { summaryPrompt },
+      }),
+    [name, systemPrompt, summaryPrompt]
   );
   const runtime = useChatRuntime({ transport });
   const providerKey = `${name}-${systemPrompt ?? "default"}`;
