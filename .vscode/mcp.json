@@ -5,6 +5,10 @@
       "args": ["-y", "@assistant-ui/mcp-docs-server@0.1.18"],
       "type": "stdio",
       "env": {}
+    },
+    "chakra-ui": {
+      "command": "npx",
+      "args": ["-y", "@chakra-ui/react-mcp"]
     }
   },
   "inputs": []
