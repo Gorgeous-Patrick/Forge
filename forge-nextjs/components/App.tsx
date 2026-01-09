@@ -8,11 +8,6 @@ import SettingsDialog from "@/components/SettingsDialog";
 import { sampleGoals, type Goal } from "@/states/goals";
 import { useState } from "react";
 import { events, type CalendarEvent } from "@/states/events";
-import { AssistantRuntimeProvider } from "@assistant-ui/react";
-import {
-  useChatRuntime,
-  AssistantChatTransport,
-} from "@assistant-ui/react-ai-sdk";
 
 function Header() {
   return (
@@ -88,33 +83,26 @@ function CalendarView({ events }: { events: CalendarEvent[] }) {
 
 export default function App() {
   const [goals, setGoals] = useState<Goal[]>(sampleGoals);
-  const runtime = useChatRuntime({
-    transport: new AssistantChatTransport({
-      api: "/api/chat",
-    }),
-  });
 
   return (
-    <AssistantRuntimeProvider runtime={runtime}>
-      <Box minH="100vh" bg="gray.50">
-        <Header />
+    <Box minH="100vh" bg="gray.50">
+      <Header />
 
-        <Flex
-          direction={{ base: "column", md: "row" }}
-          mx="auto"
-          gap={0}
-          height="calc(100vh - 73px)"
-        >
-          <Sidebar
-            goals={goals}
-            onAddGoal={(g) => setGoals((prev) => [g, ...prev])}
-            onRemoveGoal={(i) =>
-              setGoals((prev) => prev.filter((_, idx) => idx !== i))
-            }
-          />
-          <CalendarView events={events} />
-        </Flex>
-      </Box>
-    </AssistantRuntimeProvider>
+      <Flex
+        direction={{ base: "column", md: "row" }}
+        mx="auto"
+        gap={0}
+        height="calc(100vh - 73px)"
+      >
+        <Sidebar
+          goals={goals}
+          onAddGoal={(g) => setGoals((prev) => [g, ...prev])}
+          onRemoveGoal={(i) =>
+            setGoals((prev) => prev.filter((_, idx) => idx !== i))
+          }
+        />
+        <CalendarView events={events} />
+      </Flex>
+    </Box>
   );
 }
