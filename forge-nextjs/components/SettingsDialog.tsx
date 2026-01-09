@@ -60,7 +60,13 @@ function InfoTagSettingsPane() {
                   {selectedTag.info}
                 </Text>
                 <Box mt={4} flex={1} minH="0">
-                  <ChatboxComponent name={selectedTag.title} />
+                  <ChatboxComponent
+                    name={selectedTag.title}
+                    systemPrompt={
+                      "Hello GPT, you are now chatting about " +
+                      selectedTag.title
+                    }
+                  />
                 </Box>
               </>
             ) : (
