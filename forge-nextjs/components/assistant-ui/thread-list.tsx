@@ -1,13 +1,13 @@
-import { TooltipIconButton } from '@/components/assistant-ui/tooltip-icon-button'
-import { Button } from '@/components/ui/button'
-import { Skeleton } from '@/components/ui/skeleton'
+import { TooltipIconButton } from "@/components/assistant-ui/tooltip-icon-button";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   AssistantIf,
   ThreadListItemPrimitive,
   ThreadListPrimitive,
-} from '@assistant-ui/react'
-import { ArchiveIcon, PlusIcon } from 'lucide-react'
-import type { FC } from 'react'
+} from "@assistant-ui/react";
+import { ArchiveIcon, PlusIcon } from "lucide-react";
+import type { FC } from "react";
 
 export const ThreadList: FC = () => {
   return (
@@ -20,8 +20,8 @@ export const ThreadList: FC = () => {
         <ThreadListPrimitive.Items components={{ ThreadListItem }} />
       </AssistantIf>
     </ThreadListPrimitive.Root>
-  )
-}
+  );
+};
 
 const ThreadListNew: FC = () => {
   return (
@@ -34,8 +34,8 @@ const ThreadListNew: FC = () => {
         New Thread
       </Button>
     </ThreadListPrimitive.New>
-  )
-}
+  );
+};
 
 const ThreadListSkeleton: FC = () => {
   return (
@@ -51,8 +51,8 @@ const ThreadListSkeleton: FC = () => {
         </div>
       ))}
     </div>
-  )
-}
+  );
+};
 
 const ThreadListItem: FC = () => {
   return (
@@ -62,8 +62,8 @@ const ThreadListItem: FC = () => {
       </ThreadListItemPrimitive.Trigger>
       <ThreadListItemArchive />
     </ThreadListItemPrimitive.Root>
-  )
-}
+  );
+};
 
 const ThreadListItemArchive: FC = () => {
   return (
@@ -76,5 +76,5 @@ const ThreadListItemArchive: FC = () => {
         <ArchiveIcon className="size-4" />
       </TooltipIconButton>
     </ThreadListItemPrimitive.Archive>
-  )
-}
+  );
+};
