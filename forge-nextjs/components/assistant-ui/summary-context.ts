@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { DEFAULT_SUMMARY_PROMPT } from "./prompts";
+import { DEFAULT_SUMMARY_PROMPT } from "../prompts";
 
 export const SummaryPromptContext = createContext<string>(
   DEFAULT_SUMMARY_PROMPT

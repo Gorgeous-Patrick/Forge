@@ -8,7 +8,7 @@ import {
   useChatRuntime,
 } from "@assistant-ui/react-ai-sdk";
 import { Thread } from "./assistant-ui/thread";
-import { DEFAULT_SUMMARY_PROMPT } from "./assistant-ui/prompts";
+import { DEFAULT_SUMMARY_PROMPT } from "./prompts";
 import { SummaryPromptContext } from "./assistant-ui/summary-context";
 import type { FC } from "react";
 

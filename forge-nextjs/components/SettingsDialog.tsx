@@ -5,6 +5,7 @@ import { sampleInfoTags } from "../states/InfoTag";
 import { InfoTagComponent } from "./InfoTagComponent";
 import { ChatboxComponent } from "@/components/Chatbox";
 import { useColorModeValue } from "@/components/ui/color-mode";
+import { tagEditorPrompt } from "@/components/prompts";
 
 function InfoTagSettingsPane() {
   const [selectedTag, setSelectedTag] = useState<
@@ -68,10 +69,7 @@ function InfoTagSettingsPane() {
                 <Box mt={4} flex={1} minH="0">
                   <ChatboxComponent
                     name={selectedTag.title}
-                    systemPrompt={
-                      "Hello GPT, you are now chatting about " +
-                      selectedTag.title
-                    }
+                    systemPrompt={tagEditorPrompt(selectedTag.title)}
                     summaryPrompt={
                       "Please summarize the key points about " +
                       selectedTag.title +
