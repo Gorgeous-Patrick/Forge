@@ -4,16 +4,22 @@ import { useState } from "react";
 import { sampleInfoTags } from "../states/InfoTag";
 import { InfoTagComponent } from "./InfoTagComponent";
 import { ChatboxComponent } from "@/components/Chatbox";
+import { useColorModeValue } from "@/components/ui/color-mode";
 
 function InfoTagSettingsPane() {
   const [selectedTag, setSelectedTag] = useState<
     typeof sampleInfoTags[number] | null
   >(null);
+  const subtitleColor = useColorModeValue("gray.600", "gray.300");
+  const cardBg = useColorModeValue("white", "gray.900");
+  const cardBorder = useColorModeValue("gray.200", "gray.700");
+  const infoTextColor = useColorModeValue("gray.600", "gray.300");
+  const placeholderColor = useColorModeValue("gray.500", "gray.400");
 
   return (
     <Box>
       <Text fontWeight="semibold">Info Tags</Text>
-      <Text color="gray.600" mt={2}>
+      <Text color={subtitleColor} mt={2}>
         Manage and customize your information tags.
       </Text>
 
@@ -42,9 +48,9 @@ function InfoTagSettingsPane() {
         <Box flex={1} minH="420px">
           <Box
             borderWidth="1px"
-            borderColor="gray.200"
+            borderColor={cardBorder}
             borderRadius="lg"
-            bg="white"
+            bg={cardBg}
             p={4}
             height="100%"
             display="flex"
@@ -56,7 +62,7 @@ function InfoTagSettingsPane() {
                 <Heading as="h3" size="md">
                   {selectedTag.title}
                 </Heading>
-                <Text color="gray.600" mt={2}>
+                <Text color={infoTextColor} mt={2}>
                   {selectedTag.info}
                 </Text>
                 <Box mt={4} flex={1} minH="0">
@@ -81,7 +87,7 @@ function InfoTagSettingsPane() {
                 alignItems="center"
                 justifyContent="center"
               >
-                <Text color="gray.500">
+                <Text color={placeholderColor}>
                   Select a tag to view details and chat.
                 </Text>
               </Box>
@@ -94,11 +100,17 @@ function InfoTagSettingsPane() {
 }
 
 export default function SettingsDialog() {
+  const bodyBg = useColorModeValue("white", "gray.900");
+  const borderColor = useColorModeValue("gray.200", "gray.700");
+  const subtitleColor = useColorModeValue("gray.600", "gray.300");
+  const menuBgActive = useColorModeValue("gray.100", "gray.700");
+  const menuBg = "transparent";
+
   const panes = {
     General: (
       <Box>
         <Text fontWeight="semibold">General</Text>
-        <Text color="gray.600" mt={2}>
+        <Text color={subtitleColor} mt={2}>
           Basic application preferences and behavior.
         </Text>
       </Box>
@@ -107,7 +119,7 @@ export default function SettingsDialog() {
     Appearance: (
       <Box>
         <Text fontWeight="semibold">Appearance</Text>
-        <Text color="gray.600" mt={2}>
+        <Text color={subtitleColor} mt={2}>
           Theme, density and other UI preferences.
         </Text>
       </Box>
@@ -115,7 +127,7 @@ export default function SettingsDialog() {
     Notifications: (
       <Box>
         <Text fontWeight="semibold">Notifications</Text>
-        <Text color="gray.600" mt={2}>
+        <Text color={subtitleColor} mt={2}>
           Configure notification preferences and integrations.
         </Text>
       </Box>
@@ -123,7 +135,7 @@ export default function SettingsDialog() {
     Account: (
       <Box>
         <Text fontWeight="semibold">Account</Text>
-        <Text color="gray.600" mt={2}>
+        <Text color={subtitleColor} mt={2}>
           Manage account settings and connected services.
         </Text>
       </Box>
@@ -142,7 +154,7 @@ export default function SettingsDialog() {
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
-          <Dialog.Content maxW="960px">
+          <Dialog.Content maxW="960px" bg={bodyBg}>
             <Dialog.Header>
               <Dialog.Title>Settings</Dialog.Title>
             </Dialog.Header>
@@ -159,7 +171,7 @@ export default function SettingsDialog() {
                         justifyContent="flex-start"
                         width="100%"
                         mb={1}
-                        bg={item === selected ? "gray.100" : "transparent"}
+                        bg={item === selected ? menuBgActive : menuBg}
                         onClick={() => setSelected(item)}
                       >
                         {item}

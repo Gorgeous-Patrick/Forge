@@ -8,25 +8,34 @@ import SettingsDialog from "@/components/SettingsDialog";
 import { sampleGoals, type Goal } from "@/states/goals";
 import { useState } from "react";
 import { events, type CalendarEvent } from "@/states/events";
+import { ColorModeButton, useColorModeValue } from "@/components/ui/color-mode";
 
 function Header() {
+  const headerBg = useColorModeValue("white", "gray.900");
+  const borderColor = useColorModeValue("gray.200", "gray.700");
+  const headingColor = useColorModeValue("gray.900", "gray.50");
+  const subheadingColor = useColorModeValue("gray.600", "gray.300");
+
   return (
     <Box
       as="header"
-      bg="white"
+      bg={headerBg}
       borderBottomWidth="1px"
-      borderBottomColor="gray.200"
+      borderBottomColor={borderColor}
       px={4}
       py={3}
     >
       <Flex align="baseline" gap={3}>
-        <Heading as="h1" size="xl" m={0}>
+        <Heading as="h1" size="xl" m={0} color={headingColor}>
           Forge
         </Heading>
-        <Text opacity={0.7}>Calendar</Text>
-        <Box ml="auto">
+        <Text opacity={0.7} color={subheadingColor}>
+          Calendar
+        </Text>
+        <Flex ml="auto" align="center" gap={2}>
+          <ColorModeButton aria-label="Toggle dark mode" />
           <SettingsDialog />
-        </Box>
+        </Flex>
       </Flex>
     </Box>
   );
@@ -83,9 +92,10 @@ function CalendarView({ events }: { events: CalendarEvent[] }) {
 
 export default function App() {
   const [goals, setGoals] = useState<Goal[]>(sampleGoals);
+  const appBg = useColorModeValue("gray.50", "gray.900");
 
   return (
-    <Box minH="100vh" bg="gray.50">
+    <Box minH="100vh" bg={appBg}>
       <Header />
 
       <Flex

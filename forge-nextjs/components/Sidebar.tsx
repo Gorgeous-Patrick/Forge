@@ -14,6 +14,7 @@ import { InfoTagComponent } from "./InfoTagComponent";
 import WorkDialog from "./WorkDialog";
 import type { Goal } from "../states/goals";
 import { useState, useRef } from "react";
+import { useColorModeValue } from "@/components/ui/color-mode";
 
 type Props = {
   goals: Goal[];
@@ -28,6 +29,8 @@ function DeleteGoalDialog({
   goalTitle: string;
   onDelete: () => void;
 }) {
+  const dialogTextColor = useColorModeValue("gray.600", "gray.300");
+
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
@@ -51,7 +54,7 @@ function DeleteGoalDialog({
               <Dialog.Title>Delete goal?</Dialog.Title>
             </Dialog.Header>
             <Dialog.Body>
-              <Text color="gray.600">
+              <Text color={dialogTextColor}>
                 Are you sure you want to delete "{goalTitle}"? This action
                 cannot be undone.
               </Text>
@@ -110,8 +113,12 @@ function GoalComponent({
   index: number;
   onRemove?: () => void;
 }) {
+  const goalCardBg = useColorModeValue("gray.50", "gray.800");
+  const metaTextColor = useColorModeValue("gray.500", "gray.400");
+  const bodyTextColor = useColorModeValue("gray.600", "gray.300");
+
   return (
-    <Box p={3} bg="gray.50" borderRadius="md" position="relative">
+    <Box p={3} bg={goalCardBg} borderRadius="md" position="relative">
       <DeleteGoalDialog
         goalTitle={goal.title}
         onDelete={() => {
@@ -122,16 +129,16 @@ function GoalComponent({
       <Text fontWeight="semibold">{goal.title}</Text>
 
       {goal.dueDate ? (
-        <Text fontSize="sm" color="gray.500">
+        <Text fontSize="sm" color={metaTextColor}>
           {formatDue(goal.dueDate)}
         </Text>
       ) : (
-        <Text fontSize="sm" color="gray.500">
+        <Text fontSize="sm" color={metaTextColor}>
           No due date
         </Text>
       )}
 
-      <Text mt={2} fontSize="sm" color="gray.600">
+      <Text mt={2} fontSize="sm" color={bodyTextColor}>
         {goal.description}
       </Text>
 
@@ -156,6 +163,9 @@ export default function Sidebar({ goals, onAddGoal, onRemoveGoal }: Props) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dueInput, setDueInput] = useState(""); // datetime-local value
+  const sidebarBg = useColorModeValue("white", "gray.900");
+  const sidebarBorder = useColorModeValue("gray.200", "gray.700");
+  const emptyStateColor = useColorModeValue("gray.600", "gray.400");
 
   function resetForm() {
     setTitle("");
@@ -181,11 +191,11 @@ export default function Sidebar({ goals, onAddGoal, onRemoveGoal }: Props) {
     <Box
       as="aside"
       w={{ base: "100%", md: "350px", lg: "600px" }}
-      bg="white"
+      bg={sidebarBg}
       borderRightWidth={{ base: 0, md: "1px" }}
       borderBottomWidth={{ base: "1px", md: 0 }}
-      borderRightColor="gray.200"
-      borderBottomColor="gray.200"
+      borderRightColor={sidebarBorder}
+      borderBottomColor={sidebarBorder}
       p={4}
       flexShrink={0}
       height="100%"
@@ -198,7 +208,7 @@ export default function Sidebar({ goals, onAddGoal, onRemoveGoal }: Props) {
         </Heading>
 
         {goals.length === 0 ? (
-          <Text color="gray.600">No goals yet</Text>
+          <Text color={emptyStateColor}>No goals yet</Text>
         ) : (
           goals.map((g, i) => (
             <GoalComponent
