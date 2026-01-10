@@ -101,7 +101,6 @@ function InfoTagSettingsPane() {
 
 export default function SettingsDialog() {
   const bodyBg = useColorModeValue("white", "gray.900");
-  const borderColor = useColorModeValue("gray.200", "gray.700");
   const subtitleColor = useColorModeValue("gray.600", "gray.300");
   const menuBgActive = useColorModeValue("gray.100", "gray.700");
   const menuBg = "transparent";
