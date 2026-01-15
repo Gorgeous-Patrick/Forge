@@ -1,43 +1,78 @@
 "use client";
-import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Text, Button } from "@chakra-ui/react";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import Sidebar from "@/components/Sidebar";
 import SettingsDialog from "@/components/SettingsDialog";
+import LoginDialog from "@/components/LoginDialog";
 import { sampleGoals, type Goal } from "@/states/goals";
 import { useState } from "react";
 import { events, type CalendarEvent } from "@/states/events";
 import { ColorModeButton, useColorModeValue } from "@/components/ui/color-mode";
+import { useAuth } from "@/hooks/useAuth";
 
 function Header() {
   const headerBg = useColorModeValue("white", "gray.900");
   const borderColor = useColorModeValue("gray.200", "gray.700");
   const headingColor = useColorModeValue("gray.900", "gray.50");
   const subheadingColor = useColorModeValue("gray.600", "gray.300");
+  const { user, logout, login } = useAuth();
+  const [showLoginDialog, setShowLoginDialog] = useState(false);
 
   return (
-    <Box
-      as="header"
-      bg={headerBg}
-      borderBottomWidth="1px"
-      borderBottomColor={borderColor}
-      px={4}
-      py={3}
-    >
-      <Flex align="baseline" gap={3}>
-        <Heading as="h1" size="xl" m={0} color={headingColor}>
-          Forge
-        </Heading>
-        <Text opacity={0.7} color={subheadingColor}>
-          Calendar
-        </Text>
-        <Flex ml="auto" align="center" gap={2}>
-          <ColorModeButton aria-label="Toggle dark mode" />
-          <SettingsDialog />
+    <>
+      <Box
+        as="header"
+        bg={headerBg}
+        borderBottomWidth="1px"
+        borderBottomColor={borderColor}
+        px={4}
+        py={3}
+      >
+        <Flex align="baseline" gap={3}>
+          <Heading as="h1" size="xl" m={0} color={headingColor}>
+            Forge
+          </Heading>
+          <Text opacity={0.7} color={subheadingColor}>
+            Calendar
+          </Text>
+          <Flex ml="auto" align="center" gap={2}>
+            {user ? (
+              <>
+                <Text fontSize="sm" color={subheadingColor}>
+                  {user.email}
+                </Text>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={logout}
+                  aria-label="Logout"
+                >
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <Button
+                size="sm"
+                colorScheme="blue"
+                onClick={() => setShowLoginDialog(true)}
+                aria-label="Login"
+              >
+                Login
+              </Button>
+            )}
+            <ColorModeButton aria-label="Toggle dark mode" />
+            <SettingsDialog />
+          </Flex>
         </Flex>
-      </Flex>
-    </Box>
+      </Box>
+      <LoginDialog
+        open={showLoginDialog}
+        onOpenChange={setShowLoginDialog}
+        onLoginSuccess={login}
+      />
+    </>
   );
 }
 
