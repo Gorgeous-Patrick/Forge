@@ -1,6 +1,12 @@
 import App from "@/components/App";
-import Image from "next/image";
+import {VibeKanbanWebCompanion} from "vibe-kanban-web-companion";
+
 
 export default function Home() {
-  return <App />;
+  return (
+    <>
+    <VibeKanbanWebCompanion />
+  <App />
+  </>
+  );
 }
