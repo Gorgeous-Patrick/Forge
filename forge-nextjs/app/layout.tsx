@@ -2,6 +2,7 @@ import "./globals.css";
 import type { ReactNode } from "react";
 
 import { Provider } from "@/components/ui/provider";
+import { AuthProvider } from "@/hooks/useAuth";
 
 export default function RootLayout(props: { children: ReactNode }) {
   const { children } = props;
@@ -9,7 +10,9 @@ export default function RootLayout(props: { children: ReactNode }) {
     <html suppressHydrationWarning>
       <body>
         <Provider>
-          {children}
+          <AuthProvider>
+            {children}
+          </AuthProvider>
         </Provider>
       </body>
     </html>
