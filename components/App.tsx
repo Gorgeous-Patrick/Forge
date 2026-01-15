@@ -6,6 +6,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import Sidebar from "@/components/Sidebar";
 import SettingsDialog from "@/components/SettingsDialog";
 import LoginDialog from "@/components/LoginDialog";
+import WelcomeScreen from "@/components/WelcomeScreen";
 import { sampleGoals, type Goal } from "@/states/goals";
 import { useState } from "react";
 import { events, type CalendarEvent } from "@/states/events";
@@ -128,7 +129,29 @@ function CalendarView({ events }: { events: CalendarEvent[] }) {
 export default function App() {
   const [goals, setGoals] = useState<Goal[]>(sampleGoals);
   const appBg = useColorModeValue("gray.50", "gray.900");
+  const { user, isLoading, login } = useAuth();
+  const [showLoginDialog, setShowLoginDialog] = useState(false);
 
+  // Show loading state while checking authentication
+  if (isLoading) {
+    return null;
+  }
+
+  // Show welcome screen if not logged in
+  if (!user) {
+    return (
+      <>
+        <WelcomeScreen onLoginClick={() => setShowLoginDialog(true)} />
+        <LoginDialog
+          open={showLoginDialog}
+          onOpenChange={setShowLoginDialog}
+          onLoginSuccess={login}
+        />
+      </>
+    );
+  }
+
+  // Show full app if logged in
   return (
     <Box minH="100vh" bg={appBg}>
       <Header />

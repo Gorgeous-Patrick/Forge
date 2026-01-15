@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 
 import { Provider } from "@/components/ui/provider";
 import { AuthProvider } from "@/hooks/useAuth";
+import { QueryProvider } from "@/components/QueryProvider";
 
 export default function RootLayout(props: { children: ReactNode }) {
   const { children } = props;
@@ -10,9 +11,11 @@ export default function RootLayout(props: { children: ReactNode }) {
     <html suppressHydrationWarning>
       <body>
         <Provider>
-          <AuthProvider>
-            {children}
-          </AuthProvider>
+          <QueryProvider>
+            <AuthProvider>
+              {children}
+            </AuthProvider>
+          </QueryProvider>
         </Provider>
       </body>
     </html>
