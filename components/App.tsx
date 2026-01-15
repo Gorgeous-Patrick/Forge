@@ -6,6 +6,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import Sidebar from "@/components/Sidebar";
 import SettingsDialog from "@/components/SettingsDialog";
 import LoginDialog from "@/components/LoginDialog";
+import RegisterDialog from "@/components/RegisterDialog";
 import WelcomeScreen from "@/components/WelcomeScreen";
 import { sampleGoals, type Goal } from "@/states/goals";
 import { useState } from "react";
@@ -131,7 +132,7 @@ export default function App() {
   const appBg = useColorModeValue("gray.50", "gray.900");
   const { user, isLoading, login } = useAuth();
   const [showLoginDialog, setShowLoginDialog] = useState(false);
-  const [dialogMode, setDialogMode] = useState<"login" | "register">("login");
+  const [showRegisterDialog, setShowRegisterDialog] = useState(false);
 
   // Show loading state while checking authentication
   if (isLoading) {
@@ -143,20 +144,18 @@ export default function App() {
     return (
       <>
         <WelcomeScreen
-          onLoginClick={() => {
-            setDialogMode("login");
-            setShowLoginDialog(true);
-          }}
-          onRegisterClick={() => {
-            setDialogMode("register");
-            setShowLoginDialog(true);
-          }}
+          onLoginClick={() => setShowLoginDialog(true)}
+          onRegisterClick={() => setShowRegisterDialog(true)}
         />
         <LoginDialog
           open={showLoginDialog}
           onOpenChange={setShowLoginDialog}
           onLoginSuccess={login}
-          initialMode={dialogMode}
+        />
+        <RegisterDialog
+          open={showRegisterDialog}
+          onOpenChange={setShowRegisterDialog}
+          onRegisterSuccess={login}
         />
       </>
     );

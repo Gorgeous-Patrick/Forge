@@ -14,17 +14,17 @@ import {
 import { useState } from "react";
 import { useColorModeValue } from "@/components/ui/color-mode";
 
-type LoginDialogProps = {
+type RegisterDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onLoginSuccess: (email: string) => void;
+  onRegisterSuccess: (email: string) => void;
 };
 
-export default function LoginDialog({
+export default function RegisterDialog({
   open,
   onOpenChange,
-  onLoginSuccess,
-}: LoginDialogProps) {
+  onRegisterSuccess,
+}: RegisterDialogProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -39,7 +39,7 @@ export default function LoginDialog({
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/auth/login", {
+      const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -50,13 +50,13 @@ export default function LoginDialog({
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || "Login failed");
+        setError(data.error || "Registration failed");
         setIsLoading(false);
         return;
       }
 
-      // Login successful
-      onLoginSuccess(data.user.email);
+      // Registration successful - user is automatically logged in by backend
+      onRegisterSuccess(data.user.email);
       setEmail("");
       setPassword("");
       setError("");
@@ -75,7 +75,7 @@ export default function LoginDialog({
         <Dialog.Positioner>
           <Dialog.Content>
             <Dialog.Header>
-              <Dialog.Title>Login</Dialog.Title>
+              <Dialog.Title>Create Account</Dialog.Title>
             </Dialog.Header>
             <Dialog.Body>
               <form onSubmit={handleSubmit}>
@@ -99,9 +99,13 @@ export default function LoginDialog({
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
-                      placeholder="Enter your password"
+                      placeholder="Min. 8 characters"
                       disabled={isLoading}
+                      minLength={8}
                     />
+                    <Field.HelperText fontSize="xs" color={dialogTextColor}>
+                      Password must be at least 8 characters
+                    </Field.HelperText>
                   </Field.Root>
 
                   {error && (
@@ -117,7 +121,7 @@ export default function LoginDialog({
                       width="100%"
                       disabled={isLoading}
                     >
-                      {isLoading ? "Logging in..." : "Login"}
+                      {isLoading ? "Creating account..." : "Create Account"}
                     </Button>
                   </Box>
                 </VStack>
