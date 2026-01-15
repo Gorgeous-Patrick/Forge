@@ -1,11 +1,113 @@
-import { Box, Button, Dialog, Portal, Heading, Text } from "@chakra-ui/react";
+import { Box, Button, Dialog, Portal, Heading, Text, Input, Stack } from "@chakra-ui/react";
 import SettingsButton from "./SettingsButton";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { sampleInfoTags } from "../states/InfoTag";
 import { InfoTagComponent } from "./InfoTagComponent";
 import { ChatboxComponent } from "@/components/Chatbox";
 import { useColorModeValue } from "@/components/ui/color-mode";
 import { tagEditorPrompt } from "@/components/prompts";
+import { toaster } from "@/components/ui/toaster";
+
+function AccountSettingsPane() {
+  const [claudeApiKey, setClaudeApiKey] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [initialLoad, setInitialLoad] = useState(true);
+  const subtitleColor = useColorModeValue("gray.600", "gray.300");
+  const inputBg = useColorModeValue("white", "gray.800");
+  const inputBorder = useColorModeValue("gray.300", "gray.600");
+
+  useEffect(() => {
+    // Load existing settings
+    const loadSettings = async () => {
+      try {
+        const response = await fetch("/api/settings");
+        if (response.ok) {
+          const data = await response.json();
+          if (data.settings?.claudeApiKey) {
+            setClaudeApiKey(data.settings.claudeApiKey);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load settings:", error);
+      } finally {
+        setInitialLoad(false);
+      }
+    };
+    loadSettings();
+  }, []);
+
+  const handleSave = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/settings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ claudeApiKey }),
+      });
+
+      if (response.ok) {
+        toaster.create({
+          title: "Settings saved",
+          description: "Your Claude API key has been updated successfully.",
+          type: "success",
+        });
+      } else {
+        throw new Error("Failed to save settings");
+      }
+    } catch (error) {
+      console.error("Failed to save settings:", error);
+      toaster.create({
+        title: "Error",
+        description: "Failed to save settings. Please try again.",
+        type: "error",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Box>
+      <Text fontWeight="semibold">Account</Text>
+      <Text color={subtitleColor} mt={2}>
+        Manage your API keys and account settings.
+      </Text>
+
+      <Stack gap={4} mt={6}>
+        <Box>
+          <Text fontWeight="medium" mb={2}>
+            Claude API Key
+          </Text>
+          <Text fontSize="sm" color={subtitleColor} mb={3}>
+            Enter your Anthropic Claude API key to enable AI features
+          </Text>
+          <Input
+            type="password"
+            value={claudeApiKey}
+            onChange={(e) => setClaudeApiKey(e.target.value)}
+            placeholder="sk-ant-..."
+            bg={inputBg}
+            borderColor={inputBorder}
+            disabled={initialLoad}
+          />
+        </Box>
+
+        <Box>
+          <Button
+            onClick={handleSave}
+            colorScheme="blue"
+            loading={loading}
+            disabled={initialLoad}
+          >
+            Save API Key
+          </Button>
+        </Box>
+      </Stack>
+    </Box>
+  );
+}
 
 function InfoTagSettingsPane() {
   const [selectedTag, setSelectedTag] = useState<
@@ -129,14 +231,7 @@ export default function SettingsDialog() {
         </Text>
       </Box>
     ),
-    Account: (
-      <Box>
-        <Text fontWeight="semibold">Account</Text>
-        <Text color={subtitleColor} mt={2}>
-          Manage account settings and connected services.
-        </Text>
-      </Box>
-    ),
+    Account: <AccountSettingsPane />,
   };
 
   const [selected, setSelected] = useState("General" as keyof typeof panes);
