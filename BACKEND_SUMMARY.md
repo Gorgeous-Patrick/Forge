@@ -8,7 +8,7 @@ A complete REST API backend has been added to the Vibe Kanban application, provi
 
 ### 1. Database Layer (Prisma + SQLite)
 
-**Location:** `forge-nextjs/prisma/`
+**Location:** `prisma/`
 
 - **Schema** (`schema.prisma`): Defines 4 models
   - `Goal`: Main planning entities with title, description, and due dates
@@ -22,7 +22,7 @@ A complete REST API backend has been added to the Vibe Kanban application, provi
 
 ### 2. API Routes (Next.js App Router)
 
-**Location:** `forge-nextjs/app/api/`
+**Location:** `app/api/`
 
 #### Goals API (`/api/goals`)
 - `GET /api/goals` - List all goals with nested data
@@ -77,7 +77,7 @@ A complete REST API backend has been added to the Vibe Kanban application, provi
 ## File Structure
 
 ```
-forge-nextjs/
+Forge/
 ├── app/api/
 │   ├── chat/route.ts (existing AI chat endpoint)
 │   ├── goals/
