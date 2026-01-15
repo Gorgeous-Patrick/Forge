@@ -131,6 +131,7 @@ export default function App() {
   const appBg = useColorModeValue("gray.50", "gray.900");
   const { user, isLoading, login } = useAuth();
   const [showLoginDialog, setShowLoginDialog] = useState(false);
+  const [dialogMode, setDialogMode] = useState<"login" | "register">("login");
 
   // Show loading state while checking authentication
   if (isLoading) {
@@ -141,11 +142,21 @@ export default function App() {
   if (!user) {
     return (
       <>
-        <WelcomeScreen onLoginClick={() => setShowLoginDialog(true)} />
+        <WelcomeScreen
+          onLoginClick={() => {
+            setDialogMode("login");
+            setShowLoginDialog(true);
+          }}
+          onRegisterClick={() => {
+            setDialogMode("register");
+            setShowLoginDialog(true);
+          }}
+        />
         <LoginDialog
           open={showLoginDialog}
           onOpenChange={setShowLoginDialog}
           onLoginSuccess={login}
+          initialMode={dialogMode}
         />
       </>
     );
