@@ -1,5 +1,5 @@
 "use client";
-import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -33,6 +33,9 @@ function Header() {
           Calendar
         </Text>
         <Flex ml="auto" align="center" gap={2}>
+          <Button colorScheme="blue" size="sm">
+            Login
+          </Button>
           <ColorModeButton aria-label="Toggle dark mode" />
           <SettingsDialog />
         </Flex>
