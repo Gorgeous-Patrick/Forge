@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String          @id // email address
+  passwordHash  String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  goals         Goal[]
+  calendarEvents CalendarEvent[]
+}
+
+model Goal {
+  id           String        @id @default(uuid())
+  userId       String
+  title        String
+  description  String
+  dueDate      String?       // ISO datetime string or null
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deliverables Deliverable[]
+  infoTags     InfoTag[]
+
+  @@index([userId])
+}
+
+model Deliverable {
+  id              String   @id @default(uuid())
+  goalId          String
+  title           String
+  completed       Boolean  @default(false)
+  minutesEstimate Int?
+  order           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  goal            Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+  @@index([goalId])
+}
+
+model InfoTag {
+  id        String   @id @default(uuid())
+  goalId    String
+  title     String
+  info      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  goal      Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+  @@index([goalId])
+}
+
+model CalendarEvent {
+  id        String   @id @default(uuid())
+  userId    String
+  title     String
+  start     String   // ISO datetime string
+  end       String   // ISO datetime string
+  kind      String?  // 'task', 'break', etc.
+  metadata  String?  // JSON string for extensibility
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
