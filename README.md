@@ -81,7 +81,6 @@ Reusable AI assistant component with:
 ## Getting Started
 
 ```bash
-cd forge-nextjs
 npm install
 npm run dev
 ```
@@ -107,7 +106,7 @@ npm run lint
 ## Project Structure
 
 ```
-forge-nextjs/
+Forge/
 ├── app/                    # Next.js app router
 │   ├── api/chat/          # AI chat API endpoint
 │   ├── layout.tsx         # Root layout
@@ -123,7 +122,9 @@ forge-nextjs/
 │   ├── goals.ts         # Goal data types and samples
 │   ├── events.tsx       # Calendar event management
 │   └── InfoTag.tsx      # Tag type definitions
-└── lib/                 # Utility functions
+├── lib/                 # Utility functions
+├── prisma/              # Database schema and migrations
+└── public/              # Static assets
 ```
 
 ## Key Features
