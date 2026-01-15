@@ -1,15 +1,16 @@
 # Forge
 
-A calendar-based goal management application that helps you bridge the gap between long-term goals and daily todos. Forge allows you to define high-level goals with deliverables, then break them down into concrete time blocks on your calendar to ensure consistent progress.
+A goal-centric planning system where an AI collaborator helps you decide **what to do today** by generating context-aware daily deliverables from your long-term goals.
 
 ## Overview
 
-Forge combines goal tracking with calendar planning to help you:
-- Define long-term goals with descriptions, due dates, and deliverables
-- Break down goals into actionable tasks with time estimates
-- Schedule work sessions directly on your calendar
-- Get AI-powered assistance for planning and task breakdown
-- Track progress through deliverable completion
+Forge inverts the traditional productivity model:
+- **Goals are long-lived and primary** - Define your high-level objectives with due dates and context
+- **Tasks are temporary and AI-suggested** - The system proposes daily deliverables based on your goals
+- **Calendar as execution surface** - Schedule suggested tasks as time blocks on your calendar
+- **AI proposes, you dispose** - All suggestions are optional; you maintain full autonomy
+
+Instead of micromanaging todo lists, Forge helps you answer "what should I work on today?" by reasoning about your goals, deadlines, and available time.
 
 ## Architecture
 
@@ -51,8 +52,8 @@ Goal management interface featuring:
 #### `WorkDialog.tsx`
 AI-powered work planning interface that:
 - Opens a chat session for a specific goal
-- Uses custom prompts to help break down deliverables
-- Suggests optimal time blocks for tasks
+- Generates daily deliverable suggestions based on goal context
+- Helps decide what to work on today with reasoning
 
 #### `Chatbox.tsx`
 Reusable AI assistant component with:
@@ -127,12 +128,26 @@ forge-nextjs/
 
 ## Key Features
 
-- **Goal Management**: Create, edit, and delete goals with rich metadata
-- **Deliverable Tracking**: Break goals into concrete deliverables with time estimates
-- **Calendar Integration**: Visual time blocking with drag-and-drop scheduling
-- **AI Assistant**: Get help breaking down goals and planning work sessions
+- **Goal-Centric Planning**: Goals are the source of truth, not individual tasks
+- **AI-Generated Deliverables**: Daily task suggestions derived from your long-term goals
+- **Context-Aware Suggestions**: AI reasons about deadlines, progress, and available time
+- **Calendar-Based Execution**: Visual time blocking with drag-and-drop scheduling
+- **Thinking Partner**: Chat with AI about your goals to decide what to work on
+- **User Autonomy**: All AI suggestions are optional; you maintain full control
 - **Theme Support**: Full light/dark mode support
 - **Responsive Design**: Works on desktop and mobile devices
+
+## Design Philosophy
+
+Forge follows these core principles:
+
+1. **Goals over tasks** - Tasks are derived, not authored as truth
+2. **Suggestion over obligation** - AI outputs are always optional
+3. **Local clarity over global optimization** - Help you choose the next right thing, not the perfect plan
+4. **Minimal surfaces** - Every UI element justifies its existence
+5. **Human-interpretable reasoning** - AI suggestions are explainable
+
+Forge exists to reduce activation energy and help you decide what to do today, not to enforce discipline or create guilt.
 
 ## License
 
