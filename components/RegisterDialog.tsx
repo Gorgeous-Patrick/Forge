@@ -1,0 +1,140 @@
+"use client";
+
+import {
+  Box,
+  Button,
+  Input,
+  Text,
+  Dialog,
+  Portal,
+  CloseButton,
+  VStack,
+  Field,
+} from "@chakra-ui/react";
+import { useState } from "react";
+import { useColorModeValue } from "@/components/ui/color-mode";
+
+type RegisterDialogProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onRegisterSuccess: (email: string) => void;
+};
+
+export default function RegisterDialog({
+  open,
+  onOpenChange,
+  onRegisterSuccess,
+}: RegisterDialogProps) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const dialogTextColor = useColorModeValue("gray.600", "gray.300");
+  const errorColor = useColorModeValue("red.600", "red.400");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || "Registration failed");
+        setIsLoading(false);
+        return;
+      }
+
+      // Registration successful - user is automatically logged in by backend
+      onRegisterSuccess(data.user.email);
+      setEmail("");
+      setPassword("");
+      setError("");
+      onOpenChange(false);
+    } catch (err) {
+      setError("Network error. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <Dialog.Root open={open} onOpenChange={(e) => onOpenChange(e.open)}>
+      <Portal>
+        <Dialog.Backdrop />
+        <Dialog.Positioner>
+          <Dialog.Content>
+            <Dialog.Header>
+              <Dialog.Title>Create Account</Dialog.Title>
+            </Dialog.Header>
+            <Dialog.Body>
+              <form onSubmit={handleSubmit}>
+                <VStack gap={4} align="stretch">
+                  <Field.Root>
+                    <Field.Label>Email</Field.Label>
+                    <Input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      placeholder="your@email.com"
+                      disabled={isLoading}
+                    />
+                  </Field.Root>
+
+                  <Field.Root>
+                    <Field.Label>Password</Field.Label>
+                    <Input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      placeholder="Min. 8 characters"
+                      disabled={isLoading}
+                      minLength={8}
+                    />
+                    <Field.HelperText fontSize="xs" color={dialogTextColor}>
+                      Password must be at least 8 characters
+                    </Field.HelperText>
+                  </Field.Root>
+
+                  {error && (
+                    <Text color={errorColor} fontSize="sm">
+                      {error}
+                    </Text>
+                  )}
+
+                  <Box mt={2}>
+                    <Button
+                      type="submit"
+                      colorScheme="blue"
+                      width="100%"
+                      disabled={isLoading}
+                    >
+                      {isLoading ? "Creating account..." : "Create Account"}
+                    </Button>
+                  </Box>
+                </VStack>
+              </form>
+            </Dialog.Body>
+            <Dialog.Footer>
+              <Dialog.CloseTrigger asChild>
+                <CloseButton size="sm" />
+              </Dialog.CloseTrigger>
+            </Dialog.Footer>
+          </Dialog.Content>
+        </Dialog.Positioner>
+      </Portal>
+    </Dialog.Root>
+  );
+}
