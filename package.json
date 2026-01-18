@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --webpack",
-    "build": "next build --webpack",
-    "start": "next start",
+    "dev": "DATABASE_URL=file:./dev.db next dev --webpack",
+    "build": "DATABASE_URL=file:./dev.db next build --webpack",
+    "start": "DATABASE_URL=file:./dev.db next start",
     "lint": "eslint",
-    "db:seed": "tsx prisma/seed.ts",
+    "db:seed": "DATABASE_URL=file:./dev.db tsx prisma/seed.ts",
+    "db:init": "DATABASE_URL=file:./dev.db prisma migrate dev",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
