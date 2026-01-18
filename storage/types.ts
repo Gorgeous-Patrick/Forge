@@ -2,25 +2,29 @@
 export type { Goal, Deliverable } from "../states/goals";
 export type { InfoTag } from "../states/InfoTag";
 export type { CalendarEvent } from "../states/events";
+import { Deliverable } from "../states/goals";
+import { InfoTag } from "../states/InfoTag";
+import { CalendarEvent } from "../states/events";
 
 // API response types with IDs for database records
-export interface GoalWithId extends Omit<import("../states/goals").Goal, 'deliverables' | 'infoTags'> {
+export interface GoalWithId
+  extends Omit<import("../states/goals").Goal, "deliverables" | "infoTags"> {
   id: string;
   deliverables: DeliverableWithId[];
   infoTags: InfoTagWithId[];
 }
 
-export interface DeliverableWithId extends import("../states/goals").Deliverable {
+export interface DeliverableWithId extends Deliverable {
   id: string;
   goalId: string;
 }
 
-export interface InfoTagWithId extends import("../states/InfoTag").InfoTag {
+export interface InfoTagWithId extends InfoTag {
   id: string;
   goalId?: string; // Optional for user-level info tags
 }
 
-export interface CalendarEventWithId extends import("../states/events").CalendarEvent {
+export interface CalendarEventWithId extends CalendarEvent {
   id: string;
 }
 
@@ -49,7 +53,9 @@ export type CreateDeliverableInput = {
   goalId: string;
 };
 
-export type UpdateDeliverableInput = Partial<Omit<CreateDeliverableInput, 'goalId'>>;
+export type UpdateDeliverableInput = Partial<
+  Omit<CreateDeliverableInput, "goalId">
+>;
 
 export type CreateCalendarEventInput = {
   title: string;
@@ -66,4 +72,4 @@ export type CreateInfoTagInput = {
   goalId?: string;
 };
 
-export type UpdateInfoTagInput = Partial<Omit<CreateInfoTagInput, 'goalId'>>;
+export type UpdateInfoTagInput = Partial<Omit<CreateInfoTagInput, "goalId">>;
