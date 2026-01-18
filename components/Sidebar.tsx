@@ -13,12 +13,13 @@ import {
 import { InfoTagComponent } from "./InfoTagComponent";
 import WorkDialog from "./WorkDialog";
 import type { Goal } from "../states/goals";
+import type { GoalWithId, CreateGoalInput } from "@/storage/types";
 import { useState, useRef } from "react";
 import { useColorModeValue } from "@/components/ui/color-mode";
 
 type Props = {
-  goals: Goal[];
-  onAddGoal?: (g: Goal) => void;
+  goals: (Goal | GoalWithId)[];
+  onAddGoal?: (g: CreateGoalInput) => void;
   onRemoveGoal?: (index: number) => void;
 };
 
@@ -175,7 +176,7 @@ export default function Sidebar({ goals, onAddGoal, onRemoveGoal }: Props) {
 
   function handleSubmit() {
     const dueDate = dueInput ? new Date(dueInput) : null;
-    const goal: Goal = {
+    const goal: CreateGoalInput = {
       title: title || "Untitled Goal",
       description: description || "",
       dueDate: dueDate ? dueDate.toISOString() : null,
@@ -212,7 +213,7 @@ export default function Sidebar({ goals, onAddGoal, onRemoveGoal }: Props) {
         ) : (
           goals.map((g, i) => (
             <GoalComponent
-              key={`${g.title}-${i}`}
+              key={"id" in g ? g.id : `${g.title}-${i}`}
               goal={g}
               index={i}
               onRemove={() => {
