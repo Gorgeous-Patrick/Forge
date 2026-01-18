@@ -8,11 +8,12 @@ import SettingsDialog from "@/components/SettingsDialog";
 import LoginDialog from "@/components/LoginDialog";
 import RegisterDialog from "@/components/RegisterDialog";
 import WelcomeScreen from "@/components/WelcomeScreen";
-import { sampleGoals, type Goal } from "@/states/goals";
 import { useState } from "react";
 import { events, type CalendarEvent } from "@/states/events";
 import { ColorModeButton, useColorModeValue } from "@/components/ui/color-mode";
 import { useAuth } from "@/hooks/useAuth";
+import { useGoals } from "@/storage/hooks";
+import type { CreateGoalInput } from "@/storage/types";
 
 function Header() {
   const headerBg = useColorModeValue("white", "gray.900");
@@ -128,14 +129,19 @@ function CalendarView({ events }: { events: CalendarEvent[] }) {
 }
 
 export default function App() {
-  const [goals, setGoals] = useState<Goal[]>(sampleGoals);
   const appBg = useColorModeValue("gray.50", "gray.900");
-  const { user, isLoading, login } = useAuth();
+  const { user, isLoading: authLoading, login } = useAuth();
+  const {
+    goals,
+    isLoading: goalsLoading,
+    create,
+    delete: deleteGoal,
+  } = useGoals();
   const [showLoginDialog, setShowLoginDialog] = useState(false);
   const [showRegisterDialog, setShowRegisterDialog] = useState(false);
 
   // Show loading state while checking authentication
-  if (isLoading) {
+  if (authLoading) {
     return null;
   }
 
@@ -161,6 +167,25 @@ export default function App() {
     );
   }
 
+  const handleAddGoal = async (goal: CreateGoalInput) => {
+    try {
+      await create(goal);
+    } catch (error) {
+      console.error("Failed to create goal:", error);
+    }
+  };
+
+  const handleRemoveGoal = async (index: number) => {
+    try {
+      const goalToDelete = goals[index];
+      if ("id" in goalToDelete) {
+        await deleteGoal(goalToDelete.id);
+      }
+    } catch (error) {
+      console.error("Failed to delete goal:", error);
+    }
+  };
+
   // Show full app if logged in
   return (
     <Box minH="100vh" bg={appBg}>
@@ -174,10 +199,8 @@ export default function App() {
       >
         <Sidebar
           goals={goals}
-          onAddGoal={(g) => setGoals((prev) => [g, ...prev])}
-          onRemoveGoal={(i) =>
-            setGoals((prev) => prev.filter((_, idx) => idx !== i))
-          }
+          onAddGoal={handleAddGoal}
+          onRemoveGoal={handleRemoveGoal}
         />
         <CalendarView events={events} />
       </Flex>
