@@ -1,4 +1,4 @@
-import { PrismaClient } from "../lib/generated/prisma";
+import { PrismaClient, AIProvider } from "../lib/generated/prisma";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -9,6 +9,7 @@ async function main() {
   await prisma.infoTag.deleteMany();
   await prisma.goal.deleteMany();
   await prisma.calendarEvent.deleteMany();
+  await prisma.aIAgentApiKey.deleteMany();
   await prisma.user.deleteMany();
 
   // Create a test user
@@ -24,6 +25,30 @@ async function main() {
   });
 
   console.log(`Created test user: ${testUserEmail} / ${testUserPassword}`);
+
+  // Create AI Agent API keys from environment variables if available
+  const apiKeyProviders = [
+    { provider: AIProvider.ANTHROPIC, envKey: "ANTHROPIC_API_KEY", name: "Claude API Key" },
+    { provider: AIProvider.OPENAI, envKey: "OPENAI_API_KEY", name: "OpenAI API Key" },
+    { provider: AIProvider.GOOGLE, envKey: "GOOGLE_API_KEY", name: "Google AI API Key" },
+    { provider: AIProvider.MISTRAL, envKey: "MISTRAL_API_KEY", name: "Mistral API Key" },
+    { provider: AIProvider.COHERE, envKey: "COHERE_API_KEY", name: "Cohere API Key" },
+  ];
+
+  for (const { provider, envKey, name } of apiKeyProviders) {
+    const apiKey = process.env[envKey];
+    if (apiKey) {
+      await prisma.aIAgentApiKey.create({
+        data: {
+          userId: user.id,
+          provider,
+          apiKey,
+          name,
+        },
+      });
+      console.log(`Added ${provider} API key for test user`);
+    }
+  }
 
   // Create sample goals for the test user
   const goal1 = await prisma.goal.create({
