@@ -19,6 +19,7 @@ model User {
 
   goals         Goal[]
   calendarEvents CalendarEvent[]
+  aiAgentApiKeys AIAgentApiKey[]
 }
 
 model Goal {
@@ -79,4 +80,19 @@ model CalendarEvent {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+}
+
+model AIAgentApiKey {
+  id        String   @id @default(uuid())
+  userId    String
+  provider  String   // e.g., 'openai', 'anthropic', etc.
+  apiKey    String   // Encrypted API key
+  name      String?  // Optional friendly name for the key
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@unique([userId, provider])
 }
