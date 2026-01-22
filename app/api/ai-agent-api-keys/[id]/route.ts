@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAuth } from "@/lib/auth";
+import { AIProvider } from "@/lib/generated/prisma";
 
 // GET /api/ai-agent-api-keys/:id - Get a specific AI Agent API key
 export async function GET(
@@ -64,13 +65,23 @@ export async function PUT(
       );
     }
 
+    // Validate provider if provided
+    if (provider !== undefined && !Object.values(AIProvider).includes(provider as AIProvider)) {
+      return NextResponse.json(
+        {
+          error: `Invalid provider. Must be one of: ${Object.values(AIProvider).join(", ")}`
+        },
+        { status: 400 }
+      );
+    }
+
     // If provider is being changed, check for conflicts
     if (provider && provider !== existingApiKey.provider) {
       const conflictingKey = await prisma.aIAgentApiKey.findUnique({
         where: {
           userId_provider: {
             userId,
-            provider,
+            provider: provider as AIProvider,
           },
         },
       });
@@ -85,12 +96,12 @@ export async function PUT(
 
     // Build update data object with only provided fields
     const updateData: {
-      provider?: string;
+      provider?: AIProvider;
       apiKey?: string;
       name?: string | null;
     } = {};
 
-    if (provider !== undefined) updateData.provider = provider;
+    if (provider !== undefined) updateData.provider = provider as AIProvider;
     if (apiKey !== undefined) updateData.apiKey = apiKey;
     if (name !== undefined) updateData.name = name;
 

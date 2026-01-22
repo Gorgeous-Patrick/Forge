@@ -2,6 +2,7 @@ import { GET, PUT, DELETE } from '@/app/api/ai-agent-api-keys/[id]/route'
 import { prismaMock } from '@/__tests__/utils/prisma-mock'
 import { createMockRequest } from '@/__tests__/utils/test-helpers'
 import * as auth from '@/lib/auth'
+import { AIProvider } from '@/lib/generated/prisma'
 
 jest.mock('@/lib/auth', () => ({
   requireAuth: jest.fn(),
@@ -10,7 +11,7 @@ jest.mock('@/lib/auth', () => ({
 const mockApiKey = {
   id: 'api-key-1',
   userId: 'test@example.com',
-  provider: 'openai',
+  provider: AIProvider.OPENAI,
   apiKey: 'sk-test-key-123',
   name: 'My OpenAI Key',
   createdAt: new Date('2024-01-01'),
@@ -35,7 +36,7 @@ describe('GET /api/ai-agent-api-keys/:id', () => {
 
     expect(response.status).toBe(200)
     expect(data.id).toBe('api-key-1')
-    expect(data.provider).toBe('openai')
+    expect(data.provider).toBe(AIProvider.OPENAI)
     expect(prismaMock.aIAgentApiKey.findFirst).toHaveBeenCalledWith({
       where: {
         id: 'api-key-1',
@@ -133,13 +134,13 @@ describe('PUT /api/ai-agent-api-keys/:id', () => {
     prismaMock.aIAgentApiKey.findUnique.mockResolvedValue(null)
     prismaMock.aIAgentApiKey.update.mockResolvedValue({
       ...mockApiKey,
-      provider: 'anthropic',
+      provider: AIProvider.ANTHROPIC,
     } as any)
 
     const request = createMockRequest({
       method: 'PUT',
       body: {
-        provider: 'anthropic',
+        provider: AIProvider.ANTHROPIC,
       },
     })
     const params = Promise.resolve({ id: 'api-key-1' })
@@ -148,7 +149,27 @@ describe('PUT /api/ai-agent-api-keys/:id', () => {
     const data = await response.json()
 
     expect(response.status).toBe(200)
-    expect(data.provider).toBe('anthropic')
+    expect(data.provider).toBe(AIProvider.ANTHROPIC)
+  })
+
+  it('should return 400 when provider is invalid', async () => {
+    ;(auth.requireAuth as jest.Mock).mockResolvedValue('test@example.com')
+
+    prismaMock.aIAgentApiKey.findFirst.mockResolvedValue(mockApiKey as any)
+
+    const request = createMockRequest({
+      method: 'PUT',
+      body: {
+        provider: 'invalid-provider',
+      },
+    })
+    const params = Promise.resolve({ id: 'api-key-1' })
+
+    const response = await PUT(request, { params })
+    const data = await response.json()
+
+    expect(response.status).toBe(400)
+    expect(data.error).toContain('Invalid provider')
   })
 
   it('should return 409 when updating provider conflicts with existing key', async () => {
@@ -158,13 +179,13 @@ describe('PUT /api/ai-agent-api-keys/:id', () => {
     prismaMock.aIAgentApiKey.findUnique.mockResolvedValue({
       ...mockApiKey,
       id: 'different-key-id',
-      provider: 'anthropic',
+      provider: AIProvider.ANTHROPIC,
     } as any)
 
     const request = createMockRequest({
       method: 'PUT',
       body: {
-        provider: 'anthropic',
+        provider: AIProvider.ANTHROPIC,
       },
     })
     const params = Promise.resolve({ id: 'api-key-1' })
@@ -173,7 +194,7 @@ describe('PUT /api/ai-agent-api-keys/:id', () => {
     const data = await response.json()
 
     expect(response.status).toBe(409)
-    expect(data.error).toBe("API key for provider 'anthropic' already exists")
+    expect(data.error).toBe("API key for provider 'ANTHROPIC' already exists")
   })
 
   it('should return 404 when API key is not found', async () => {

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAuth } from "@/lib/auth";
+import { AIProvider } from "@/lib/generated/prisma";
 
 // GET /api/ai-agent-api-keys - Get all AI Agent API keys for the authenticated user
 export async function GET() {
@@ -47,12 +48,22 @@ export async function POST(req: Request) {
       );
     }
 
+    // Validate provider is a valid enum value
+    if (!Object.values(AIProvider).includes(provider as AIProvider)) {
+      return NextResponse.json(
+        {
+          error: `Invalid provider. Must be one of: ${Object.values(AIProvider).join(", ")}`
+        },
+        { status: 400 }
+      );
+    }
+
     // Check if an API key for this provider already exists
     const existingKey = await prisma.aIAgentApiKey.findUnique({
       where: {
         userId_provider: {
           userId,
-          provider,
+          provider: provider as AIProvider,
         },
       },
     });
@@ -67,7 +78,7 @@ export async function POST(req: Request) {
     const newApiKey = await prisma.aIAgentApiKey.create({
       data: {
         userId,
-        provider,
+        provider: provider as AIProvider,
         apiKey,
         name,
       },
