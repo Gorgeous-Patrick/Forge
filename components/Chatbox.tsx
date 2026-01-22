@@ -33,9 +33,11 @@ export function ChatboxComponent({
   const transport = useMemo(() => {
     const params = new URLSearchParams();
     if (summaryPrompt) params.set("summaryPrompt", summaryPrompt);
+    // For now, always use Claude (Anthropic provider)
+    params.set("provider", "ANTHROPIC");
 
     return new AssistantChatTransport({
-      api: params.size ? `/api/chat?${params.toString()}` : "/api/chat",
+      api: `/api/chat?${params.toString()}`,
     });
   }, [name, systemPrompt, summaryPrompt]);
   const runtime = useChatRuntime({ transport });
