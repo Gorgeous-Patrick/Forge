@@ -1,5 +1,5 @@
 "use client";
-import { Box, Flex, Heading, Text, Button, NativeSelectRoot, NativeSelectField } from "@chakra-ui/react";
+import { Box, Flex, Heading, Text, Button, Select, createListCollection } from "@chakra-ui/react";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -82,34 +82,45 @@ function Header() {
 
 // Sidebar moved to its own component in `src/Sidebar.tsx` and receives goals via props.
 
+const viewOptions = createListCollection({
+  items: [
+    { label: "Month", value: "dayGridMonth" },
+    { label: "Week", value: "timeGridWeek" },
+    { label: "Day", value: "timeGridDay" },
+  ],
+});
+
 function CalendarView({ events }: { events: CalendarEvent[] }) {
-  const [currentView, setCurrentView] = useState<string>("timeGridDay");
+  const [currentView, setCurrentView] = useState<string[]>(["timeGridDay"]);
   const calendarRef = useRef<FullCalendar>(null);
-  const selectBg = useColorModeValue("white", "gray.800");
-  const selectBorder = useColorModeValue("gray.300", "gray.600");
 
   useEffect(() => {
-    if (calendarRef.current) {
+    if (calendarRef.current && currentView.length > 0) {
       const calendarApi = calendarRef.current.getApi();
-      calendarApi.changeView(currentView);
+      calendarApi.changeView(currentView[0]);
     }
   }, [currentView]);
 
   return (
     <Box flex={1} p={4} height="100%" minHeight={0} overflowY="auto">
       <Flex justify="flex-end" mb={3}>
-        <NativeSelectRoot width="200px">
-          <NativeSelectField
-            value={currentView}
-            onChange={(e) => setCurrentView(e.target.value)}
-            bg={selectBg}
-            borderColor={selectBorder}
-          >
-            <option value="dayGridMonth">Month</option>
-            <option value="timeGridWeek">Week</option>
-            <option value="timeGridDay">Day</option>
-          </NativeSelectField>
-        </NativeSelectRoot>
+        <Select.Root
+          collection={viewOptions}
+          value={currentView}
+          onValueChange={(e) => setCurrentView(e.value)}
+          width="200px"
+        >
+          <Select.Trigger>
+            <Select.ValueText placeholder="Select view" />
+          </Select.Trigger>
+          <Select.Content>
+            {viewOptions.items.map((option) => (
+              <Select.Item item={option} key={option.value}>
+                {option.label}
+              </Select.Item>
+            ))}
+          </Select.Content>
+        </Select.Root>
       </Flex>
       <Box mt={3} minHeight={0}>
         <FullCalendar
