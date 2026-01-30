@@ -1,24 +1,24 @@
-import { PATCH, DELETE } from "@/app/api/deliverables/[id]/route";
+import { PATCH, DELETE } from "@/app/api/goal-events/[id]/route";
 import { prismaMock } from "@/__tests__/utils/prisma-mock";
 import {
   createMockRequest,
-  mockDeliverable,
+  mockGoalEvent,
 } from "@/__tests__/utils/test-helpers";
 
-const mockParams = { params: Promise.resolve({ id: "deliverable-1" }) };
+const mockParams = { params: Promise.resolve({ id: "goal-event-1" }) };
 
-describe("PATCH /api/deliverables/:id", () => {
+describe("PATCH /api/goal-events/:id", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("should update deliverable completed status", async () => {
-    const updatedDeliverable = {
-      ...mockDeliverable,
+  it("should update goalEvent completed status", async () => {
+    const updatedGoalEvent = {
+      ...mockGoalEvent,
       completed: true,
     };
 
-    prismaMock.deliverable.update.mockResolvedValue(updatedDeliverable as any);
+    prismaMock.event.update.mockResolvedValue(updatedGoalEvent as any);
 
     const request = createMockRequest({
       method: "PATCH",
@@ -32,21 +32,21 @@ describe("PATCH /api/deliverables/:id", () => {
 
     expect(response.status).toBe(200);
     expect(data.completed).toBe(true);
-    expect(prismaMock.deliverable.update).toHaveBeenCalledWith({
-      where: { id: "deliverable-1" },
+    expect(prismaMock.event.update).toHaveBeenCalledWith({
+      where: { id: "goal-event-1" },
       data: {
         completed: true,
       },
     });
   });
 
-  it("should update deliverable title", async () => {
-    const updatedDeliverable = {
-      ...mockDeliverable,
+  it("should update goalEvent title", async () => {
+    const updatedGoalEvent = {
+      ...mockGoalEvent,
       title: "Updated Title",
     };
 
-    prismaMock.deliverable.update.mockResolvedValue(updatedDeliverable as any);
+    prismaMock.event.update.mockResolvedValue(updatedGoalEvent as any);
 
     const request = createMockRequest({
       method: "PATCH",
@@ -62,13 +62,13 @@ describe("PATCH /api/deliverables/:id", () => {
     expect(data.title).toBe("Updated Title");
   });
 
-  it("should update deliverable minutesEstimate", async () => {
-    const updatedDeliverable = {
-      ...mockDeliverable,
+  it("should update goalEvent minutesEstimate", async () => {
+    const updatedGoalEvent = {
+      ...mockGoalEvent,
       minutesEstimate: 120,
     };
 
-    prismaMock.deliverable.update.mockResolvedValue(updatedDeliverable as any);
+    prismaMock.event.update.mockResolvedValue(updatedGoalEvent as any);
 
     const request = createMockRequest({
       method: "PATCH",
@@ -85,14 +85,14 @@ describe("PATCH /api/deliverables/:id", () => {
   });
 
   it("should update multiple fields at once", async () => {
-    const updatedDeliverable = {
-      ...mockDeliverable,
+    const updatedGoalEvent = {
+      ...mockGoalEvent,
       title: "Updated Title",
       completed: true,
       minutesEstimate: 90,
     };
 
-    prismaMock.deliverable.update.mockResolvedValue(updatedDeliverable as any);
+    prismaMock.event.update.mockResolvedValue(updatedGoalEvent as any);
 
     const request = createMockRequest({
       method: "PATCH",
@@ -113,7 +113,7 @@ describe("PATCH /api/deliverables/:id", () => {
   });
 
   it("should return 500 when database error occurs", async () => {
-    prismaMock.deliverable.update.mockRejectedValue(
+    prismaMock.event.update.mockRejectedValue(
       new Error("Database error")
     );
 
@@ -128,31 +128,31 @@ describe("PATCH /api/deliverables/:id", () => {
     const data = await response.json();
 
     expect(response.status).toBe(500);
-    expect(data.error).toBe("Failed to update deliverable");
+    expect(data.error).toBe("Failed to update event");
   });
 });
 
-describe("DELETE /api/deliverables/:id", () => {
+describe("DELETE /api/goal-events/:id", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("should delete a deliverable", async () => {
-    prismaMock.deliverable.delete.mockResolvedValue(mockDeliverable as any);
+  it("should delete a goalEvent", async () => {
+    prismaMock.event.delete.mockResolvedValue(mockGoalEvent as any);
 
     const request = createMockRequest({ method: "DELETE" });
     const response = await DELETE(request, mockParams);
     const data = await response.json();
 
     expect(response.status).toBe(200);
-    expect(data.message).toBe("Deliverable deleted successfully");
-    expect(prismaMock.deliverable.delete).toHaveBeenCalledWith({
-      where: { id: "deliverable-1" },
+    expect(data.message).toBe("Event deleted successfully");
+    expect(prismaMock.event.delete).toHaveBeenCalledWith({
+      where: { id: "goal-event-1" },
     });
   });
 
   it("should return 500 when database error occurs", async () => {
-    prismaMock.deliverable.delete.mockRejectedValue(
+    prismaMock.event.delete.mockRejectedValue(
       new Error("Database error")
     );
 
@@ -161,6 +161,6 @@ describe("DELETE /api/deliverables/:id", () => {
     const data = await response.json();
 
     expect(response.status).toBe(500);
-    expect(data.error).toBe("Failed to delete deliverable");
+    expect(data.error).toBe("Failed to delete event");
   });
 });

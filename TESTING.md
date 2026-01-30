@@ -13,8 +13,8 @@ __tests__/
 │   ├── goals/
 │   │   ├── goals.test.ts          # Goals CRUD tests (GET, POST)
 │   │   └── goal-id.test.ts        # Individual goal tests (GET, PUT, DELETE)
-│   ├── deliverables/
-│   │   └── deliverable-id.test.ts # Deliverable tests (PATCH, DELETE)
+│   ├── events/
+│   │   └── event-id.test.ts # Event tests (PATCH, DELETE)
 │   └── events/
 │       └── events.test.ts         # Calendar events tests (GET, POST)
 ├── lib/
@@ -43,7 +43,7 @@ All 50 tests pass successfully, covering:
 
 - ✅ Authentication (Register, Login) - 13 tests
 - ✅ Goals CRUD operations - 11 tests
-- ✅ Deliverables operations - 8 tests
+- ✅ Events operations - 8 tests
 - ✅ Calendar events - 8 tests
 - ✅ Auth utilities - 6 tests
 - ✅ Goal individual operations - 4 tests
@@ -78,7 +78,7 @@ prismaMock.user.findUnique.mockResolvedValue(mockUser);
 The `test-helpers.ts` file provides:
 
 - `createMockRequest()`: Creates mock Next.js requests with body/headers/cookies
-- Mock data fixtures: `mockUser`, `mockGoal`, `mockDeliverable`, `mockEvent`
+- Mock data fixtures: `mockUser`, `mockGoal`, `mockEvent`, `mockEvent`
 
 ## GitHub Actions Integration
 

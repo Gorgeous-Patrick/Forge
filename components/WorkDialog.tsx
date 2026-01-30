@@ -13,7 +13,7 @@ import { useState } from "react";
 
 export function WorkDialog({ goal }: { goal: Goal }) {
   const defaultVal =
-    goal.deliverables && goal.deliverables.length > 0 ? "0" : "";
+    goal.events && goal.events.length > 0 ? "0" : "";
   const [selected, setSelected] = useState<string>(defaultVal);
 
   return (
@@ -36,10 +36,10 @@ export function WorkDialog({ goal }: { goal: Goal }) {
               <Box>
                 <Text fontWeight="semibold">{goal.title}</Text>
                 <Text mt={2} color="gray.600">
-                  Choose a deliverable to work on for this session.
+                  Choose a event to work on for this session.
                 </Text>
 
-                {goal.deliverables && goal.deliverables.length > 0 ? (
+                {goal.events && goal.events.length > 0 ? (
                   <Box mt={3}>
                     <RadioCard.Root
                       defaultValue={defaultVal}
@@ -48,9 +48,9 @@ export function WorkDialog({ goal }: { goal: Goal }) {
                       }
                       variant="solid"
                     >
-                      <RadioCard.Label>Select deliverable</RadioCard.Label>
+                      <RadioCard.Label>Select event</RadioCard.Label>
                       <HStack align="stretch">
-                        {goal.deliverables.map((d, idx) => (
+                        {goal.events.map((d, idx) => (
                           <RadioCard.Item key={`del-${idx}`} value={`${idx}`}>
                             <RadioCard.ItemHiddenInput />
                             <RadioCard.ItemControl>
@@ -73,7 +73,7 @@ export function WorkDialog({ goal }: { goal: Goal }) {
                   </Box>
                 ) : (
                   <Text mt={3} color="gray.500">
-                    No deliverables defined for this goal.
+                    No events defined for this goal.
                   </Text>
                 )}
               </Box>
@@ -90,7 +90,7 @@ export function WorkDialog({ goal }: { goal: Goal }) {
                     console.log(
                       "Start work on",
                       goal.title,
-                      "deliverable",
+                      "event",
                       selected
                     );
                   }}

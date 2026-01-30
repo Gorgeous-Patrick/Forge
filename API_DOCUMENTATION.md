@@ -26,7 +26,7 @@ npm run db:seed
 The backend uses SQLite with Prisma ORM. The database includes:
 
 - **Goals**: Main planning entities with title, description, and due dates
-- **Deliverables**: Tasks/subtasks within goals
+- **Events**: Tasks/subtasks within goals
 - **InfoTags**: Metadata tags for goals
 - **CalendarEvents**: Calendar scheduling entries
 
@@ -36,7 +36,7 @@ The backend uses SQLite with Prisma ORM. The database includes:
 
 #### GET /api/goals
 
-Get all goals with their deliverables and info tags.
+Get all goals with their events and info tags.
 
 **Response:**
 
@@ -49,11 +49,11 @@ Get all goals with their deliverables and info tags.
     "dueDate": "2026-01-15T17:00:00" | null,
     "createdAt": "2026-01-15T18:00:00.000Z",
     "updatedAt": "2026-01-15T18:00:00.000Z",
-    "deliverables": [
+    "events": [
       {
         "id": "uuid",
         "goalId": "uuid",
-        "title": "Deliverable title",
+        "title": "Event title",
         "completed": false,
         "minutesEstimate": 30,
         "order": 0,
@@ -86,9 +86,9 @@ Create a new goal.
   "title": "Goal title",
   "description": "Goal description",
   "dueDate": "2026-01-15T17:00:00" | null,
-  "deliverables": [
+  "events": [
     {
-      "title": "Deliverable title",
+      "title": "Event title",
       "completed": false,
       "minutesEstimate": 30
     }
@@ -112,7 +112,7 @@ Get a specific goal by ID.
 
 #### PUT /api/goals/:id
 
-Update a goal. Replaces all deliverables and info tags.
+Update a goal. Replaces all events and info tags.
 
 **Request Body:** Same as POST /api/goals
 
@@ -120,7 +120,7 @@ Update a goal. Replaces all deliverables and info tags.
 
 #### DELETE /api/goals/:id
 
-Delete a goal (cascades to deliverables and info tags).
+Delete a goal (cascades to events and info tags).
 
 **Response:**
 
@@ -130,11 +130,11 @@ Delete a goal (cascades to deliverables and info tags).
 }
 ```
 
-### Deliverables
+### Events
 
-#### PATCH /api/deliverables/:id
+#### PATCH /api/events/:id
 
-Update a deliverable (e.g., toggle completion status).
+Update a event (e.g., toggle completion status).
 
 **Request Body:**
 
@@ -148,17 +148,17 @@ Update a deliverable (e.g., toggle completion status).
 
 All fields are optional. Only provided fields will be updated.
 
-**Response:** Returns the updated deliverable object.
+**Response:** Returns the updated event object.
 
-#### DELETE /api/deliverables/:id
+#### DELETE /api/events/:id
 
-Delete a specific deliverable.
+Delete a specific event.
 
 **Response:**
 
 ```json
 {
-  "message": "Deliverable deleted successfully"
+  "message": "Event deleted successfully"
 }
 ```
 

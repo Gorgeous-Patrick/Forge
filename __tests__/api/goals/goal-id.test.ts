@@ -29,7 +29,7 @@ describe("GET /api/goals/:id", () => {
     expect(prismaMock.goal.findFirst).toHaveBeenCalledWith({
       where: { id: "goal-1", userId: "test@example.com" },
       include: {
-        deliverables: { orderBy: { order: "asc" } },
+        events: { orderBy: { order: "asc" } },
         infoTags: true,
       },
     });
@@ -84,7 +84,7 @@ describe("PUT /api/goals/:id", () => {
         title: "Updated Goal",
         description: "Updated Description",
         dueDate: "2024-12-31",
-        deliverables: [],
+        events: [],
         infoTags: [],
       },
     });

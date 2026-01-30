@@ -180,7 +180,7 @@ export default function Sidebar({ goals, onAddGoal, onRemoveGoal }: Props) {
       title: title || "Untitled Goal",
       description: description || "",
       dueDate: dueDate ? dueDate.toISOString() : null,
-      deliverables: [],
+      events: [],
       infoTags: [],
     };
     if (onAddGoal) onAddGoal(goal);

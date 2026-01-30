@@ -55,14 +55,14 @@ export const mockGoal = {
   dueDate: new Date("2024-12-31"),
   createdAt: new Date("2024-01-01"),
   updatedAt: new Date("2024-01-01"),
-  deliverables: [],
+  events: [],
   infoTags: [],
 };
 
-export const mockDeliverable = {
-  id: "deliverable-1",
+export const mockGoalEvent = {
+  id: "goal-event-1",
   goalId: "goal-1",
-  title: "Test Deliverable",
+  title: "Test Goal Event",
   completed: false,
   minutesEstimate: 60,
   order: 0,

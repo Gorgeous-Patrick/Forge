@@ -32,7 +32,7 @@ describe("GET /api/goals", () => {
     expect(prismaMock.goal.findMany).toHaveBeenCalledWith({
       where: { userId: "test@example.com" },
       include: {
-        deliverables: {
+        events: {
           orderBy: { order: "asc" },
         },
         infoTags: true,
@@ -72,14 +72,14 @@ describe("POST /api/goals", () => {
     jest.clearAllMocks();
   });
 
-  it("should create a new goal with deliverables and infoTags", async () => {
+  it("should create a new goal with events and infoTags", async () => {
     (auth.requireAuth as jest.Mock).mockResolvedValue("test@example.com");
 
     const mockCreatedGoal = {
       ...mockGoal,
-      deliverables: [
+      events: [
         {
-          id: "deliverable-1",
+          id: "event-1",
           title: "Task 1",
           completed: false,
           minutesEstimate: 60,
@@ -103,7 +103,7 @@ describe("POST /api/goals", () => {
         title: "Test Goal",
         description: "Test Description",
         dueDate: "2024-12-31",
-        deliverables: [
+        events: [
           {
             title: "Task 1",
             completed: false,
@@ -125,7 +125,7 @@ describe("POST /api/goals", () => {
     expect(response.status).toBe(201);
     expect(data.id).toBe(mockCreatedGoal.id);
     expect(data.title).toBe(mockCreatedGoal.title);
-    expect(data.deliverables).toHaveLength(1);
+    expect(data.events).toHaveLength(1);
     expect(data.infoTags).toHaveLength(1);
     expect(prismaMock.goal.create).toHaveBeenCalledWith({
       data: {
@@ -133,7 +133,7 @@ describe("POST /api/goals", () => {
         title: "Test Goal",
         description: "Test Description",
         dueDate: "2024-12-31",
-        deliverables: {
+        events: {
           create: [
             {
               title: "Task 1",
@@ -153,7 +153,7 @@ describe("POST /api/goals", () => {
         },
       },
       include: {
-        deliverables: {
+        events: {
           orderBy: { order: "asc" },
         },
         infoTags: true,
@@ -161,7 +161,7 @@ describe("POST /api/goals", () => {
     });
   });
 
-  it("should create goal without deliverables and infoTags", async () => {
+  it("should create goal without events and infoTags", async () => {
     (auth.requireAuth as jest.Mock).mockResolvedValue("test@example.com");
 
     prismaMock.goal.create.mockResolvedValue(mockGoal as any);

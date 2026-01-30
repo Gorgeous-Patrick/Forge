@@ -1,13 +1,13 @@
 # Forge
 
-A goal-centric planning system where an AI collaborator helps you decide **what to do today** by generating context-aware daily deliverables from your long-term goals.
+A goal-centric planning system where an AI collaborator helps you decide **what to do today** by generating context-aware daily events from your long-term goals.
 
 ## Overview
 
 Forge inverts the traditional productivity model:
 
 - **Goals are long-lived and primary** - Define your high-level objectives with due dates and context
-- **Tasks are temporary and AI-suggested** - The system proposes daily deliverables based on your goals
+- **Tasks are temporary and AI-suggested** - The system proposes daily events based on your goals
 - **Calendar as execution surface** - Schedule suggested tasks as time blocks on your calendar
 - **AI proposes, you dispose** - All suggestions are optional; you maintain full autonomy
 
@@ -29,7 +29,7 @@ Instead of micromanaging todo lists, Forge helps you answer "what should I work 
 - **Zustand** - Lightweight state management for goals and calendar events
 - Goal data structure includes:
   - Title, description, and due date
-  - Deliverables with completion status and time estimates
+  - Events with completion status and time estimates
   - Custom info tags (owner, priority, etc.)
 
 ### AI Integration
@@ -62,7 +62,7 @@ Goal management interface featuring:
 AI-powered work planning interface that:
 
 - Opens a chat session for a specific goal
-- Generates daily deliverable suggestions based on goal context
+- Generates daily event suggestions based on goal context
 - Helps decide what to work on today with reasoning
 
 #### `Chatbox.tsx`
@@ -145,7 +145,7 @@ Forge/
 ## Key Features
 
 - **Goal-Centric Planning**: Goals are the source of truth, not individual tasks
-- **AI-Generated Deliverables**: Daily task suggestions derived from your long-term goals
+- **AI-Generated Events**: Daily task suggestions derived from your long-term goals
 - **Context-Aware Suggestions**: AI reasons about deadlines, progress, and available time
 - **Calendar-Based Execution**: Visual time blocking with drag-and-drop scheduling
 - **Thinking Partner**: Chat with AI about your goals to decide what to work on

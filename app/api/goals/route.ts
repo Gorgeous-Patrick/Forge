@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAuth } from "@/lib/auth";
 
-// GET /api/goals - Get all goals with their deliverables and infoTags
+// GET /api/goals - Get all goals with their events and infoTags
 export async function GET() {
   try {
     const userId = await requireAuth();
@@ -12,7 +12,7 @@ export async function GET() {
         userId,
       },
       include: {
-        deliverables: {
+        events: {
           orderBy: {
             order: "asc",
           },
@@ -45,7 +45,7 @@ export async function POST(req: Request) {
   try {
     const userId = await requireAuth();
     const body = await req.json();
-    const { title, description, dueDate, deliverables, infoTags } = body;
+    const { title, description, dueDate, events, infoTags } = body;
 
     const goal = await prisma.goal.create({
       data: {
@@ -53,9 +53,9 @@ export async function POST(req: Request) {
         title,
         description,
         dueDate,
-        deliverables: {
+        events: {
           create:
-            deliverables?.map((d: any, index: number) => ({
+            events?.map((d: any, index: number) => ({
               title: d.title,
               completed: d.completed ?? false,
               minutesEstimate: d.minutesEstimate,
@@ -71,7 +71,7 @@ export async function POST(req: Request) {
         },
       },
       include: {
-        deliverables: {
+        events: {
           orderBy: {
             order: "asc",
           },

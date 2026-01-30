@@ -1,20 +1,20 @@
 // Re-export types from states for consistency
-export type { Goal, Deliverable } from "../states/goals";
+export type { Goal, Event } from "../states/goals";
 export type { InfoTag } from "../states/InfoTag";
 export type { CalendarEvent } from "../states/events";
-import { Deliverable } from "../states/goals";
+import { Event } from "../states/goals";
 import { InfoTag } from "../states/InfoTag";
 import { CalendarEvent } from "../states/events";
 
 // API response types with IDs for database records
 export interface GoalWithId
-  extends Omit<import("../states/goals").Goal, "deliverables" | "infoTags"> {
+  extends Omit<import("../states/goals").Goal, "events" | "infoTags"> {
   id: string;
-  deliverables: DeliverableWithId[];
+  events: EventWithId[];
   infoTags: InfoTagWithId[];
 }
 
-export interface DeliverableWithId extends Deliverable {
+export interface EventWithId extends Event {
   id: string;
   goalId: string;
 }
@@ -33,7 +33,7 @@ export type CreateGoalInput = {
   title: string;
   description: string;
   dueDate: string | null;
-  deliverables: Array<{
+  events: Array<{
     title: string;
     completed: boolean;
     minutesEstimate?: number;
@@ -46,15 +46,15 @@ export type CreateGoalInput = {
 
 export type UpdateGoalInput = Partial<CreateGoalInput>;
 
-export type CreateDeliverableInput = {
+export type CreateEventInput = {
   title: string;
   completed: boolean;
   minutesEstimate?: number;
   goalId: string;
 };
 
-export type UpdateDeliverableInput = Partial<
-  Omit<CreateDeliverableInput, "goalId">
+export type UpdateEventInput = Partial<
+  Omit<CreateEventInput, "goalId">
 >;
 
 export type CreateCalendarEventInput = {
