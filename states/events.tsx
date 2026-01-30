@@ -3,7 +3,13 @@ export type CalendarEvent = {
   title: string;
   start: Date;
   end: Date;
-  extendedProps?: { kind?: string };
+  extendedProps?: {
+    kind?: string;
+    goalId?: string;
+    goalTitle?: string;
+    completed?: boolean;
+    minutesEstimate?: number;
+  };
 };
 function todayAt(hour: number, minute: number) {
   const d = new Date();

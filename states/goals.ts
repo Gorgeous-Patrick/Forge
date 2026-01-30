@@ -2,6 +2,8 @@ import type { InfoTag } from "./InfoTag";
 
 export type Event = {
   title: string;
+  start?: string;  // ISO datetime string
+  end?: string;    // ISO datetime string
   completed: boolean;
   minutesEstimate?: number;
 };
