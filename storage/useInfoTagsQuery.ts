@@ -29,7 +29,9 @@ async function fetchInfoTag(id: string): Promise<InfoTagWithId> {
   return response.json();
 }
 
-async function createInfoTag(input: CreateInfoTagInput): Promise<InfoTagWithId> {
+async function createInfoTag(
+  input: CreateInfoTagInput
+): Promise<InfoTagWithId> {
   const response = await fetch("/api/infoTags", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -94,7 +96,9 @@ export function useUpdateInfoTagMutation() {
       updateInfoTag(id, input),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: infoTagKeys.all });
-      queryClient.invalidateQueries({ queryKey: infoTagKeys.detail(variables.id) });
+      queryClient.invalidateQueries({
+        queryKey: infoTagKeys.detail(variables.id),
+      });
     },
   });
 }

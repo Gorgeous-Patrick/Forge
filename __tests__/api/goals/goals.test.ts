@@ -1,84 +1,86 @@
-import { GET, POST } from '@/app/api/goals/route'
-import { prismaMock } from '@/__tests__/utils/prisma-mock'
-import { createMockRequest, mockGoal } from '@/__tests__/utils/test-helpers'
-import * as auth from '@/lib/auth'
+import { GET, POST } from "@/app/api/goals/route";
+import { prismaMock } from "@/__tests__/utils/prisma-mock";
+import { createMockRequest, mockGoal } from "@/__tests__/utils/test-helpers";
+import * as auth from "@/lib/auth";
 
-jest.mock('@/lib/auth', () => ({
+jest.mock("@/lib/auth", () => ({
   requireAuth: jest.fn(),
-}))
+}));
 
-describe('GET /api/goals', () => {
+describe("GET /api/goals", () => {
   beforeEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
-  it('should return all goals for authenticated user', async () => {
-    ;(auth.requireAuth as jest.Mock).mockResolvedValue('test@example.com')
+  it("should return all goals for authenticated user", async () => {
+    (auth.requireAuth as jest.Mock).mockResolvedValue("test@example.com");
 
     const mockGoals = [
-      { ...mockGoal, id: 'goal-1' },
-      { ...mockGoal, id: 'goal-2' },
-    ]
+      { ...mockGoal, id: "goal-1" },
+      { ...mockGoal, id: "goal-2" },
+    ];
 
-    prismaMock.goal.findMany.mockResolvedValue(mockGoals as any)
+    prismaMock.goal.findMany.mockResolvedValue(mockGoals as any);
 
-    const response = await GET()
-    const data = await response.json()
+    const response = await GET();
+    const data = await response.json();
 
-    expect(response.status).toBe(200)
-    expect(data).toHaveLength(2)
-    expect(data[0].id).toBe('goal-1')
-    expect(data[1].id).toBe('goal-2')
+    expect(response.status).toBe(200);
+    expect(data).toHaveLength(2);
+    expect(data[0].id).toBe("goal-1");
+    expect(data[1].id).toBe("goal-2");
     expect(prismaMock.goal.findMany).toHaveBeenCalledWith({
-      where: { userId: 'test@example.com' },
+      where: { userId: "test@example.com" },
       include: {
         deliverables: {
-          orderBy: { order: 'asc' },
+          orderBy: { order: "asc" },
         },
         infoTags: true,
       },
       orderBy: {
-        createdAt: 'desc',
+        createdAt: "desc",
       },
-    })
-  })
+    });
+  });
 
-  it('should return 401 when user is not authenticated', async () => {
-    ;(auth.requireAuth as jest.Mock).mockRejectedValue(new Error('Unauthorized'))
+  it("should return 401 when user is not authenticated", async () => {
+    (auth.requireAuth as jest.Mock).mockRejectedValue(
+      new Error("Unauthorized")
+    );
 
-    const response = await GET()
-    const data = await response.json()
+    const response = await GET();
+    const data = await response.json();
 
-    expect(response.status).toBe(401)
-    expect(data.error).toBe('Authentication required')
-  })
+    expect(response.status).toBe(401);
+    expect(data.error).toBe("Authentication required");
+  });
 
-  it('should return 500 when database error occurs', async () => {
-    ;(auth.requireAuth as jest.Mock).mockResolvedValue('test@example.com')
-    prismaMock.goal.findMany.mockRejectedValue(new Error('Database error'))
+  it("should return 500 when database error occurs", async () => {
+    (auth.requireAuth as jest.Mock).mockResolvedValue("test@example.com");
+    prismaMock.goal.findMany.mockRejectedValue(new Error("Database error"));
 
-    const response = await GET()
-    const data = await response.json()
+    const response = await GET();
+    const data = await response.json();
 
-    expect(response.status).toBe(500)
-    expect(data.error).toBe('Failed to fetch goals')
-  })
-})
+    expect(response.status).toBe(500);
+    expect(data.error).toBe("Failed to fetch goals");
+  });
+});
 
-describe('POST /api/goals', () => {
+describe("POST /api/goals", () => {
   beforeEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
-  it('should create a new goal with deliverables and infoTags', async () => {
-    ;(auth.requireAuth as jest.Mock).mockResolvedValue('test@example.com')
+  it("should create a new goal with deliverables and infoTags", async () => {
+    (auth.requireAuth as jest.Mock).mockResolvedValue("test@example.com");
 
     const mockCreatedGoal = {
       ...mockGoal,
       deliverables: [
         {
-          id: 'deliverable-1',
-          title: 'Task 1',
+          id: "deliverable-1",
+          title: "Task 1",
           completed: false,
           minutesEstimate: 60,
           order: 0,
@@ -86,55 +88,55 @@ describe('POST /api/goals', () => {
       ],
       infoTags: [
         {
-          id: 'tag-1',
-          title: 'Priority',
-          info: 'High',
+          id: "tag-1",
+          title: "Priority",
+          info: "High",
         },
       ],
-    }
+    };
 
-    prismaMock.goal.create.mockResolvedValue(mockCreatedGoal as any)
+    prismaMock.goal.create.mockResolvedValue(mockCreatedGoal as any);
 
     const request = createMockRequest({
-      method: 'POST',
+      method: "POST",
       body: {
-        title: 'Test Goal',
-        description: 'Test Description',
-        dueDate: '2024-12-31',
+        title: "Test Goal",
+        description: "Test Description",
+        dueDate: "2024-12-31",
         deliverables: [
           {
-            title: 'Task 1',
+            title: "Task 1",
             completed: false,
             minutesEstimate: 60,
           },
         ],
         infoTags: [
           {
-            title: 'Priority',
-            info: 'High',
+            title: "Priority",
+            info: "High",
           },
         ],
       },
-    })
+    });
 
-    const response = await POST(request)
-    const data = await response.json()
+    const response = await POST(request);
+    const data = await response.json();
 
-    expect(response.status).toBe(201)
-    expect(data.id).toBe(mockCreatedGoal.id)
-    expect(data.title).toBe(mockCreatedGoal.title)
-    expect(data.deliverables).toHaveLength(1)
-    expect(data.infoTags).toHaveLength(1)
+    expect(response.status).toBe(201);
+    expect(data.id).toBe(mockCreatedGoal.id);
+    expect(data.title).toBe(mockCreatedGoal.title);
+    expect(data.deliverables).toHaveLength(1);
+    expect(data.infoTags).toHaveLength(1);
     expect(prismaMock.goal.create).toHaveBeenCalledWith({
       data: {
-        userId: 'test@example.com',
-        title: 'Test Goal',
-        description: 'Test Description',
-        dueDate: '2024-12-31',
+        userId: "test@example.com",
+        title: "Test Goal",
+        description: "Test Description",
+        dueDate: "2024-12-31",
         deliverables: {
           create: [
             {
-              title: 'Task 1',
+              title: "Task 1",
               completed: false,
               minutesEstimate: 60,
               order: 0,
@@ -144,76 +146,78 @@ describe('POST /api/goals', () => {
         infoTags: {
           create: [
             {
-              title: 'Priority',
-              info: 'High',
+              title: "Priority",
+              info: "High",
             },
           ],
         },
       },
       include: {
         deliverables: {
-          orderBy: { order: 'asc' },
+          orderBy: { order: "asc" },
         },
         infoTags: true,
       },
-    })
-  })
+    });
+  });
 
-  it('should create goal without deliverables and infoTags', async () => {
-    ;(auth.requireAuth as jest.Mock).mockResolvedValue('test@example.com')
+  it("should create goal without deliverables and infoTags", async () => {
+    (auth.requireAuth as jest.Mock).mockResolvedValue("test@example.com");
 
-    prismaMock.goal.create.mockResolvedValue(mockGoal as any)
-
-    const request = createMockRequest({
-      method: 'POST',
-      body: {
-        title: 'Simple Goal',
-        description: 'Simple Description',
-        dueDate: '2024-12-31',
-      },
-    })
-
-    const response = await POST(request)
-    const data = await response.json()
-
-    expect(response.status).toBe(201)
-    expect(prismaMock.goal.create).toHaveBeenCalled()
-  })
-
-  it('should return 401 when user is not authenticated', async () => {
-    ;(auth.requireAuth as jest.Mock).mockRejectedValue(new Error('Unauthorized'))
+    prismaMock.goal.create.mockResolvedValue(mockGoal as any);
 
     const request = createMockRequest({
-      method: 'POST',
+      method: "POST",
       body: {
-        title: 'Test Goal',
-        description: 'Test Description',
+        title: "Simple Goal",
+        description: "Simple Description",
+        dueDate: "2024-12-31",
       },
-    })
+    });
 
-    const response = await POST(request)
-    const data = await response.json()
+    const response = await POST(request);
+    const data = await response.json();
 
-    expect(response.status).toBe(401)
-    expect(data.error).toBe('Authentication required')
-  })
+    expect(response.status).toBe(201);
+    expect(prismaMock.goal.create).toHaveBeenCalled();
+  });
 
-  it('should return 500 when database error occurs', async () => {
-    ;(auth.requireAuth as jest.Mock).mockResolvedValue('test@example.com')
-    prismaMock.goal.create.mockRejectedValue(new Error('Database error'))
+  it("should return 401 when user is not authenticated", async () => {
+    (auth.requireAuth as jest.Mock).mockRejectedValue(
+      new Error("Unauthorized")
+    );
 
     const request = createMockRequest({
-      method: 'POST',
+      method: "POST",
       body: {
-        title: 'Test Goal',
-        description: 'Test Description',
+        title: "Test Goal",
+        description: "Test Description",
       },
-    })
+    });
 
-    const response = await POST(request)
-    const data = await response.json()
+    const response = await POST(request);
+    const data = await response.json();
 
-    expect(response.status).toBe(500)
-    expect(data.error).toBe('Failed to create goal')
-  })
-})
+    expect(response.status).toBe(401);
+    expect(data.error).toBe("Authentication required");
+  });
+
+  it("should return 500 when database error occurs", async () => {
+    (auth.requireAuth as jest.Mock).mockResolvedValue("test@example.com");
+    prismaMock.goal.create.mockRejectedValue(new Error("Database error"));
+
+    const request = createMockRequest({
+      method: "POST",
+      body: {
+        title: "Test Goal",
+        description: "Test Description",
+      },
+    });
+
+    const response = await POST(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(500);
+    expect(data.error).toBe("Failed to create goal");
+  });
+});

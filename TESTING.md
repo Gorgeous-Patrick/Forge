@@ -62,9 +62,9 @@ The test suite uses `jest-mock-extended` to create deep mocks of the Prisma Clie
 The mock is configured globally in `jest.setup.js` and can be accessed in tests via:
 
 ```typescript
-import { prismaMock } from '@/__tests__/utils/prisma-mock'
+import { prismaMock } from "@/__tests__/utils/prisma-mock";
 
-prismaMock.user.findUnique.mockResolvedValue(mockUser)
+prismaMock.user.findUnique.mockResolvedValue(mockUser);
 ```
 
 ### Next.js Mocking
@@ -83,10 +83,12 @@ The `test-helpers.ts` file provides:
 ## GitHub Actions Integration
 
 Tests run automatically on:
+
 - Push to `master` or `main` branches
 - Pull requests to `master` or `main` branches
 
 The workflow (`.github/workflows/backend-tests.yml`):
+
 1. Checks out code
 2. Sets up Node.js 20.x
 3. Installs dependencies
@@ -115,39 +117,41 @@ The workflow (`.github/workflows/backend-tests.yml`):
 ### Basic Test Template
 
 ```typescript
-import { prismaMock } from '@/__tests__/utils/prisma-mock'
-import { createMockRequest } from '@/__tests__/utils/test-helpers'
-import * as auth from '@/lib/auth'
+import { prismaMock } from "@/__tests__/utils/prisma-mock";
+import { createMockRequest } from "@/__tests__/utils/test-helpers";
+import * as auth from "@/lib/auth";
 
-jest.mock('@/lib/auth', () => ({
+jest.mock("@/lib/auth", () => ({
   requireAuth: jest.fn(),
-}))
+}));
 
-describe('Your endpoint', () => {
+describe("Your endpoint", () => {
   beforeEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
-  it('should do something', async () => {
+  it("should do something", async () => {
     // Setup mocks
-    ;(auth.requireAuth as jest.Mock).mockResolvedValue('user@example.com')
-    prismaMock.model.method.mockResolvedValue(mockData)
+    (auth.requireAuth as jest.Mock).mockResolvedValue("user@example.com");
+    prismaMock.model.method.mockResolvedValue(mockData);
 
     // Create request
     const request = createMockRequest({
-      method: 'GET',
-      body: { /* ... */ },
-    })
+      method: "GET",
+      body: {
+        /* ... */
+      },
+    });
 
     // Call handler
-    const response = await GET(request)
-    const data = await response.json()
+    const response = await GET(request);
+    const data = await response.json();
 
     // Assertions
-    expect(response.status).toBe(200)
-    expect(data).toHaveProperty('id')
-  })
-})
+    expect(response.status).toBe(200);
+    expect(data).toHaveProperty("id");
+  });
+});
 ```
 
 ## Best Practices
@@ -161,6 +165,7 @@ describe('Your endpoint', () => {
 ## Continuous Integration
 
 Tests must pass before merging pull requests. The GitHub Actions workflow ensures:
+
 - All tests pass in a clean environment
 - Dependencies install correctly
 - Prisma schema is valid
@@ -169,14 +174,17 @@ Tests must pass before merging pull requests. The GitHub Actions workflow ensure
 ## Troubleshooting
 
 ### "Table does not exist" errors
+
 - Ensure Prisma Client is generated: `npx prisma generate`
 - Check that `jest.setup.js` properly mocks `@/lib/prisma`
 
 ### Mock not working
+
 - Import `prismaMock` before the code under test
 - Ensure `jest.clearAllMocks()` is called between tests
 - Check mock return values match expected types
 
 ### Date serialization issues
+
 - Remember that `Date` objects become strings in JSON responses
 - Test individual properties rather than deep equality with dates

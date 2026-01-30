@@ -1,5 +1,10 @@
 // Main hooks - TanStack Query powered
-export { useGoals, useDeliverables, useCalendarEvents, useInfoTags } from "./hooks";
+export {
+  useGoals,
+  useDeliverables,
+  useCalendarEvents,
+  useInfoTags,
+} from "./hooks";
 
 // Types
 export type {

@@ -86,18 +86,20 @@ export async function PUT(
         description,
         dueDate,
         deliverables: {
-          create: deliverables?.map((d: any, index: number) => ({
-            title: d.title,
-            completed: d.completed ?? false,
-            minutesEstimate: d.minutesEstimate,
-            order: index,
-          })) ?? [],
+          create:
+            deliverables?.map((d: any, index: number) => ({
+              title: d.title,
+              completed: d.completed ?? false,
+              minutesEstimate: d.minutesEstimate,
+              order: index,
+            })) ?? [],
         },
         infoTags: {
-          create: infoTags?.map((tag: any) => ({
-            title: tag.title,
-            info: tag.info,
-          })) ?? [],
+          create:
+            infoTags?.map((tag: any) => ({
+              title: tag.title,
+              info: tag.info,
+            })) ?? [],
         },
       },
       include: {

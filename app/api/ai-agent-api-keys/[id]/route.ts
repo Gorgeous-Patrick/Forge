@@ -20,10 +20,7 @@ export async function GET(
     });
 
     if (!apiKey) {
-      return NextResponse.json(
-        { error: "API key not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "API key not found" }, { status: 404 });
     }
 
     return NextResponse.json(apiKey);
@@ -59,17 +56,19 @@ export async function PUT(
     });
 
     if (!existingApiKey) {
-      return NextResponse.json(
-        { error: "API key not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "API key not found" }, { status: 404 });
     }
 
     // Validate provider if provided
-    if (provider !== undefined && !Object.values(AIProvider).includes(provider as AIProvider)) {
+    if (
+      provider !== undefined &&
+      !Object.values(AIProvider).includes(provider as AIProvider)
+    ) {
       return NextResponse.json(
         {
-          error: `Invalid provider. Must be one of: ${Object.values(AIProvider).join(", ")}`
+          error: `Invalid provider. Must be one of: ${Object.values(
+            AIProvider
+          ).join(", ")}`,
         },
         { status: 400 }
       );
@@ -141,10 +140,7 @@ export async function DELETE(
     });
 
     if (!existingApiKey) {
-      return NextResponse.json(
-        { error: "API key not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "API key not found" }, { status: 404 });
     }
 
     await prisma.aIAgentApiKey.delete({

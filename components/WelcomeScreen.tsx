@@ -1,5 +1,13 @@
 "use client";
-import { Box, Flex, Heading, Text, Button, VStack, HStack } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Text,
+  Button,
+  VStack,
+  HStack,
+} from "@chakra-ui/react";
 import { useColorModeValue } from "@/components/ui/color-mode";
 
 interface WelcomeScreenProps {
@@ -7,7 +15,10 @@ interface WelcomeScreenProps {
   onRegisterClick: () => void;
 }
 
-export default function WelcomeScreen({ onLoginClick, onRegisterClick }: WelcomeScreenProps) {
+export default function WelcomeScreen({
+  onLoginClick,
+  onRegisterClick,
+}: WelcomeScreenProps) {
   const bgGradient = useColorModeValue(
     "linear(to-br, gray.50, white)",
     "linear(to-br, gray.900, gray.800)"
@@ -41,7 +52,8 @@ export default function WelcomeScreen({ onLoginClick, onRegisterClick }: Welcome
           maxW="500px"
           lineHeight="tall"
         >
-          Build your future, one block at a time. Organize your goals and schedule with clarity.
+          Build your future, one block at a time. Organize your goals and
+          schedule with clarity.
         </Text>
 
         <HStack gap={4} mt={4}>

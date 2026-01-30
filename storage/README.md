@@ -18,14 +18,26 @@ The module is already set up and TanStack Query is installed. The QueryClient pr
 ### Import the hooks
 
 ```typescript
-import { useGoals, useDeliverables, useCalendarEvents, useInfoTags } from "@/storage";
+import {
+  useGoals,
+  useDeliverables,
+  useCalendarEvents,
+  useInfoTags,
+} from "@/storage";
 ```
 
 ### Goals Hook
 
 ```typescript
 function MyComponent() {
-  const { goals, isLoading, error, create, update, delete: deleteGoal } = useGoals();
+  const {
+    goals,
+    isLoading,
+    error,
+    create,
+    update,
+    delete: deleteGoal,
+  } = useGoals();
 
   // Create a goal
   const handleCreate = async () => {
@@ -34,11 +46,9 @@ function MyComponent() {
       description: "Description",
       dueDate: "2026-01-20T10:00:00",
       deliverables: [
-        { title: "Task 1", completed: false, minutesEstimate: 30 }
+        { title: "Task 1", completed: false, minutesEstimate: 30 },
       ],
-      infoTags: [
-        { title: "Priority", info: "High" }
-      ]
+      infoTags: [{ title: "Priority", info: "High" }],
     });
   };
 
@@ -46,7 +56,7 @@ function MyComponent() {
   const handleUpdate = async (goalId: string) => {
     await update(goalId, {
       title: "Updated Title",
-      description: "Updated description"
+      description: "Updated description",
     });
   };
 
@@ -60,7 +70,7 @@ function MyComponent() {
 
   return (
     <div>
-      {goals.map(goal => (
+      {goals.map((goal) => (
         <div key={goal.id}>{goal.title}</div>
       ))}
     </div>
@@ -90,7 +100,13 @@ function MyComponent() {
 
 ```typescript
 function CalendarComponent() {
-  const { events, isLoading, create, update, delete: deleteEvent } = useCalendarEvents();
+  const {
+    events,
+    isLoading,
+    create,
+    update,
+    delete: deleteEvent,
+  } = useCalendarEvents();
 
   // Create an event
   const handleCreate = async () => {
@@ -98,7 +114,7 @@ function CalendarComponent() {
       title: "Meeting",
       start: new Date("2026-01-15T14:00:00"),
       end: new Date("2026-01-15T15:00:00"),
-      extendedProps: { kind: "meeting" }
+      extendedProps: { kind: "meeting" },
     });
   };
 
@@ -107,7 +123,7 @@ function CalendarComponent() {
     await update(eventId, {
       title: "Updated Meeting",
       start: new Date("2026-01-15T15:00:00"),
-      end: new Date("2026-01-15T16:00:00")
+      end: new Date("2026-01-15T16:00:00"),
     });
   };
 
@@ -118,7 +134,7 @@ function CalendarComponent() {
 
   return (
     <div>
-      {events.map(event => (
+      {events.map((event) => (
         <div key={event.id}>
           {event.title} - {event.start.toLocaleString()}
         </div>
@@ -132,14 +148,20 @@ function CalendarComponent() {
 
 ```typescript
 function InfoTagsComponent() {
-  const { infoTags, isLoading, create, update, delete: deleteTag } = useInfoTags();
+  const {
+    infoTags,
+    isLoading,
+    create,
+    update,
+    delete: deleteTag,
+  } = useInfoTags();
 
   // Create a tag
   const handleCreate = async () => {
     await create({
       title: "Name",
       info: "John Doe",
-      goalId: "optional-goal-id" // Optional: associate with a goal
+      goalId: "optional-goal-id", // Optional: associate with a goal
     });
   };
 
@@ -147,7 +169,7 @@ function InfoTagsComponent() {
   const handleUpdate = async (tagId: string) => {
     await update(tagId, {
       title: "Updated Name",
-      info: "Jane Doe"
+      info: "Jane Doe",
     });
   };
 
@@ -158,7 +180,7 @@ function InfoTagsComponent() {
 
   return (
     <div>
-      {infoTags.map(tag => (
+      {infoTags.map((tag) => (
         <div key={tag.id}>
           {tag.title}: {tag.info}
         </div>
@@ -171,6 +193,7 @@ function InfoTagsComponent() {
 ## How It Works
 
 ### When Logged Out
+
 - Data is stored in browser localStorage
 - Keys used: `forge:goals`, `forge:events`, `forge:infoTags`
 - Operations are synchronous and immediate
@@ -178,6 +201,7 @@ function InfoTagsComponent() {
 - Each item gets a generated ID in format: `timestamp-randomstring`
 
 ### When Logged In
+
 - Data is fetched from API endpoints using TanStack Query
 - Automatic caching with 5-minute stale time
 - Optimistic updates with automatic refetching
@@ -186,7 +210,7 @@ function InfoTagsComponent() {
   - Goals: `/api/goals` (GET, POST, PUT, DELETE)
   - Deliverables: `/api/deliverables/:id` (PATCH, DELETE)
   - Events: `/api/events` (GET, POST, PATCH, DELETE)
-  - Info Tags: `/api/infoTags` (GET, POST, PATCH, DELETE) *
+  - Info Tags: `/api/infoTags` (GET, POST, PATCH, DELETE) \*
 
 \* Note: Info Tags API endpoints may need to be implemented if they don't exist yet.
 
@@ -205,10 +229,7 @@ const goal = localGoals.getById("some-id");
 ### Direct TanStack Query hooks
 
 ```typescript
-import {
-  useGoalsQuery,
-  useCreateGoalMutation
-} from "@/storage";
+import { useGoalsQuery, useCreateGoalMutation } from "@/storage";
 
 // Use TanStack Query hooks directly
 const { data: goals } = useGoalsQuery(true);

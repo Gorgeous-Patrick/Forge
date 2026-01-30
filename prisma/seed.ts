@@ -28,11 +28,31 @@ async function main() {
 
   // Create AI Agent API keys from environment variables if available
   const apiKeyProviders = [
-    { provider: AIProvider.ANTHROPIC, envKey: "ANTHROPIC_API_KEY", name: "Claude API Key" },
-    { provider: AIProvider.OPENAI, envKey: "OPENAI_API_KEY", name: "OpenAI API Key" },
-    { provider: AIProvider.GOOGLE, envKey: "GOOGLE_API_KEY", name: "Google AI API Key" },
-    { provider: AIProvider.MISTRAL, envKey: "MISTRAL_API_KEY", name: "Mistral API Key" },
-    { provider: AIProvider.COHERE, envKey: "COHERE_API_KEY", name: "Cohere API Key" },
+    {
+      provider: AIProvider.ANTHROPIC,
+      envKey: "ANTHROPIC_API_KEY",
+      name: "Claude API Key",
+    },
+    {
+      provider: AIProvider.OPENAI,
+      envKey: "OPENAI_API_KEY",
+      name: "OpenAI API Key",
+    },
+    {
+      provider: AIProvider.GOOGLE,
+      envKey: "GOOGLE_API_KEY",
+      name: "Google AI API Key",
+    },
+    {
+      provider: AIProvider.MISTRAL,
+      envKey: "MISTRAL_API_KEY",
+      name: "Mistral API Key",
+    },
+    {
+      provider: AIProvider.COHERE,
+      envKey: "COHERE_API_KEY",
+      name: "Cohere API Key",
+    },
   ];
 
   for (const { provider, envKey, name } of apiKeyProviders) {

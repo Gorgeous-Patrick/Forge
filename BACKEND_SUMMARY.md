@@ -11,6 +11,7 @@ A complete REST API backend has been added to the Vibe Kanban application, provi
 **Location:** `prisma/`
 
 - **Schema** (`schema.prisma`): Defines 4 models
+
   - `Goal`: Main planning entities with title, description, and due dates
   - `Deliverable`: Tasks/subtasks within goals (with completion tracking)
   - `InfoTag`: Flexible key-value metadata for goals
@@ -25,6 +26,7 @@ A complete REST API backend has been added to the Vibe Kanban application, provi
 **Location:** `app/api/`
 
 #### Goals API (`/api/goals`)
+
 - `GET /api/goals` - List all goals with nested data
 - `POST /api/goals` - Create a new goal
 - `GET /api/goals/:id` - Get a specific goal
@@ -32,10 +34,12 @@ A complete REST API backend has been added to the Vibe Kanban application, provi
 - `DELETE /api/goals/:id` - Delete a goal (cascades to deliverables and tags)
 
 #### Deliverables API (`/api/deliverables`)
+
 - `PATCH /api/deliverables/:id` - Update a deliverable (e.g., toggle completion)
 - `DELETE /api/deliverables/:id` - Delete a deliverable
 
 #### Events API (`/api/events`)
+
 - `GET /api/events` - List all calendar events
 - `POST /api/events` - Create a new event
 - `GET /api/events/:id` - Get a specific event

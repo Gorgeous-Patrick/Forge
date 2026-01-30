@@ -30,7 +30,10 @@ async function createGoal(input: CreateGoalInput): Promise<GoalWithId> {
   return response.json();
 }
 
-async function updateGoal(id: string, input: UpdateGoalInput): Promise<GoalWithId> {
+async function updateGoal(
+  id: string,
+  input: UpdateGoalInput
+): Promise<GoalWithId> {
   const response = await fetch(`/api/goals/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -82,7 +85,9 @@ export function useUpdateGoalMutation() {
       updateGoal(id, input),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: goalKeys.all });
-      queryClient.invalidateQueries({ queryKey: goalKeys.detail(variables.id) });
+      queryClient.invalidateQueries({
+        queryKey: goalKeys.detail(variables.id),
+      });
     },
   });
 }

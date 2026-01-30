@@ -39,6 +39,7 @@ The backend uses SQLite with Prisma ORM. The database includes:
 Get all goals with their deliverables and info tags.
 
 **Response:**
+
 ```json
 [
   {
@@ -79,6 +80,7 @@ Get all goals with their deliverables and info tags.
 Create a new goal.
 
 **Request Body:**
+
 ```json
 {
   "title": "Goal title",
@@ -121,6 +123,7 @@ Update a goal. Replaces all deliverables and info tags.
 Delete a goal (cascades to deliverables and info tags).
 
 **Response:**
+
 ```json
 {
   "message": "Goal deleted successfully"
@@ -134,6 +137,7 @@ Delete a goal (cascades to deliverables and info tags).
 Update a deliverable (e.g., toggle completion status).
 
 **Request Body:**
+
 ```json
 {
   "title": "Updated title",
@@ -151,6 +155,7 @@ All fields are optional. Only provided fields will be updated.
 Delete a specific deliverable.
 
 **Response:**
+
 ```json
 {
   "message": "Deliverable deleted successfully"
@@ -164,6 +169,7 @@ Delete a specific deliverable.
 Get all calendar events.
 
 **Response:**
+
 ```json
 [
   {
@@ -185,6 +191,7 @@ The response format is compatible with FullCalendar.
 Create a new calendar event.
 
 **Request Body:**
+
 ```json
 {
   "title": "Event title",
@@ -210,6 +217,7 @@ Get a specific event by ID.
 Update an event (useful for drag-and-drop rescheduling).
 
 **Request Body:**
+
 ```json
 {
   "title": "Updated title",
@@ -231,6 +239,7 @@ All fields are optional. Only provided fields will be updated.
 Delete a calendar event.
 
 **Response:**
+
 ```json
 {
   "message": "Event deleted successfully"
@@ -247,6 +256,7 @@ All endpoints return appropriate HTTP status codes:
 - `500 Internal Server Error`: Server error
 
 Error responses include an error message:
+
 ```json
 {
   "error": "Error description"
@@ -277,6 +287,7 @@ This opens a web interface to browse and edit the database.
 ## Development
 
 The backend uses:
+
 - **Next.js 16** API routes
 - **Prisma 6** ORM
 - **SQLite** database

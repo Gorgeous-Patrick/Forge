@@ -116,11 +116,18 @@ export function useUpdateEventMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, input }: { id: string; input: UpdateCalendarEventInput }) =>
-      updateEvent(id, input),
+    mutationFn: ({
+      id,
+      input,
+    }: {
+      id: string;
+      input: UpdateCalendarEventInput;
+    }) => updateEvent(id, input),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: eventKeys.all });
-      queryClient.invalidateQueries({ queryKey: eventKeys.detail(variables.id) });
+      queryClient.invalidateQueries({
+        queryKey: eventKeys.detail(variables.id),
+      });
     },
   });
 }

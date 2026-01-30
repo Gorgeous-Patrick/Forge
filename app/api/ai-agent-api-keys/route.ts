@@ -52,7 +52,9 @@ export async function POST(req: Request) {
     if (!Object.values(AIProvider).includes(provider as AIProvider)) {
       return NextResponse.json(
         {
-          error: `Invalid provider. Must be one of: ${Object.values(AIProvider).join(", ")}`
+          error: `Invalid provider. Must be one of: ${Object.values(
+            AIProvider
+          ).join(", ")}`,
         },
         { status: 400 }
       );

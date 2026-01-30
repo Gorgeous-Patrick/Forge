@@ -10,9 +10,6 @@ export async function POST() {
     });
   } catch (error) {
     console.error("Error logging out:", error);
-    return NextResponse.json(
-      { error: "Failed to logout" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to logout" }, { status: 500 });
   }
 }

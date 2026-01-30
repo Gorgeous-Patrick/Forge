@@ -18,6 +18,7 @@ The Vibe Kanban backend now includes secure user authentication with email-based
 **Endpoint**: `POST /api/auth/register`
 
 **Request Body**:
+
 ```json
 {
   "email": "user@example.com",
@@ -26,11 +27,13 @@ The Vibe Kanban backend now includes secure user authentication with email-based
 ```
 
 **Requirements**:
+
 - Email must be valid format
 - Password must be at least 8 characters
 - Email must not already be registered
 
 **Response** (201 Created):
+
 ```json
 {
   "message": "User registered successfully",
@@ -48,6 +51,7 @@ The Vibe Kanban backend now includes secure user authentication with email-based
 **Endpoint**: `POST /api/auth/login`
 
 **Request Body**:
+
 ```json
 {
   "email": "user@example.com",
@@ -56,6 +60,7 @@ The Vibe Kanban backend now includes secure user authentication with email-based
 ```
 
 **Response** (200 OK):
+
 ```json
 {
   "message": "Login successful",
@@ -67,6 +72,7 @@ The Vibe Kanban backend now includes secure user authentication with email-based
 ```
 
 **Error Response** (401 Unauthorized):
+
 ```json
 {
   "error": "Invalid email or password"
@@ -80,6 +86,7 @@ The Vibe Kanban backend now includes secure user authentication with email-based
 **Request**: No body required
 
 **Response** (200 OK):
+
 ```json
 {
   "message": "Logout successful"
@@ -93,6 +100,7 @@ The Vibe Kanban backend now includes secure user authentication with email-based
 **Request**: No body required (uses session cookie)
 
 **Response** (200 OK):
+
 ```json
 {
   "email": "user@example.com",
@@ -102,6 +110,7 @@ The Vibe Kanban backend now includes secure user authentication with email-based
 ```
 
 **Error Response** (401 Unauthorized):
+
 ```json
 {
   "error": "Not authenticated"
@@ -113,6 +122,7 @@ The Vibe Kanban backend now includes secure user authentication with email-based
 All data endpoints now require authentication:
 
 ### Goals API
+
 - `GET /api/goals` - Returns only the authenticated user's goals
 - `POST /api/goals` - Creates a goal for the authenticated user
 - `GET /api/goals/:id` - Returns goal only if it belongs to the user
@@ -120,6 +130,7 @@ All data endpoints now require authentication:
 - `DELETE /api/goals/:id` - Deletes goal only if it belongs to the user
 
 ### Events API
+
 - `GET /api/events` - Returns only the authenticated user's events
 - `POST /api/events` - Creates an event for the authenticated user
 - `GET /api/events/:id` - Returns event only if it belongs to the user
@@ -127,6 +138,7 @@ All data endpoints now require authentication:
 - `DELETE /api/events/:id` - Deletes event only if it belongs to the user
 
 ### Deliverables API
+
 - `PATCH /api/deliverables/:id` - Updates deliverable (verified through parent goal)
 - `DELETE /api/deliverables/:id` - Deletes deliverable (verified through parent goal)
 
@@ -135,6 +147,7 @@ All data endpoints now require authentication:
 **Cookie Name**: `session_user_email`
 
 **Cookie Settings**:
+
 - `httpOnly: true` - Cannot be accessed via JavaScript (XSS protection)
 - `secure: true` (in production) - Only sent over HTTPS
 - `sameSite: 'lax'` - CSRF protection
@@ -176,13 +189,16 @@ curl -X POST http://localhost:3001/api/auth/logout -b cookies.txt
 ### Test User Credentials
 
 The seed script creates a default test user:
+
 - **Email**: `test@example.com`
 - **Password**: `password123`
 
 ## Error Responses
 
 ### 401 Unauthorized
+
 Returned when authentication is required but not provided:
+
 ```json
 {
   "error": "Authentication required"
@@ -190,7 +206,9 @@ Returned when authentication is required but not provided:
 ```
 
 ### 404 Not Found
+
 Returned when trying to access another user's resource:
+
 ```json
 {
   "error": "Goal not found"
@@ -198,7 +216,9 @@ Returned when trying to access another user's resource:
 ```
 
 ### 409 Conflict
+
 Returned when trying to register with an existing email:
+
 ```json
 {
   "error": "User with this email already exists"
@@ -206,7 +226,9 @@ Returned when trying to register with an existing email:
 ```
 
 ### 400 Bad Request
+
 Returned for validation errors:
+
 ```json
 {
   "error": "Password must be at least 8 characters long"
@@ -216,6 +238,7 @@ Returned for validation errors:
 ## Database Schema
 
 ### User Table
+
 ```prisma
 model User {
   id            String          @id // email address
@@ -229,6 +252,7 @@ model User {
 ```
 
 ### Modified Goal Table
+
 ```prisma
 model Goal {
   id           String        @id @default(uuid())
@@ -248,6 +272,7 @@ model Goal {
 ```
 
 ### Modified CalendarEvent Table
+
 ```prisma
 model CalendarEvent {
   id        String   @id @default(uuid())
@@ -269,12 +294,14 @@ model CalendarEvent {
 ## Implementation Details
 
 ### Password Security
+
 - Uses bcryptjs library for secure password hashing
 - 10 salt rounds (2^10 = 1,024 iterations)
 - Passwords are never stored in plain text
 - Passwords are never returned in API responses
 
 ### Authentication Middleware
+
 Located in `lib/auth.ts`:
 
 - `hashPassword(password)` - Hashes a password
@@ -285,6 +312,7 @@ Located in `lib/auth.ts`:
 - `requireAuth()` - Throws error if not authenticated (used in protected routes)
 
 ### Route Protection Pattern
+
 All protected routes follow this pattern:
 
 ```typescript
@@ -313,6 +341,7 @@ If you had data before adding authentication:
 3. Use the test credentials to access the seeded data
 
 To preserve existing data, you would need to:
+
 1. Export existing data before migration
 2. Create a user account
 3. Associate all data with that user's ID
@@ -338,16 +367,16 @@ To integrate with your React frontend:
 
 ```javascript
 // Login
-const response = await fetch('/api/auth/login', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  credentials: 'include', // Important: includes cookies
-  body: JSON.stringify({ email, password })
+const response = await fetch("/api/auth/login", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  credentials: "include", // Important: includes cookies
+  body: JSON.stringify({ email, password }),
 });
 
 // Fetch protected data
-const goals = await fetch('/api/goals', {
-  credentials: 'include' // Important: includes cookies
+const goals = await fetch("/api/goals", {
+  credentials: "include", // Important: includes cookies
 });
 ```
 
