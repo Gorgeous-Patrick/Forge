@@ -1,6 +1,6 @@
 import type { InfoTag } from "./InfoTag";
 
-export type Deliverable = {
+export type Event = {
   title: string;
   completed: boolean;
   minutesEstimate?: number;
@@ -11,8 +11,8 @@ export type Goal = {
   description: string;
   // ISO datetime string (e.g. "2026-01-15T17:00:00" or full ISO with TZ) or null when no due date/time
   dueDate: string | null;
-  // Small list of deliverables for the goal
-  deliverables: Deliverable[];
+  // Small list of events for the goal
+  events: Event[];
   infoTags: InfoTag[];
 };
 
@@ -22,7 +22,7 @@ export const sampleGoals: Goal[] = [
     description:
       "Finalize and install the repository pre-commit hooks; run autoupdate and fix any reported issues.",
     dueDate: "2026-01-15T17:00:00",
-    deliverables: [
+    events: [
       {
         title: "Add .pre-commit-config.yaml",
         completed: true,
@@ -49,7 +49,7 @@ export const sampleGoals: Goal[] = [
     description:
       "Adjust responsive styles and finalize the main landing section in the React app.",
     dueDate: null,
-    deliverables: [
+    events: [
       {
         title: "Fix mobile header spacing",
         completed: true,
@@ -71,7 +71,7 @@ export const sampleGoals: Goal[] = [
     description:
       "Write unit tests covering login/logout and token refresh logic.",
     dueDate: "2026-02-01T09:30:00",
-    deliverables: [
+    events: [
       { title: "Test login flow", completed: false, minutesEstimate: 40 },
       { title: "Test token refresh", completed: false, minutesEstimate: 35 },
     ],

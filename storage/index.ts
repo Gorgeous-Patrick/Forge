@@ -1,7 +1,7 @@
 // Main hooks - TanStack Query powered
 export {
   useGoals,
-  useDeliverables,
+  useGoalEvents,
   useCalendarEvents,
   useInfoTags,
 } from "./hooks";
@@ -9,17 +9,17 @@ export {
 // Types
 export type {
   Goal,
-  Deliverable,
+  Event,
   InfoTag,
   CalendarEvent,
   GoalWithId,
-  DeliverableWithId,
+  EventWithId,
   InfoTagWithId,
   CalendarEventWithId,
   CreateGoalInput,
   UpdateGoalInput,
-  CreateDeliverableInput,
-  UpdateDeliverableInput,
+  CreateEventInput,
+  UpdateEventInput,
   CreateCalendarEventInput,
   UpdateCalendarEventInput,
   CreateInfoTagInput,
@@ -36,9 +36,9 @@ export {
 } from "./useGoalsQuery";
 
 export {
-  useUpdateDeliverableMutation,
-  useDeleteDeliverableMutation,
-} from "./useDeliverablesQuery";
+  useUpdateEventMutation as useUpdateGoalEventMutation,
+  useDeleteEventMutation as useDeleteGoalEventMutation,
+} from "./useGoalEventsQuery";
 
 export {
   useEventsQuery,

@@ -2,7 +2,7 @@
 
 ## Overview
 
-A complete REST API backend has been added to the Vibe Kanban application, providing persistent storage for goals, deliverables, info tags, and calendar events.
+A complete REST API backend has been added to the Vibe Kanban application, providing persistent storage for goals, events, info tags, and calendar events.
 
 ## What Was Built
 
@@ -13,7 +13,7 @@ A complete REST API backend has been added to the Vibe Kanban application, provi
 - **Schema** (`schema.prisma`): Defines 4 models
 
   - `Goal`: Main planning entities with title, description, and due dates
-  - `Deliverable`: Tasks/subtasks within goals (with completion tracking)
+  - `Event`: Tasks/subtasks within goals (with completion tracking)
   - `InfoTag`: Flexible key-value metadata for goals
   - `CalendarEvent`: Calendar scheduling entries
 
@@ -31,12 +31,12 @@ A complete REST API backend has been added to the Vibe Kanban application, provi
 - `POST /api/goals` - Create a new goal
 - `GET /api/goals/:id` - Get a specific goal
 - `PUT /api/goals/:id` - Update a goal
-- `DELETE /api/goals/:id` - Delete a goal (cascades to deliverables and tags)
+- `DELETE /api/goals/:id` - Delete a goal (cascades to events and tags)
 
-#### Deliverables API (`/api/deliverables`)
+#### Events API (`/api/events`)
 
-- `PATCH /api/deliverables/:id` - Update a deliverable (e.g., toggle completion)
-- `DELETE /api/deliverables/:id` - Delete a deliverable
+- `PATCH /api/events/:id` - Update a event (e.g., toggle completion)
+- `DELETE /api/events/:id` - Delete a event
 
 #### Events API (`/api/events`)
 
@@ -72,8 +72,8 @@ A complete REST API backend has been added to the Vibe Kanban application, provi
 ## Key Features
 
 1. **Type Safety**: Prisma generates TypeScript types from schema
-2. **Cascading Deletes**: Deleting a goal removes all related deliverables and tags
-3. **Ordering**: Deliverables maintain order for UI display
+2. **Cascading Deletes**: Deleting a goal removes all related events and tags
+3. **Ordering**: Events maintain order for UI display
 4. **Flexible Metadata**: InfoTags and CalendarEvent metadata support extensibility
 5. **FullCalendar Compatible**: Events API returns format compatible with FullCalendar
 6. **Easy Reset**: Simple commands to reset and reseed database
@@ -87,7 +87,7 @@ Forge/
 │   ├── goals/
 │   │   ├── route.ts (GET, POST)
 │   │   └── [id]/route.ts (GET, PUT, DELETE)
-│   ├── deliverables/
+│   ├── events/
 │   │   └── [id]/route.ts (PATCH, DELETE)
 │   └── events/
 │       ├── route.ts (GET, POST)
@@ -155,7 +155,7 @@ The API has been tested and verified working. Sample test performed:
 
 ```bash
 curl http://localhost:3001/api/goals
-# Returns: Array of goals with nested deliverables and infoTags
+# Returns: Array of goals with nested events and infoTags
 ```
 
 All CRUD operations follow REST conventions and return appropriate HTTP status codes.

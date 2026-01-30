@@ -17,7 +17,7 @@ export async function GET(
         userId,
       },
       include: {
-        deliverables: {
+        events: {
           orderBy: {
             order: "asc",
           },
@@ -55,7 +55,7 @@ export async function PUT(
     const userId = await requireAuth();
     const { id } = await params;
     const body = await req.json();
-    const { title, description, dueDate, deliverables, infoTags } = body;
+    const { title, description, dueDate, events, infoTags } = body;
 
     // Verify goal belongs to user
     const existingGoal = await prisma.goal.findFirst({
@@ -66,11 +66,11 @@ export async function PUT(
       return NextResponse.json({ error: "Goal not found" }, { status: 404 });
     }
 
-    // Delete existing deliverables and infoTags, then recreate them
+    // Delete existing events and infoTags, then recreate them
     await prisma.goal.update({
       where: { id },
       data: {
-        deliverables: {
+        events: {
           deleteMany: {},
         },
         infoTags: {
@@ -85,9 +85,9 @@ export async function PUT(
         title,
         description,
         dueDate,
-        deliverables: {
+        events: {
           create:
-            deliverables?.map((d: any, index: number) => ({
+            events?.map((d: any, index: number) => ({
               title: d.title,
               completed: d.completed ?? false,
               minutesEstimate: d.minutesEstimate,
@@ -103,7 +103,7 @@ export async function PUT(
         },
       },
       include: {
-        deliverables: {
+        events: {
           orderBy: {
             order: "asc",
           },

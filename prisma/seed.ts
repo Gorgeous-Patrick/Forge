@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   // Clear existing data
-  await prisma.deliverable.deleteMany();
+  await prisma.event.deleteMany();
   await prisma.infoTag.deleteMany();
   await prisma.goal.deleteMany();
   await prisma.calendarEvent.deleteMany();
@@ -78,7 +78,7 @@ async function main() {
       description:
         "Finalize and install the repository pre-commit hooks; run autoupdate and fix any reported issues.",
       dueDate: "2026-01-15T17:00:00",
-      deliverables: {
+      events: {
         create: [
           {
             title: "Add .pre-commit-config.yaml",
@@ -116,7 +116,7 @@ async function main() {
       description:
         "Adjust responsive styles and finalize the main landing section in the React app.",
       dueDate: null,
-      deliverables: {
+      events: {
         create: [
           {
             title: "Fix mobile header spacing",
@@ -148,7 +148,7 @@ async function main() {
       description:
         "Write unit tests covering login/logout and token refresh logic.",
       dueDate: "2026-02-01T09:30:00",
-      deliverables: {
+      events: {
         create: [
           {
             title: "Test login flow",

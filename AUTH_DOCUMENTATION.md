@@ -137,10 +137,10 @@ All data endpoints now require authentication:
 - `PATCH /api/events/:id` - Updates event only if it belongs to the user
 - `DELETE /api/events/:id` - Deletes event only if it belongs to the user
 
-### Deliverables API
+### Events API
 
-- `PATCH /api/deliverables/:id` - Updates deliverable (verified through parent goal)
-- `DELETE /api/deliverables/:id` - Deletes deliverable (verified through parent goal)
+- `PATCH /api/events/:id` - Updates event (verified through parent goal)
+- `DELETE /api/events/:id` - Deletes event (verified through parent goal)
 
 ## Session Management
 
@@ -179,7 +179,7 @@ curl http://localhost:3001/api/goals -b cookies.txt
 # Create a goal (authenticated)
 curl -X POST http://localhost:3001/api/goals \
   -H "Content-Type: application/json" \
-  -d '{"title":"My Goal","description":"Test goal","dueDate":null,"deliverables":[],"infoTags":[]}' \
+  -d '{"title":"My Goal","description":"Test goal","dueDate":null,"events":[],"infoTags":[]}' \
   -b cookies.txt
 
 # Logout
@@ -264,7 +264,7 @@ model Goal {
   updatedAt    DateTime      @updatedAt
 
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  deliverables Deliverable[]
+  events Event[]
   infoTags     InfoTag[]
 
   @@index([userId])

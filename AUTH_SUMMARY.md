@@ -79,7 +79,7 @@ All existing endpoints now require authentication:
 - ✅ Returns 401 if not authenticated
 - ✅ Returns 404 if accessing another user's event
 
-**Deliverables API** (`/api/deliverables/*`):
+**Events API** (`/api/events/*`):
 
 - ✅ Inherits protection through parent Goal relationship
 
@@ -257,8 +257,8 @@ To preserve data in future migrations:
 - `GET /api/events/:id` - Get specific event
 - `PATCH /api/events/:id` - Update event
 - `DELETE /api/events/:id` - Delete event
-- `PATCH /api/deliverables/:id` - Update deliverable
-- `DELETE /api/deliverables/:id` - Delete deliverable
+- `PATCH /api/events/:id` - Update event
+- `DELETE /api/events/:id` - Delete event
 
 ## Status
 

@@ -7,7 +7,7 @@ A unified storage system that automatically switches between localStorage (when 
 - **Automatic switching**: Detects authentication state and uses the appropriate storage method
 - **React hooks**: All operations are exposed as React hooks for automatic UI updates
 - **Type-safe**: Full TypeScript support with comprehensive types
-- **Four data types**: Goals, Deliverables, Calendar Events, and Info Tags
+- **Four data types**: Goals, Events, Calendar Events, and Info Tags
 
 ## Installation
 
@@ -20,7 +20,7 @@ The module is already set up and TanStack Query is installed. The QueryClient pr
 ```typescript
 import {
   useGoals,
-  useDeliverables,
+  useEvents,
   useCalendarEvents,
   useInfoTags,
 } from "@/storage";
@@ -45,7 +45,7 @@ function MyComponent() {
       title: "My Goal",
       description: "Description",
       dueDate: "2026-01-20T10:00:00",
-      deliverables: [
+      events: [
         { title: "Task 1", completed: false, minutesEstimate: 30 },
       ],
       infoTags: [{ title: "Priority", info: "High" }],
@@ -78,20 +78,20 @@ function MyComponent() {
 }
 ```
 
-### Deliverables Hook
+### Events Hook
 
 ```typescript
 function MyComponent() {
-  const { update, delete: deleteDeliverable } = useDeliverables();
+  const { update, delete: deleteEvent } = useEvents();
 
-  // Update a deliverable (e.g., mark as complete)
-  const handleToggle = async (deliverableId: string) => {
-    await update(deliverableId, { completed: true });
+  // Update a event (e.g., mark as complete)
+  const handleToggle = async (eventId: string) => {
+    await update(eventId, { completed: true });
   };
 
-  // Delete a deliverable
-  const handleDelete = async (deliverableId: string) => {
-    await deleteDeliverable(deliverableId);
+  // Delete a event
+  const handleDelete = async (eventId: string) => {
+    await deleteEvent(eventId);
   };
 }
 ```
@@ -208,7 +208,7 @@ function InfoTagsComponent() {
 - Server-generated UUIDs for IDs
 - API endpoints:
   - Goals: `/api/goals` (GET, POST, PUT, DELETE)
-  - Deliverables: `/api/deliverables/:id` (PATCH, DELETE)
+  - Events: `/api/events/:id` (PATCH, DELETE)
   - Events: `/api/events` (GET, POST, PATCH, DELETE)
   - Info Tags: `/api/infoTags` (GET, POST, PATCH, DELETE) \*
 
@@ -243,11 +243,11 @@ All types are exported from the storage module:
 ```typescript
 import type {
   Goal,
-  Deliverable,
+  Event,
   InfoTag,
   CalendarEvent,
   GoalWithId,
-  DeliverableWithId,
+  EventWithId,
   InfoTagWithId,
   CalendarEventWithId,
   CreateGoalInput,
@@ -277,7 +277,7 @@ storage/
 ├── localStorage.ts             # LocalStorage functions
 ├── hooks.ts                    # Unified hooks (main API)
 ├── useGoalsQuery.ts           # TanStack Query hooks for goals
-├── useDeliverablesQuery.ts    # TanStack Query hooks for deliverables
+├── useEventsQuery.ts    # TanStack Query hooks for events
 ├── useEventsQuery.ts          # TanStack Query hooks for events
 ├── useInfoTagsQuery.ts        # TanStack Query hooks for info tags
 └── README.md                  # This file

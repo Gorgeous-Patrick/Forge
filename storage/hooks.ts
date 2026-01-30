@@ -6,9 +6,9 @@ import {
   useDeleteGoalMutation,
 } from "./useGoalsQuery";
 import {
-  useUpdateDeliverableMutation,
-  useDeleteDeliverableMutation,
-} from "./useDeliverablesQuery";
+  useUpdateEventMutation as useUpdateGoalEventMutation,
+  useDeleteEventMutation as useDeleteGoalEventMutation,
+} from "./useGoalEventsQuery";
 import {
   useEventsQuery,
   useCreateEventMutation,
@@ -23,12 +23,12 @@ import {
 } from "./useInfoTagsQuery";
 import type {
   GoalWithId,
-  DeliverableWithId,
+  EventWithId as GoalEventWithId,
   CalendarEventWithId,
   InfoTagWithId,
   CreateGoalInput,
   UpdateGoalInput,
-  UpdateDeliverableInput,
+  UpdateEventInput as UpdateGoalEventInput,
   CreateCalendarEventInput,
   UpdateCalendarEventInput,
   CreateInfoTagInput,
@@ -91,16 +91,16 @@ export function useGoals() {
   };
 }
 
-// Deliverables Hook
-export function useDeliverables() {
-  const updateMutation = useUpdateDeliverableMutation();
-  const deleteMutation = useDeleteDeliverableMutation();
+// Goal Events Hook
+export function useGoalEvents() {
+  const updateMutation = useUpdateGoalEventMutation();
+  const deleteMutation = useDeleteGoalEventMutation();
 
   const update = useCallback(
     async (
       id: string,
-      input: UpdateDeliverableInput
-    ): Promise<DeliverableWithId | null> => {
+      input: UpdateGoalEventInput
+    ): Promise<GoalEventWithId | null> => {
       return new Promise((resolve, reject) => {
         updateMutation.mutate(
           { id, input },
@@ -114,7 +114,7 @@ export function useDeliverables() {
     [updateMutation]
   );
 
-  const deleteDeliverable = useCallback(
+  const deleteGoalEvent = useCallback(
     async (id: string): Promise<boolean> => {
       return new Promise((resolve, reject) => {
         deleteMutation.mutate(id, {
@@ -128,7 +128,7 @@ export function useDeliverables() {
 
   return {
     update,
-    delete: deleteDeliverable,
+    delete: deleteGoalEvent,
   };
 }
 
