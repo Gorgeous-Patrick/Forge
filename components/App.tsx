@@ -1,14 +1,15 @@
 "use client";
-import { Box, Flex, Heading, Text, Button } from "@chakra-ui/react";
+import { Box, Flex, Heading, Text, Button, Select, createListCollection } from "@chakra-ui/react";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
+import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import Sidebar from "@/components/Sidebar";
 import SettingsDialog from "@/components/SettingsDialog";
 import LoginDialog from "@/components/LoginDialog";
 import RegisterDialog from "@/components/RegisterDialog";
 import WelcomeScreen from "@/components/WelcomeScreen";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { events, type CalendarEvent } from "@/states/events";
 import { ColorModeButton, useColorModeValue } from "@/components/ui/color-mode";
 import { useAuth } from "@/hooks/useAuth";
@@ -81,12 +82,53 @@ function Header() {
 
 // Sidebar moved to its own component in `src/Sidebar.tsx` and receives goals via props.
 
+const viewOptions = createListCollection({
+  items: [
+    { label: "Month", value: "dayGridMonth" },
+    { label: "Week", value: "timeGridWeek" },
+    { label: "Day", value: "timeGridDay" },
+  ],
+});
+
 function CalendarView({ events }: { events: CalendarEvent[] }) {
+  const [currentView, setCurrentView] = useState<string[]>(["timeGridDay"]);
+  const calendarRef = useRef<FullCalendar>(null);
+
+  useEffect(() => {
+    if (calendarRef.current && currentView.length > 0) {
+      const calendarApi = calendarRef.current.getApi();
+      calendarApi.changeView(currentView[0]);
+    }
+  }, [currentView]);
+
   return (
     <Box flex={1} p={4} height="100%" minHeight={0} overflowY="auto">
+      <Flex justify="flex-end" mb={3}>
+        <Select.Root
+          collection={viewOptions}
+          value={currentView}
+          onValueChange={(e) => setCurrentView(e.value)}
+          width="200px"
+          positioning={{ sameWidth: true }}
+        >
+          <Select.Trigger>
+            <Select.ValueText placeholder="Select view" />
+          </Select.Trigger>
+          <Select.Positioner>
+            <Select.Content>
+              {viewOptions.items.map((option) => (
+                <Select.Item item={option} key={option.value}>
+                  {option.label}
+                </Select.Item>
+              ))}
+            </Select.Content>
+          </Select.Positioner>
+        </Select.Root>
+      </Flex>
       <Box mt={3} minHeight={0}>
         <FullCalendar
-          plugins={[timeGridPlugin, interactionPlugin]}
+          ref={calendarRef}
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="timeGridDay"
           headerToolbar={{
             left: "prev,next today",
