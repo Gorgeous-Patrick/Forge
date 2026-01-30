@@ -109,17 +109,20 @@ function CalendarView({ events }: { events: CalendarEvent[] }) {
           value={currentView}
           onValueChange={(e) => setCurrentView(e.value)}
           width="200px"
+          positioning={{ sameWidth: true }}
         >
           <Select.Trigger>
             <Select.ValueText placeholder="Select view" />
           </Select.Trigger>
-          <Select.Content>
-            {viewOptions.items.map((option) => (
-              <Select.Item item={option} key={option.value}>
-                {option.label}
-              </Select.Item>
-            ))}
-          </Select.Content>
+          <Select.Positioner>
+            <Select.Content>
+              {viewOptions.items.map((option) => (
+                <Select.Item item={option} key={option.value}>
+                  {option.label}
+                </Select.Item>
+              ))}
+            </Select.Content>
+          </Select.Positioner>
         </Select.Root>
       </Flex>
       <Box mt={3} minHeight={0}>
