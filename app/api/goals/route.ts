@@ -70,6 +70,7 @@ export async function POST(req: Request) {
 
     // Generate placeholder CalendarEvents if dueDate exists
     if (dueDate) {
+      console.log('[Goal API] Creating placeholder events for goal:', title, 'with dueDate:', dueDate);
       const goalDueDate = new Date(dueDate);
       const now = new Date();
 
@@ -78,6 +79,8 @@ export async function POST(req: Request) {
         1,
         Math.floor((goalDueDate.getTime() - now.getTime()) / (1000 * 60 * 60))
       );
+
+      console.log('[Goal API] totalHours:', totalHours);
 
       // Generate 3 placeholder calendar events spread over the time period
       const eventDuration = 2; // 2 hours per event
@@ -94,8 +97,14 @@ export async function POST(req: Request) {
           eventStart.getTime() + eventDuration * 60 * 60 * 1000
         );
 
+        console.log(`[Goal API] Creating calendar event ${i + 1}:`, {
+          title: `Work on: ${title} (Part ${i + 1})`,
+          start: eventStart.toISOString(),
+          end: eventEnd.toISOString(),
+        });
+
         // Create CalendarEvent with goalId in metadata
-        await prisma.calendarEvent.create({
+        const createdEvent = await prisma.calendarEvent.create({
           data: {
             userId,
             title: `Work on: ${title} (Part ${i + 1})`,
@@ -109,7 +118,11 @@ export async function POST(req: Request) {
             }),
           },
         });
+        console.log('[Goal API] Created calendar event with id:', createdEvent.id);
       }
+      console.log('[Goal API] Finished creating', numEvents, 'calendar events');
+    } else {
+      console.log('[Goal API] No dueDate provided, skipping calendar event creation');
     }
 
     return NextResponse.json(goal, { status: 201 });
