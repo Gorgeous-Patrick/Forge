@@ -1,14 +1,15 @@
 "use client";
-import { Box, Flex, Heading, Text, Button } from "@chakra-ui/react";
+import { Box, Flex, Heading, Text, Button, NativeSelectRoot, NativeSelectField } from "@chakra-ui/react";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
+import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import Sidebar from "@/components/Sidebar";
 import SettingsDialog from "@/components/SettingsDialog";
 import LoginDialog from "@/components/LoginDialog";
 import RegisterDialog from "@/components/RegisterDialog";
 import WelcomeScreen from "@/components/WelcomeScreen";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { events, type CalendarEvent } from "@/states/events";
 import { ColorModeButton, useColorModeValue } from "@/components/ui/color-mode";
 import { useAuth } from "@/hooks/useAuth";
@@ -82,11 +83,38 @@ function Header() {
 // Sidebar moved to its own component in `src/Sidebar.tsx` and receives goals via props.
 
 function CalendarView({ events }: { events: CalendarEvent[] }) {
+  const [currentView, setCurrentView] = useState<string>("timeGridDay");
+  const calendarRef = useRef<FullCalendar>(null);
+  const selectBg = useColorModeValue("white", "gray.800");
+  const selectBorder = useColorModeValue("gray.300", "gray.600");
+
+  useEffect(() => {
+    if (calendarRef.current) {
+      const calendarApi = calendarRef.current.getApi();
+      calendarApi.changeView(currentView);
+    }
+  }, [currentView]);
+
   return (
     <Box flex={1} p={4} height="100%" minHeight={0} overflowY="auto">
+      <Flex justify="flex-end" mb={3}>
+        <NativeSelectRoot width="200px">
+          <NativeSelectField
+            value={currentView}
+            onChange={(e) => setCurrentView(e.target.value)}
+            bg={selectBg}
+            borderColor={selectBorder}
+          >
+            <option value="dayGridMonth">Month</option>
+            <option value="timeGridWeek">Week</option>
+            <option value="timeGridDay">Day</option>
+          </NativeSelectField>
+        </NativeSelectRoot>
+      </Flex>
       <Box mt={3} minHeight={0}>
         <FullCalendar
-          plugins={[timeGridPlugin, interactionPlugin]}
+          ref={calendarRef}
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="timeGridDay"
           headerToolbar={{
             left: "prev,next today",
