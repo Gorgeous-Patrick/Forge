@@ -21,6 +21,10 @@ import {
   useUpdateInfoTagMutation,
   useDeleteInfoTagMutation,
 } from "./useInfoTagsQuery";
+import {
+  useGoalEventsForCalendarQuery,
+  type GoalEventForCalendar,
+} from "./useGoalEventsForCalendarQuery";
 import type {
   GoalWithId,
   EventWithId as GoalEventWithId,
@@ -247,5 +251,16 @@ export function useInfoTags() {
     create,
     update,
     delete: deleteInfoTag,
+  };
+}
+
+// Goal Events for Calendar Hook
+export function useGoalEventsForCalendar() {
+  const query = useGoalEventsForCalendarQuery();
+
+  return {
+    events: query.data || [],
+    isLoading: query.isLoading,
+    error: query.error,
   };
 }

@@ -42,6 +42,8 @@ model Event {
   id              String   @id @default(uuid())
   goalId          String
   title           String
+  start           String?  // ISO datetime string
+  end             String?  // ISO datetime string
   completed       Boolean  @default(false)
   minutesEstimate Int?
   order           Int      @default(0)
