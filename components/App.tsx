@@ -21,8 +21,8 @@ import { useState, useRef, useEffect, useMemo } from "react";
 import { type CalendarEvent } from "@/states/events";
 import { ColorModeButton, useColorModeValue } from "@/components/ui/color-mode";
 import { useAuth } from "@/hooks/useAuth";
-import { useGoals, useGoalEventsForCalendar } from "@/storage/hooks";
-import type { CreateGoalInput } from "@/storage/types";
+import { useGoals } from "@/storage/hooks";
+import type { CreateGoalInput, GoalWithId } from "@/storage/types";
 
 function Header() {
   const headerBg = useColorModeValue("white", "gray.900");
@@ -98,21 +98,40 @@ const viewOptions = createListCollection({
   ],
 });
 
-function CalendarView() {
+function CalendarView({ goals }: { goals: (GoalWithId | CreateGoalInput)[] }) {
   const [currentView, setCurrentView] = useState<string[]>(["timeGridDay"]);
   const calendarRef = useRef<FullCalendar>(null);
-  const { events: goalEvents, isLoading } = useGoalEventsForCalendar();
 
-  // Transform goal events to FullCalendar format (Date objects)
+  // Extract events from all goals and transform to FullCalendar format
   const calendarEvents = useMemo(() => {
-    return goalEvents.map((event) => ({
-      id: event.id,
-      title: event.title,
-      start: new Date(event.start),
-      end: new Date(event.end),
-      extendedProps: event.extendedProps,
-    }));
-  }, [goalEvents]);
+    const events: CalendarEvent[] = [];
+
+    goals.forEach((goal) => {
+      const goalId = "id" in goal ? goal.id : undefined;
+      const goalTitle = goal.title;
+
+      goal.events.forEach((event) => {
+        // Only include events that have start and end times
+        if (event.start && event.end) {
+          events.push({
+            id: goalId ? `${goalId}-${event.title}` : event.title,
+            title: event.title,
+            start: new Date(event.start),
+            end: new Date(event.end),
+            extendedProps: {
+              goalId,
+              goalTitle,
+              completed: event.completed,
+              minutesEstimate: event.minutesEstimate,
+              kind: "goal-event",
+            },
+          });
+        }
+      });
+    });
+
+    return events;
+  }, [goals]);
 
   useEffect(() => {
     if (calendarRef.current && currentView.length > 0) {
@@ -145,54 +164,48 @@ function CalendarView() {
           </Select.Positioner>
         </Select.Root>
       </Flex>
-      {isLoading ? (
-        <Box mt={3} p={4}>
-          <Text>Loading events...</Text>
-        </Box>
-      ) : (
-        <Box mt={3} minHeight={0}>
-          <FullCalendar
-            ref={calendarRef}
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            initialView="timeGridDay"
-            headerToolbar={{
-              left: "prev,next today",
-              center: "title",
-              right: "",
-            }}
-            nowIndicator={true}
-            height="auto"
-            allDaySlot={false}
-            slotDuration="00:10:00"
-            slotLabelInterval="01:00"
-            expandRows={true}
-            weekends={true}
-            editable={true}
-            eventStartEditable={true}
-            eventDurationEditable={true}
-            events={calendarEvents}
-            eventClick={(info) => {
-              const goalTitle = info.event.extendedProps?.goalTitle ?? "";
-              const completed = info.event.extendedProps?.completed ? "[✓]" : "[ ]";
-              alert(`${completed} ${info.event.title}\nGoal: ${goalTitle}`);
-            }}
-            eventDrop={(info) => {
-              console.log("eventDrop:", {
-                id: info.event.id,
-                start: info.event.start,
-                end: info.event.end,
-              });
-            }}
-            eventResize={(info) => {
-              console.log("eventResize:", {
-                id: info.event.id,
-                start: info.event.start,
-                end: info.event.end,
-              });
-            }}
-          />
-        </Box>
-      )}
+      <Box mt={3} minHeight={0}>
+        <FullCalendar
+          ref={calendarRef}
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          initialView="timeGridDay"
+          headerToolbar={{
+            left: "prev,next today",
+            center: "title",
+            right: "",
+          }}
+          nowIndicator={true}
+          height="auto"
+          allDaySlot={false}
+          slotDuration="00:10:00"
+          slotLabelInterval="01:00"
+          expandRows={true}
+          weekends={true}
+          editable={true}
+          eventStartEditable={true}
+          eventDurationEditable={true}
+          events={calendarEvents}
+          eventClick={(info) => {
+            const goalTitle = info.event.extendedProps?.goalTitle ?? "";
+            const completed = info.event.extendedProps?.completed ? "[✓]" : "[ ]";
+            alert(`${completed} ${info.event.title}\nGoal: ${goalTitle}`);
+          }}
+          eventDrop={(info) => {
+            console.log("eventDrop:", {
+              id: info.event.id,
+              start: info.event.start,
+              end: info.event.end,
+            });
+          }}
+          eventResize={(info) => {
+            console.log("eventResize:", {
+              id: info.event.id,
+              start: info.event.start,
+              end: info.event.end,
+            });
+          }}
+        />
+      </Box>
     </Box>
   );
 }
@@ -271,7 +284,7 @@ export default function App() {
           onAddGoal={handleAddGoal}
           onRemoveGoal={handleRemoveGoal}
         />
-        <CalendarView />
+        <CalendarView goals={goals} />
       </Flex>
     </Box>
   );

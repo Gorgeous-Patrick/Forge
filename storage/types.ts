@@ -35,6 +35,8 @@ export type CreateGoalInput = {
   dueDate: string | null;
   events: Array<{
     title: string;
+    start?: string;
+    end?: string;
     completed: boolean;
     minutesEstimate?: number;
   }>;
@@ -48,6 +50,8 @@ export type UpdateGoalInput = Partial<CreateGoalInput>;
 
 export type CreateEventInput = {
   title: string;
+  start?: string;
+  end?: string;
   completed: boolean;
   minutesEstimate?: number;
   goalId: string;
