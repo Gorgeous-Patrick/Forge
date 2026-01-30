@@ -45,57 +45,15 @@ export async function POST(req: Request) {
   try {
     const userId = await requireAuth();
     const body = await req.json();
-    const { title, description, dueDate, events, infoTags } = body;
+    const { title, description, dueDate, infoTags } = body;
 
-    // Generate placeholder events if none provided and dueDate exists
-    let eventsToCreate = events;
-    if ((!events || events.length === 0) && dueDate) {
-      const goalDueDate = new Date(dueDate);
-      const now = new Date();
-
-      // Calculate time from now to due date
-      const totalHours = Math.max(1, Math.floor((goalDueDate.getTime() - now.getTime()) / (1000 * 60 * 60)));
-
-      // Generate 3 placeholder events spread over the time period
-      const placeholderEvents = [];
-      const eventDuration = 2; // 2 hours per event
-      const numEvents = 3;
-
-      for (let i = 0; i < numEvents; i++) {
-        // Space events evenly before the due date
-        const hoursBeforeDue = totalHours - (i * Math.floor(totalHours / (numEvents + 1)));
-        const eventStart = new Date(goalDueDate.getTime() - (hoursBeforeDue * 60 * 60 * 1000));
-        const eventEnd = new Date(eventStart.getTime() + (eventDuration * 60 * 60 * 1000));
-
-        placeholderEvents.push({
-          title: `Work on: ${title} (Part ${i + 1})`,
-          start: eventStart.toISOString(),
-          end: eventEnd.toISOString(),
-          completed: false,
-          minutesEstimate: eventDuration * 60,
-        });
-      }
-
-      eventsToCreate = placeholderEvents;
-    }
-
+    // Create the goal (without events)
     const goal = await prisma.goal.create({
       data: {
         userId,
         title,
         description,
         dueDate,
-        events: {
-          create:
-            eventsToCreate?.map((d: any, index: number) => ({
-              title: d.title,
-              start: d.start,
-              end: d.end,
-              completed: d.completed ?? false,
-              minutesEstimate: d.minutesEstimate,
-              order: index,
-            })) ?? [],
-        },
         infoTags: {
           create:
             infoTags?.map((tag: any) => ({
@@ -105,14 +63,54 @@ export async function POST(req: Request) {
         },
       },
       include: {
-        events: {
-          orderBy: {
-            order: "asc",
-          },
-        },
+        events: true,
         infoTags: true,
       },
     });
+
+    // Generate placeholder CalendarEvents if dueDate exists
+    if (dueDate) {
+      const goalDueDate = new Date(dueDate);
+      const now = new Date();
+
+      // Calculate time from now to due date
+      const totalHours = Math.max(
+        1,
+        Math.floor((goalDueDate.getTime() - now.getTime()) / (1000 * 60 * 60))
+      );
+
+      // Generate 3 placeholder calendar events spread over the time period
+      const eventDuration = 2; // 2 hours per event
+      const numEvents = 3;
+
+      for (let i = 0; i < numEvents; i++) {
+        // Space events evenly before the due date
+        const hoursBeforeDue =
+          totalHours - i * Math.floor(totalHours / (numEvents + 1));
+        const eventStart = new Date(
+          goalDueDate.getTime() - hoursBeforeDue * 60 * 60 * 1000
+        );
+        const eventEnd = new Date(
+          eventStart.getTime() + eventDuration * 60 * 60 * 1000
+        );
+
+        // Create CalendarEvent with goalId in metadata
+        await prisma.calendarEvent.create({
+          data: {
+            userId,
+            title: `Work on: ${title} (Part ${i + 1})`,
+            start: eventStart.toISOString(),
+            end: eventEnd.toISOString(),
+            kind: "task",
+            metadata: JSON.stringify({
+              goalId: goal.id,
+              goalTitle: title,
+              partNumber: i + 1,
+            }),
+          },
+        });
+      }
+    }
 
     return NextResponse.json(goal, { status: 201 });
   } catch (error) {
