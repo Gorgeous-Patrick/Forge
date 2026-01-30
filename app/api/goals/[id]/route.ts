@@ -146,6 +146,27 @@ export async function DELETE(
       return NextResponse.json({ error: "Goal not found" }, { status: 404 });
     }
 
+    // Delete associated CalendarEvents (where metadata contains this goalId)
+    const calendarEvents = await prisma.calendarEvent.findMany({
+      where: { userId },
+    });
+
+    for (const event of calendarEvents) {
+      if (event.metadata) {
+        try {
+          const metadata = JSON.parse(event.metadata);
+          if (metadata.goalId === id) {
+            await prisma.calendarEvent.delete({
+              where: { id: event.id },
+            });
+          }
+        } catch (e) {
+          // Skip events with invalid metadata
+        }
+      }
+    }
+
+    // Delete the goal
     await prisma.goal.delete({
       where: { id },
     });

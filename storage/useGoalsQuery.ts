@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { GoalWithId, CreateGoalInput, UpdateGoalInput } from "./types";
+import { eventKeys } from "./useEventsQuery";
 
 // Query keys
 export const goalKeys = {
@@ -73,6 +74,8 @@ export function useCreateGoalMutation() {
     mutationFn: createGoal,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: goalKeys.all });
+      // Also invalidate events since creating a goal creates CalendarEvents
+      queryClient.invalidateQueries({ queryKey: eventKeys.all });
     },
   });
 }
@@ -99,6 +102,8 @@ export function useDeleteGoalMutation() {
     mutationFn: deleteGoal,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: goalKeys.all });
+      // Also invalidate events since deleting a goal deletes CalendarEvents
+      queryClient.invalidateQueries({ queryKey: eventKeys.all });
     },
   });
 }
