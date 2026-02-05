@@ -57,9 +57,7 @@ export type CreateEventInput = {
   goalId: string;
 };
 
-export type UpdateEventInput = Partial<
-  Omit<CreateEventInput, "goalId">
->;
+export type UpdateEventInput = Partial<Omit<CreateEventInput, "goalId">>;
 
 export type CreateCalendarEventInput = {
   title: string;

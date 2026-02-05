@@ -18,12 +18,7 @@ The module is already set up and TanStack Query is installed. The QueryClient pr
 ### Import the hooks
 
 ```typescript
-import {
-  useGoals,
-  useEvents,
-  useCalendarEvents,
-  useInfoTags,
-} from "@/storage";
+import { useGoals, useEvents, useCalendarEvents, useInfoTags } from "@/storage";
 ```
 
 ### Goals Hook
@@ -45,9 +40,7 @@ function MyComponent() {
       title: "My Goal",
       description: "Description",
       dueDate: "2026-01-20T10:00:00",
-      events: [
-        { title: "Task 1", completed: false, minutesEstimate: 30 },
-      ],
+      events: [{ title: "Task 1", completed: false, minutesEstimate: 30 }],
       infoTags: [{ title: "Priority", info: "High" }],
     });
   };

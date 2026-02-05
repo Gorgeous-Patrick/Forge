@@ -113,9 +113,7 @@ describe("PATCH /api/goal-events/:id", () => {
   });
 
   it("should return 500 when database error occurs", async () => {
-    prismaMock.event.update.mockRejectedValue(
-      new Error("Database error")
-    );
+    prismaMock.event.update.mockRejectedValue(new Error("Database error"));
 
     const request = createMockRequest({
       method: "PATCH",
@@ -152,9 +150,7 @@ describe("DELETE /api/goal-events/:id", () => {
   });
 
   it("should return 500 when database error occurs", async () => {
-    prismaMock.event.delete.mockRejectedValue(
-      new Error("Database error")
-    );
+    prismaMock.event.delete.mockRejectedValue(new Error("Database error"));
 
     const request = createMockRequest({ method: "DELETE" });
     const response = await DELETE(request, mockParams);

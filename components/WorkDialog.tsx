@@ -12,8 +12,7 @@ import type { Goal } from "../states/goals";
 import { useState } from "react";
 
 export function WorkDialog({ goal }: { goal: Goal }) {
-  const defaultVal =
-    goal.events && goal.events.length > 0 ? "0" : "";
+  const defaultVal = goal.events && goal.events.length > 0 ? "0" : "";
   const [selected, setSelected] = useState<string>(defaultVal);
 
   return (
@@ -87,12 +86,7 @@ export function WorkDialog({ goal }: { goal: Goal }) {
                 <Button
                   onClick={() => {
                     // eslint-disable-next-line no-console
-                    console.log(
-                      "Start work on",
-                      goal.title,
-                      "event",
-                      selected
-                    );
+                    console.log("Start work on", goal.title, "event", selected);
                   }}
                 >
                   Start

@@ -28,13 +28,8 @@ export function useUpdateEventMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({
-      id,
-      input,
-    }: {
-      id: string;
-      input: UpdateEventInput;
-    }) => updateEvent(id, input),
+    mutationFn: ({ id, input }: { id: string; input: UpdateEventInput }) =>
+      updateEvent(id, input),
     onSuccess: () => {
       // Invalidate all goals queries since events are nested
       queryClient.invalidateQueries({ queryKey: goalKeys.all });
