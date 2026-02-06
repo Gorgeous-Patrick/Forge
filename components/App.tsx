@@ -100,7 +100,7 @@ const viewOptions = createListCollection({
 function CalendarView() {
   const [currentView, setCurrentView] = useState<string[]>(["timeGridDay"]);
   const calendarRef = useRef<FullCalendar>(null);
-  const { events: calendarEvents, isLoading } = useCalendarEvents();
+  const { events: calendarEvents, isLoading, update } = useCalendarEvents();
 
   useEffect(() => {
     if (calendarRef.current && currentView.length > 0) {
@@ -163,19 +163,25 @@ function CalendarView() {
               const kind = info.event.extendedProps?.kind ?? "task";
               alert(`[${kind}] ${info.event.title}`);
             }}
-            eventDrop={(info) => {
-              console.log("eventDrop:", {
-                id: info.event.id,
-                start: info.event.start,
-                end: info.event.end,
-              });
+            eventDrop={async (info) => {
+              try {
+                await update(info.event.id, {
+                  start: info.event.start!,
+                  end: info.event.end!,
+                });
+              } catch {
+                info.revert();
+              }
             }}
-            eventResize={(info) => {
-              console.log("eventResize:", {
-                id: info.event.id,
-                start: info.event.start,
-                end: info.event.end,
-              });
+            eventResize={async (info) => {
+              try {
+                await update(info.event.id, {
+                  start: info.event.start!,
+                  end: info.event.end!,
+                });
+              } catch {
+                info.revert();
+              }
             }}
           />
         </Box>
